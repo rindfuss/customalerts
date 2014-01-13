@@ -7,21 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B143E4118550CB2006DB54E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B143E4018550CB2006DB54E /* Images.xcassets */; };
+		9B4E0AC01839625A00B41777 /* CalendarDayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B4E0ABF1839625A00B41777 /* CalendarDayButton.m */; };
+		9B93713016FABB9600E83DA4 /* AlertsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B93712F16FABB9600E83DA4 /* AlertsViewController.m */; };
+		9BB5373B170384D700FC17AC /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BB5373A170384D700FC17AC /* MainViewController.m */; };
 		9BDAAE7E16F9539B008C4102 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAE7D16F9539B008C4102 /* UIKit.framework */; };
 		9BDAAE8016F9539B008C4102 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAE7F16F9539B008C4102 /* Foundation.framework */; };
-		9BDAAE8216F9539B008C4102 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAE8116F9539B008C4102 /* CoreGraphics.framework */; };
 		9BDAAE8816F9539B008C4102 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9BDAAE8616F9539B008C4102 /* InfoPlist.strings */; };
 		9BDAAE8A16F9539B008C4102 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDAAE8916F9539B008C4102 /* main.m */; };
 		9BDAAE8E16F9539B008C4102 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDAAE8D16F9539B008C4102 /* AppDelegate.m */; };
-		9BDAAE9016F9539B008C4102 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BDAAE8F16F9539B008C4102 /* Default.png */; };
-		9BDAAE9216F9539B008C4102 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BDAAE9116F9539B008C4102 /* Default@2x.png */; };
-		9BDAAE9416F9539B008C4102 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BDAAE9316F9539B008C4102 /* Default-568h@2x.png */; };
 		9BDAAE9716F9539B008C4102 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BDAAE9516F9539B008C4102 /* MainStoryboard_iPhone.storyboard */; };
-		9BDAAE9A16F9539B008C4102 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BDAAE9816F9539B008C4102 /* MainStoryboard_iPad.storyboard */; };
-		9BDAAE9D16F9539B008C4102 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDAAE9C16F9539B008C4102 /* ViewController.m */; };
+		9BDAAEA516F953D9008C4102 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAEA316F953D9008C4102 /* EventKit.framework */; };
+		9BDAAEA616F953D9008C4102 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAEA416F953D9008C4102 /* EventKitUI.framework */; };
+		9BDAAEAD16F95CD6008C4102 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDAAEAC16F95CD6008C4102 /* EventsViewController.m */; };
+		9BE4E1981839CBD80080B8EF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE4E1971839CBD80080B8EF /* CoreGraphics.framework */; };
+		9BEF28C4172AE350000EF122 /* whiteButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BEF28C3172AE350000EF122 /* whiteButton.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9B143E4018550CB2006DB54E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		9B21152C1836B9E200C6EB1E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9B4E0ABE1839625A00B41777 /* CalendarDayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarDayButton.h; sourceTree = "<group>"; };
+		9B4E0ABF1839625A00B41777 /* CalendarDayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarDayButton.m; sourceTree = "<group>"; };
+		9B93712E16FABB9600E83DA4 /* AlertsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertsViewController.h; sourceTree = "<group>"; };
+		9B93712F16FABB9600E83DA4 /* AlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertsViewController.m; sourceTree = "<group>"; };
+		9BB53739170384D700FC17AC /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		9BB5373A170384D700FC17AC /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		9BDAAE7916F9539B008C4102 /* Custom Alerts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Custom Alerts.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BDAAE7D16F9539B008C4102 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9BDAAE7F16F9539B008C4102 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -32,13 +43,13 @@
 		9BDAAE8B16F9539B008C4102 /* Custom Alerts-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Custom Alerts-Prefix.pch"; sourceTree = "<group>"; };
 		9BDAAE8C16F9539B008C4102 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9BDAAE8D16F9539B008C4102 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9BDAAE8F16F9539B008C4102 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		9BDAAE9116F9539B008C4102 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		9BDAAE9316F9539B008C4102 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		9BDAAE9616F9539B008C4102 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		9BDAAE9916F9539B008C4102 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		9BDAAE9B16F9539B008C4102 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		9BDAAE9C16F9539B008C4102 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		9BDAAEA316F953D9008C4102 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		9BDAAEA416F953D9008C4102 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		9BDAAEAB16F95CD5008C4102 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
+		9BDAAEAC16F95CD6008C4102 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
+		9BE4E1971839CBD80080B8EF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		9BEF28C3172AE350000EF122 /* whiteButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteButton.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,9 +57,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BE4E1981839CBD80080B8EF /* CoreGraphics.framework in Frameworks */,
+				9BDAAEA516F953D9008C4102 /* EventKit.framework in Frameworks */,
+				9BDAAEA616F953D9008C4102 /* EventKitUI.framework in Frameworks */,
 				9BDAAE7E16F9539B008C4102 /* UIKit.framework in Frameworks */,
 				9BDAAE8016F9539B008C4102 /* Foundation.framework in Frameworks */,
-				9BDAAE8216F9539B008C4102 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +71,9 @@
 		9BDAAE6E16F9539B008C4102 = {
 			isa = PBXGroup;
 			children = (
+				9BEF28C3172AE350000EF122 /* whiteButton.png */,
+				9BDAAEA316F953D9008C4102 /* EventKit.framework */,
+				9BDAAEA416F953D9008C4102 /* EventKitUI.framework */,
 				9BDAAE8316F9539B008C4102 /* Custom Alerts */,
 				9BDAAE7C16F9539B008C4102 /* Frameworks */,
 				9BDAAE7A16F9539B008C4102 /* Products */,
@@ -75,6 +91,8 @@
 		9BDAAE7C16F9539B008C4102 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9BE4E1971839CBD80080B8EF /* CoreGraphics.framework */,
+				9B21152C1836B9E200C6EB1E /* QuartzCore.framework */,
 				9BDAAE7D16F9539B008C4102 /* UIKit.framework */,
 				9BDAAE7F16F9539B008C4102 /* Foundation.framework */,
 				9BDAAE8116F9539B008C4102 /* CoreGraphics.framework */,
@@ -88,9 +106,15 @@
 				9BDAAE8C16F9539B008C4102 /* AppDelegate.h */,
 				9BDAAE8D16F9539B008C4102 /* AppDelegate.m */,
 				9BDAAE9516F9539B008C4102 /* MainStoryboard_iPhone.storyboard */,
-				9BDAAE9816F9539B008C4102 /* MainStoryboard_iPad.storyboard */,
-				9BDAAE9B16F9539B008C4102 /* ViewController.h */,
-				9BDAAE9C16F9539B008C4102 /* ViewController.m */,
+				9B4E0ABE1839625A00B41777 /* CalendarDayButton.h */,
+				9B4E0ABF1839625A00B41777 /* CalendarDayButton.m */,
+				9BB53739170384D700FC17AC /* MainViewController.h */,
+				9BB5373A170384D700FC17AC /* MainViewController.m */,
+				9BDAAEAB16F95CD5008C4102 /* EventsViewController.h */,
+				9BDAAEAC16F95CD6008C4102 /* EventsViewController.m */,
+				9B93712E16FABB9600E83DA4 /* AlertsViewController.h */,
+				9B93712F16FABB9600E83DA4 /* AlertsViewController.m */,
+				9B143E4018550CB2006DB54E /* Images.xcassets */,
 				9BDAAE8416F9539B008C4102 /* Supporting Files */,
 			);
 			path = "Custom Alerts";
@@ -103,9 +127,6 @@
 				9BDAAE8616F9539B008C4102 /* InfoPlist.strings */,
 				9BDAAE8916F9539B008C4102 /* main.m */,
 				9BDAAE8B16F9539B008C4102 /* Custom Alerts-Prefix.pch */,
-				9BDAAE8F16F9539B008C4102 /* Default.png */,
-				9BDAAE9116F9539B008C4102 /* Default@2x.png */,
-				9BDAAE9316F9539B008C4102 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -136,8 +157,13 @@
 		9BDAAE7016F9539B008C4102 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Rich Rindfuss";
+				TargetAttributes = {
+					9BDAAE7816F9539B008C4102 = {
+						DevelopmentTeam = N736TF9VHT;
+					};
+				};
 			};
 			buildConfigurationList = 9BDAAE7316F9539B008C4102 /* Build configuration list for PBXProject "Custom Alerts" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -162,11 +188,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BDAAE8816F9539B008C4102 /* InfoPlist.strings in Resources */,
-				9BDAAE9016F9539B008C4102 /* Default.png in Resources */,
-				9BDAAE9216F9539B008C4102 /* Default@2x.png in Resources */,
-				9BDAAE9416F9539B008C4102 /* Default-568h@2x.png in Resources */,
+				9B143E4118550CB2006DB54E /* Images.xcassets in Resources */,
 				9BDAAE9716F9539B008C4102 /* MainStoryboard_iPhone.storyboard in Resources */,
-				9BDAAE9A16F9539B008C4102 /* MainStoryboard_iPad.storyboard in Resources */,
+				9BEF28C4172AE350000EF122 /* whiteButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,7 +203,10 @@
 			files = (
 				9BDAAE8A16F9539B008C4102 /* main.m in Sources */,
 				9BDAAE8E16F9539B008C4102 /* AppDelegate.m in Sources */,
-				9BDAAE9D16F9539B008C4102 /* ViewController.m in Sources */,
+				9BDAAEAD16F95CD6008C4102 /* EventsViewController.m in Sources */,
+				9B93713016FABB9600E83DA4 /* AlertsViewController.m in Sources */,
+				9B4E0AC01839625A00B41777 /* CalendarDayButton.m in Sources */,
+				9BB5373B170384D700FC17AC /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,14 +227,6 @@
 				9BDAAE9616F9539B008C4102 /* en */,
 			);
 			name = MainStoryboard_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		9BDAAE9816F9539B008C4102 /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9BDAAE9916F9539B008C4102 /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -235,9 +254,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -251,15 +270,16 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Richard Rindfuss";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Richard Rindfuss";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -268,10 +288,18 @@
 		9BDAAEA116F9539C008C4102 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Custom Alerts/Custom Alerts-Prefix.pch";
 				INFOPLIST_FILE = "Custom Alerts/Custom Alerts-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos7.0;
+				"SDKROOT[arch=*]" = iphoneos6.1;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -279,10 +307,20 @@
 		9BDAAEA216F9539C008C4102 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Custom Alerts/Custom Alerts-Prefix.pch";
 				INFOPLIST_FILE = "Custom Alerts/Custom Alerts-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "65256AFB-9A82-4CEB-98F7-4EAB4911CFF3";
+				SDKROOT = iphoneos7.0;
+				"SDKROOT[arch=*]" = iphoneos6.1;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -306,6 +344,7 @@
 				9BDAAEA216F9539C008C4102 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
