@@ -21,6 +21,7 @@
     [super viewDidLoad];
 
     // Customize look of buttons
+/*
     UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
     UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
     [self.saveButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
@@ -28,7 +29,7 @@
     UIImage *buttonImagePressed = [UIImage imageNamed:@"blueButton.png"];
     UIImage *stretchableButtonImagePressed = [buttonImagePressed stretchableImageWithLeftCapWidth:12 topCapHeight:0];
     [self.saveButton setBackgroundImage:stretchableButtonImagePressed forState:UIControlStateHighlighted];
- 
+*/
     [self configureUserControls];
 }
 

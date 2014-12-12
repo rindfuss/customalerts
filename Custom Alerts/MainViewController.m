@@ -37,45 +37,17 @@
     // Make navigation controller panel at top non-transparent so that tableview has appropriate vertical size
     [self.navigationController.navigationBar setTranslucent:NO];
     
-    // Customize look of control buttons
-   
-    UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
-    UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
-    [self.goToCalendarEventsButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
-    
-    UIImage *buttonImagePressed = [UIImage imageNamed:@"blueButton.png"];
-    UIImage *stretchableButtonImagePressed = [buttonImagePressed stretchableImageWithLeftCapWidth:12 topCapHeight:0];
-    [self.goToCalendarEventsButton setBackgroundImage:stretchableButtonImagePressed forState:UIControlStateHighlighted];
-    
     // Customize look of calendar-related buttons
-    UIColor *buttonNormalColor = [UIColor colorWithRed:223.0/255.0f green:222.0/255.0f blue:225.0/255.0f alpha:1];
-    
-    UIImage *highlightedImage = [self imageFromColor:[UIColor blueColor]];
-    
     UIButton *normalButton = (UIButton *)[self.calendarButtonView viewWithTag:FirstDayButtonTag];
-    CGSize normalButtonSize = normalButton.frame.size;
-    UIImage *normalImageActive = [self buttonImageWithColor:buttonNormalColor withBrightEdgeColor:[UIColor whiteColor] withSize:normalButtonSize];
-    
-    UIButton *rightEdgeButton = (UIButton *)[self.calendarButtonView viewWithTag:FirstDayButtonTag+6];
-    CGSize rightEdgeButtonSize = rightEdgeButton.frame.size;
-    UIImage *rightEdgeImageActive = [self buttonImageWithColor:buttonNormalColor withBrightEdgeColor:[UIColor whiteColor] withSize:rightEdgeButtonSize];
+    UIImage *highlightedImage = [self circleImageFromColor:[UIColor blueColor] withSize:normalButton.frame.size];
+
     
     NSInteger buttonColumn = 1;
     for (NSInteger i=FirstDayButtonTag; i<=LastDayButtonTag; i++) {
         CalendarDayButton *dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
         [dayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [dayButton setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
-        
-        if (buttonColumn <=6) {
-            [dayButton setBackgroundImage:normalImageActive forState:UIControlStateNormal];
-        }
-        else {
-            [dayButton setBackgroundImage:rightEdgeImageActive forState:UIControlStateNormal];
-        }
-        
-        dayButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        dayButton.layer.borderWidth = 0.5f;
-        
+
         if (buttonColumn == 7) {
             buttonColumn = 1;
         }
@@ -84,9 +56,7 @@
         }
     }
     
-    // Customize header and calendar button views
-    [self.calendarHeaderView setBackgroundColor:buttonNormalColor];
-    
+ 
     // Configure previous and next month buttons
     UIImage *previousMonthImage = [self arrowButtonImageForDirection:ArrowDirectionLeft withArrowColor:[UIColor blackColor] withButtonColor:[UIColor clearColor] withBrightEdgeColor:[UIColor clearColor] withSize:self.previousMonthButton.frame.size];
     [self.previousMonthButton setBackgroundImage:previousMonthImage forState:UIControlStateNormal];
@@ -467,7 +437,8 @@
 }
 
 
--(UIImage *)imageFromColor:(UIColor *)color {
+/*
+-(UIImage *)squareImageFromColor:(UIColor *)color {
     CGRect rect = CGRectMake(0, 0, 1, 1);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -477,6 +448,23 @@
     UIGraphicsEndImageContext();
     return img;
 }
+*/
+
+-(UIImage *)circleImageFromColor:(UIColor *)color withSize:(CGSize)size {
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextSetStrokeColorWithColor(context, [color CGColor]);
+    CGContextSetLineWidth(context, 1.0);
+
+    CGContextFillEllipseInRect (context, rect);
+    
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+
 
 -(UIImage *)buttonImageWithColor:(UIColor *)color withBrightEdgeColor:(UIColor *)brightEdgeColor withSize:(CGSize)size {
     
@@ -486,6 +474,7 @@
 //    CGContextSetAlpha(context, 1.0f);
     CGContextSetFillColorWithColor(context, [color CGColor]);
     CGContextFillRect(context, rect);
+
     
     CGContextSetStrokeColorWithColor(context, [brightEdgeColor CGColor]);
     //Set the width of the pen mark
@@ -504,11 +493,11 @@
     
     //Draw it
     CGContextStrokePath(context);
-    
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return img;
 }
+
 
 -(UIImage *)arrowButtonImageForDirection:(ArrowDirectionType)arrowDirection withArrowColor:(UIColor *)arrowColor withButtonColor:(UIColor *)buttonColor withBrightEdgeColor:(UIColor *)brightEdgeColor withSize:(CGSize)size {
 
@@ -563,11 +552,6 @@
     return arrowImage;
 }
 
-/*
-- (void)doHighlight:(CalendarDayButton*)b {
-    [b customSetHighlighted:YES];
-}
- */
 
 #pragma mark - TableView delegate methods
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

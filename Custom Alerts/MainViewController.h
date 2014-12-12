@@ -57,7 +57,8 @@ typedef enum {
 -(void)selectDate:(NSDate *)newDate;
 -(void)selectPreviousMonth;
 -(void)selectNextMonth;
--(UIImage *)imageFromColor:(UIColor *)color;
+//-(UIImage *)squareImageFromColor:(UIColor *)color;
+-(UIImage *)circleImageFromColor:(UIColor *)color withSize:(CGSize)size;
 -(UIImage *)buttonImageWithColor:(UIColor *)color withBrightEdgeColor:(UIColor *)brightEdgeColor withSize:(CGSize)size;
 -(UIImage *)arrowButtonImageForDirection:(ArrowDirectionType)arrowDirection withArrowColor:(UIColor *)arrowColor withButtonColor:(UIColor *)buttonColor withBrightEdgeColor:(UIColor *)brightEdgeColor withSize:(CGSize)size;
 //-(void)doHighlight:(UIButton*)b;
