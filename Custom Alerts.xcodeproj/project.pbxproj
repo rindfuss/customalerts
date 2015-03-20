@@ -296,8 +296,8 @@
 				INFOPLIST_FILE = "Custom Alerts/Custom Alerts-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos7.0;
-				"SDKROOT[arch=*]" = iphoneos7.0;
+				SDKROOT = iphoneos8.1;
+				"SDKROOT[arch=*]" = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
@@ -317,8 +317,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "65256AFB-9A82-4CEB-98F7-4EAB4911CFF3";
-				SDKROOT = iphoneos7.0;
-				"SDKROOT[arch=*]" = iphoneos7.0;
+				SDKROOT = iphoneos8.1;
+				"SDKROOT[arch=*]" = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
