@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Adr-hw-aXk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Adr-hw-aXk">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <scenes>
-        <!--Events View Controller - Events-->
+        <!--Events-->
         <scene sceneID="PjR-OS-2QX">
             <objects>
                 <tableViewController id="ego-GL-NgK" customClass="EventsViewController" sceneMemberID="viewController">
@@ -51,7 +51,7 @@
             </objects>
             <point key="canvasLocation" x="1115" y="-76"/>
         </scene>
-        <!--Main View Controller - Select a Date-->
+        <!--Select a Date-->
         <scene sceneID="aj1-Ab-OVO">
             <objects>
                 <tableViewController id="JPq-QS-ove" customClass="MainViewController" sceneMemberID="viewController">
@@ -81,15 +81,12 @@
                                                 </label>
                                                 <view autoresizesSubviews="NO" contentMode="TopLeft" translatesAutoresizingMaskIntoConstraints="NO" id="rT3-x5-Hbx">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="306"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6N1-Gz-fZa">
                                                             <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <subviews>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bbe-cm-XBO">
                                                                     <rect key="frame" x="0.0" y="0.0" width="55" height="35"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="55" id="IOh-HR-9eP"/>
                                                                     </constraints>
@@ -103,7 +100,6 @@
                                                                 </button>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Month" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nwp-lE-Csw">
                                                                     <rect key="frame" x="60" y="5" width="200" height="24"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="200" id="0Go-2X-RnZ"/>
                                                                     </constraints>
@@ -112,7 +108,6 @@
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvN-CE-KrN">
                                                                     <rect key="frame" x="265" y="0.0" width="55" height="35"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="55" id="iKZ-09-Qxb"/>
                                                                     </constraints>
@@ -126,7 +121,6 @@
                                                                 </button>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sun" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JAf-NJ-Znd">
                                                                     <rect key="frame" x="8" y="27" width="31" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="31" id="6W1-8r-ILE"/>
                                                                     </constraints>
@@ -135,7 +129,6 @@
                                                                 </label>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mon" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cpj-ln-MUq">
                                                                     <rect key="frame" x="54" y="27" width="31" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="31" id="wSY-2J-3Jx"/>
                                                                     </constraints>
@@ -144,7 +137,6 @@
                                                                 </label>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tue" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zgt-Jr-lLn">
                                                                     <rect key="frame" x="99" y="27" width="31" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="31" id="eSS-Ge-ZLS"/>
                                                                     </constraints>
@@ -153,7 +145,6 @@
                                                                 </label>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYQ-Ur-QeZ">
                                                                     <rect key="frame" x="145" y="27" width="31" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="31" id="ciI-cG-rmK"/>
                                                                     </constraints>
@@ -162,7 +153,6 @@
                                                                 </label>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thu" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eL-Pd-3AZ">
                                                                     <rect key="frame" x="190" y="27" width="31" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="31" id="4jZ-8t-CJx"/>
                                                                     </constraints>
@@ -171,7 +161,6 @@
                                                                 </label>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fri" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cR0-OQ-fsc">
                                                                     <rect key="frame" x="238" y="27" width="31" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="31" id="kVn-19-Jee"/>
                                                                     </constraints>
@@ -180,7 +169,6 @@
                                                                 </label>
                                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sat" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M6l-B5-Lwb">
                                                                     <rect key="frame" x="283" y="27" width="31" height="21"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="31" id="eWx-GX-JS8"/>
                                                                         <constraint firstAttribute="height" constant="21" id="qWr-1L-1NX"/>
@@ -221,7 +209,6 @@
                                                         </view>
                                                         <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S7W-gZ-xm2" customClass="CalendarDayButton">
                                                             <rect key="frame" x="0.0" y="46" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="JcM-hv-Oe1"/>
                                                                 <constraint firstAttribute="width" constant="46" id="ss8-qF-N6H"/>
@@ -236,7 +223,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Awb-eh-dFp" customClass="CalendarDayButton">
                                                             <rect key="frame" x="46" y="46" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="XOX-qj-QbG"/>
                                                                 <constraint firstAttribute="height" constant="44" id="xte-tT-TTB"/>
@@ -251,7 +237,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6us-Hx-ZVA" customClass="CalendarDayButton">
                                                             <rect key="frame" x="92" y="46" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="AxL-VO-2JO"/>
                                                                 <constraint firstAttribute="width" constant="46" id="YXQ-uX-q7Q"/>
@@ -266,7 +251,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0UG-Dj-OpL" customClass="CalendarDayButton">
                                                             <rect key="frame" x="138" y="46" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="1Wo-LC-cIK"/>
                                                                 <constraint firstAttribute="height" constant="44" id="bjR-ek-iYe"/>
@@ -281,7 +265,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="105" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lki-R4-cBZ" customClass="CalendarDayButton">
                                                             <rect key="frame" x="184" y="46" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="AKu-Y6-jHU"/>
                                                                 <constraint firstAttribute="width" constant="46" id="DoU-WI-Ceg"/>
@@ -296,7 +279,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="106" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MnF-GJ-9rr" customClass="CalendarDayButton">
                                                             <rect key="frame" x="230" y="46" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="QJy-be-eUT"/>
                                                                 <constraint firstAttribute="width" constant="46" id="qFe-m7-3ZC"/>
@@ -311,7 +293,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="107" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AT8-Aj-mGc" customClass="CalendarDayButton">
                                                             <rect key="frame" x="276" y="46" width="44" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="aHz-B2-w8N"/>
                                                                 <constraint firstAttribute="width" constant="44" id="fdc-jJ-dfI"/>
@@ -326,7 +307,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="108" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aNr-g3-ev5" customClass="CalendarDayButton">
                                                             <rect key="frame" x="0.0" y="90" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="ELz-cV-R5E"/>
                                                                 <constraint firstAttribute="width" constant="46" id="n6F-6U-FYM"/>
@@ -341,7 +321,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="109" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmB-h0-ZnW" customClass="CalendarDayButton">
                                                             <rect key="frame" x="46" y="90" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="i1L-sE-TKs"/>
                                                                 <constraint firstAttribute="width" constant="46" id="mqu-rn-Qem"/>
@@ -356,7 +335,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="110" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="63n-oT-0R0" customClass="CalendarDayButton">
                                                             <rect key="frame" x="92" y="90" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="Ehg-K7-AwX"/>
                                                                 <constraint firstAttribute="width" constant="46" id="vEz-sY-rsw"/>
@@ -371,7 +349,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="111" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jdS-g0-dFc" customClass="CalendarDayButton">
                                                             <rect key="frame" x="138" y="90" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="Oqx-AS-1Xs"/>
                                                                 <constraint firstAttribute="width" constant="46" id="dne-kl-KKa"/>
@@ -386,7 +363,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="112" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hvd-8p-LqX" customClass="CalendarDayButton">
                                                             <rect key="frame" x="184" y="90" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="gbP-Xs-Sui"/>
                                                                 <constraint firstAttribute="width" constant="46" id="pAE-hp-BSG"/>
@@ -401,7 +377,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="113" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ckr-0o-7EK" customClass="CalendarDayButton">
                                                             <rect key="frame" x="230" y="90" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="c0m-GQ-oCG"/>
                                                                 <constraint firstAttribute="width" constant="46" id="ycy-fo-JQF"/>
@@ -416,7 +391,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="114" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7yv-xR-ALS" customClass="CalendarDayButton">
                                                             <rect key="frame" x="276" y="90" width="44" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="pVE-1A-TsT"/>
                                                             </constraints>
@@ -430,7 +404,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="115" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dJU-zi-3pa" customClass="CalendarDayButton">
                                                             <rect key="frame" x="0.0" y="134" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="YGP-SY-iy7"/>
                                                                 <constraint firstAttribute="height" constant="44" id="jfy-fi-p2d"/>
@@ -445,7 +418,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="116" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MwF-lA-i1M" customClass="CalendarDayButton">
                                                             <rect key="frame" x="46" y="134" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="oz4-bO-Ej3"/>
                                                                 <constraint firstAttribute="width" constant="46" id="wv5-ks-Ydz"/>
@@ -460,7 +432,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="117" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTa-MM-Jnp" customClass="CalendarDayButton">
                                                             <rect key="frame" x="92" y="134" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="CYK-OR-JZ1"/>
                                                                 <constraint firstAttribute="height" constant="44" id="hNH-bn-aJi"/>
@@ -475,7 +446,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="118" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IXD-QH-Cb0" customClass="CalendarDayButton">
                                                             <rect key="frame" x="138" y="134" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="JWQ-C9-VKZ"/>
                                                                 <constraint firstAttribute="height" constant="44" id="egF-xQ-LLO"/>
@@ -490,7 +460,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="119" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yVI-E7-61y" customClass="CalendarDayButton">
                                                             <rect key="frame" x="184" y="134" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="5wv-Rs-u5K"/>
                                                                 <constraint firstAttribute="height" constant="44" id="c5K-sj-WYZ"/>
@@ -505,7 +474,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="120" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yA7-33-teG" customClass="CalendarDayButton">
                                                             <rect key="frame" x="230" y="134" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="cg0-TT-NZX"/>
                                                                 <constraint firstAttribute="width" constant="46" id="p7U-4c-VIO"/>
@@ -520,7 +488,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="121" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I14-m0-dgR" customClass="CalendarDayButton">
                                                             <rect key="frame" x="276" y="134" width="44" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="tXK-9N-fok"/>
                                                             </constraints>
@@ -534,7 +501,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="122" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ltw-Rd-cVC" customClass="CalendarDayButton">
                                                             <rect key="frame" x="0.0" y="178" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="6h2-8y-xa1"/>
                                                                 <constraint firstAttribute="width" constant="46" id="UES-bY-Zdi"/>
@@ -549,7 +515,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="123" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fh7-Mu-e9u" customClass="CalendarDayButton">
                                                             <rect key="frame" x="46" y="178" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="6pD-RE-552"/>
                                                                 <constraint firstAttribute="height" constant="44" id="FWr-R5-g5t"/>
@@ -564,7 +529,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="124" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qT7-Fl-gjr" customClass="CalendarDayButton">
                                                             <rect key="frame" x="92" y="178" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="9KN-Xh-Tdj"/>
                                                                 <constraint firstAttribute="width" constant="46" id="ilI-l7-gMf"/>
@@ -579,7 +543,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="125" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qs3-Ke-LS6" customClass="CalendarDayButton">
                                                             <rect key="frame" x="138" y="178" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="Ej7-6B-42u"/>
                                                                 <constraint firstAttribute="width" constant="46" id="uI4-Pv-NZf"/>
@@ -594,7 +557,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="126" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1c6-Eh-7MK" customClass="CalendarDayButton">
                                                             <rect key="frame" x="184" y="178" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="eun-X1-oyz"/>
                                                                 <constraint firstAttribute="height" constant="44" id="h3S-0A-svy"/>
@@ -609,7 +571,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="127" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uSv-x4-ubk" customClass="CalendarDayButton">
                                                             <rect key="frame" x="230" y="178" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="8cC-Db-rpP"/>
                                                                 <constraint firstAttribute="width" constant="46" id="ejG-3E-k8j"/>
@@ -624,7 +585,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="128" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zgx-yq-wPj" customClass="CalendarDayButton">
                                                             <rect key="frame" x="276" y="178" width="44" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="Wcm-Il-hzm"/>
                                                             </constraints>
@@ -638,7 +598,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="129" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="74h-9C-SYN" customClass="CalendarDayButton">
                                                             <rect key="frame" x="0.0" y="222" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="RKd-D3-9A3"/>
                                                                 <constraint firstAttribute="height" constant="44" id="yGR-Fd-31r"/>
@@ -653,7 +612,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="130" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DQH-u3-KzF" customClass="CalendarDayButton">
                                                             <rect key="frame" x="46" y="222" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="3Xb-1N-iFo"/>
                                                                 <constraint firstAttribute="height" constant="44" id="fen-P3-xR7"/>
@@ -668,7 +626,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="131" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e7Y-JG-tRD" customClass="CalendarDayButton">
                                                             <rect key="frame" x="92" y="222" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="Kac-N0-Jgh"/>
                                                                 <constraint firstAttribute="height" constant="44" id="dbZ-EI-QJO"/>
@@ -683,7 +640,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="132" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dhd-af-qai" customClass="CalendarDayButton">
                                                             <rect key="frame" x="138" y="222" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="1RU-bo-t6k"/>
                                                                 <constraint firstAttribute="height" constant="44" id="w16-z5-MQF"/>
@@ -698,7 +654,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="133" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ard-0K-MKl" customClass="CalendarDayButton">
                                                             <rect key="frame" x="184" y="222" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="f99-ra-RcW"/>
                                                                 <constraint firstAttribute="height" constant="44" id="hvS-9c-di0"/>
@@ -713,7 +668,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="134" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XTI-u2-Bof" customClass="CalendarDayButton">
                                                             <rect key="frame" x="230" y="222" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="PX6-Up-Z2d"/>
                                                                 <constraint firstAttribute="width" constant="46" id="UHg-ya-BMf"/>
@@ -728,7 +682,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="135" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZUY-gj-6yW" customClass="CalendarDayButton">
                                                             <rect key="frame" x="276" y="222" width="44" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="LMj-g1-ror"/>
                                                             </constraints>
@@ -742,7 +695,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="136" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CvN-hC-fsK" customClass="CalendarDayButton">
                                                             <rect key="frame" x="0.0" y="266" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="hMs-eb-cMz"/>
                                                                 <constraint firstAttribute="width" constant="46" id="zeP-sI-UxI"/>
@@ -757,7 +709,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="137" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIG-rm-Cxg" customClass="CalendarDayButton">
                                                             <rect key="frame" x="46" y="266" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="J7I-ht-ZHQ"/>
                                                                 <constraint firstAttribute="height" constant="44" id="xRz-8X-gat"/>
@@ -772,7 +723,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="138" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPG-tz-NeS" customClass="CalendarDayButton">
                                                             <rect key="frame" x="92" y="266" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="46" id="Cp7-Ax-hja"/>
                                                                 <constraint firstAttribute="height" constant="44" id="rIm-Vn-iLV"/>
@@ -787,7 +737,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="139" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XPm-Bb-a98" customClass="CalendarDayButton">
                                                             <rect key="frame" x="138" y="266" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="cSh-fX-2Lb"/>
                                                                 <constraint firstAttribute="width" constant="46" id="p8S-6b-4GA"/>
@@ -802,7 +751,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="140" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yWV-UX-tJV" customClass="CalendarDayButton">
                                                             <rect key="frame" x="184" y="266" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="3cs-8E-dIS"/>
                                                                 <constraint firstAttribute="width" constant="46" id="dzK-By-pY0"/>
@@ -817,7 +765,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="141" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gyD-kY-c8A" customClass="CalendarDayButton">
                                                             <rect key="frame" x="230" y="266" width="46" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="1wh-FH-Qxx"/>
                                                                 <constraint firstAttribute="width" constant="46" id="J6h-je-AwG"/>
@@ -832,7 +779,6 @@
                                                         </button>
                                                         <button opaque="NO" tag="142" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Wj-r4-IL1" customClass="CalendarDayButton">
                                                             <rect key="frame" x="276" y="266" width="44" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="44" id="h6h-qU-Bnz"/>
                                                             </constraints>
@@ -1074,7 +1020,7 @@
             </objects>
             <point key="canvasLocation" x="603" y="-76"/>
         </scene>
-        <!--Alerts View Controller - Alerts-->
+        <!--Alerts-->
         <scene sceneID="gZ8-wm-XGG">
             <objects>
                 <viewController id="wer-Dx-ejt" customClass="AlertsViewController" sceneMemberID="viewController">

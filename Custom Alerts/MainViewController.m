@@ -10,6 +10,7 @@
 
 @interface MainViewController ()
 
+
 @end
 
 @implementation MainViewController
@@ -67,7 +68,7 @@
     
     // Disable buttons until user grants access to calendar items
     [self.goToCalendarEventsButton setEnabled:NO];
-    [self.addEventsButton setEnabled:NO];
+//    [self.addEventsButton setEnabled:NO];
 
     self.eventStore = [[EKEventStore alloc] init];
     
@@ -88,9 +89,9 @@
                     // access granted
                     // Get the default calendar from store.
                     self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
-                    self.currentCalendars = [NSArray arrayWithObject:self.defaultCalendar];
+                    [self loadCurrentCalendars];
                     [self.goToCalendarEventsButton setEnabled:YES];
-                    [self.addEventsButton setEnabled:YES];
+//                    [self.addEventsButton setEnabled:YES];
                 }
             });
         }];
@@ -98,11 +99,31 @@
     else
     {
         self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
-        self.currentCalendars = [NSArray arrayWithObject:self.defaultCalendar];
+        [self loadCurrentCalendars];
         [self.goToCalendarEventsButton setEnabled:YES];
-        [self.addEventsButton setEnabled:YES];
+//        [self.addEventsButton setEnabled:YES];
     }
 }
+
+
+- (void)loadCurrentCalendars {
+    
+    self.currentCalendars = [NSArray arrayWithObject:self.defaultCalendar];
+    
+    NSMutableArray *savedCalendars = [[NSMutableArray alloc] init];
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *selectedCalendarIDs = [defaults objectForKey:@"selected_calendars_preference"];
+    for (NSString *calendarID in selectedCalendarIDs) {
+        EKCalendar *cal = [self.eventStore calendarWithIdentifier:calendarID];
+        if (cal) {
+            [savedCalendars addObject:[self.eventStore calendarWithIdentifier:calendarID]];
+        }
+    }
+    self.currentCalendars = savedCalendars;
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -139,8 +160,8 @@
 }
 
 - (IBAction)calendarsButton:(id)sender {
-//    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayAllCalendars eventStore:self.eventStore];
-    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly eventStore:self.eventStore];
+    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayAllCalendars eventStore:self.eventStore];
+//    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly eventStore:self.eventStore];
 
     
     calendarChooser.delegate = self;
@@ -157,6 +178,7 @@
     [self selectDate:[NSDate date]];  //update current date to today
 }
 
+/*
 - (IBAction)addEvents:(id)sender {  // For testing
 
     EKEventEditViewController *addController = [[EKEventEditViewController alloc] initWithNibName:nil bundle:nil];
@@ -174,7 +196,8 @@
 	addController.editViewDelegate = self;
 
 }
-
+*/
+ 
 - (IBAction)buttonPressed:(id)sender {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
@@ -566,6 +589,7 @@
 }
 
 
+/*
 #pragma mark - EKEventEditViewDelegate
 
 // Overriding EKEventEditViewDelegate method to update event store according to user actions.
@@ -598,18 +622,22 @@
 }
 
 
+
 // Set the calendar edited by EKEventEditViewController to our chosen calendar - the default calendar.
 - (EKCalendar *)eventEditViewControllerDefaultCalendarForNewEvents:(EKEventEditViewController *)controller {
 	
     EKCalendar *calendarForEdit = self.defaultCalendar;
 	return calendarForEdit;
 }
+ */
 
+/*
 #pragma mark - EventsViewController Delegate Methods
 - (void)eventsViewControllerDidComplete: (EventsViewController *)controller {
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+*/
 
 #pragma mark - Calendar Chooser delegate methods
 - (void)calendarChooserSelectionDidChange:(EKCalendarChooser *)calendarChooser {
@@ -618,6 +646,14 @@
 
 - (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser {
     self.currentCalendars = [calendarChooser.selectedCalendars allObjects];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *selectedCalendarIDs = [[NSMutableArray alloc] init];
+    for (EKCalendar *calendar in self.currentCalendars) {
+        NSString *calendarID = calendar.calendarIdentifier;
+        [selectedCalendarIDs addObject:calendarID];
+    }
+    [defaults setObject:selectedCalendarIDs forKey:@"selected_calendars_preference" ];
     
     [self.navigationController popViewControllerAnimated:YES];
 }

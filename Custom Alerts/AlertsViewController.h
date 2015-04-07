@@ -25,29 +25,32 @@
 
 @class AlertsViewController;
 
+/*
 @protocol AlertsViewControllerDelegate <NSObject>
 - (void)alertsViewControllerDidComplete: (AlertsViewController *)controller;
 @end
-
+*/
+ 
 @interface AlertsViewController : UIViewController <EKEventEditViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
+@property (strong, nonatomic) UIBarButtonItem *addButton;
 @property (weak, nonatomic) IBOutlet UIPickerView *alertDetailsPicker;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-@property (nonatomic, weak) id <AlertsViewControllerDelegate> delegate;
-@property (nonatomic, weak) EKEventStore *eventStore;
-@property (nonatomic, weak) EKEvent *currentEvent;
-@property (nonatomic, weak) EKAlarm *currentAlert;
+//@property (nonatomic, weak) id <AlertsViewControllerDelegate> delegate;
+@property (nonatomic, strong) EKEventStore *eventStore;
+@property (nonatomic, strong) EKEvent *currentEvent;
+@property (nonatomic, strong) EKAlarm *currentAlert;
 
 @property (nonatomic) NSInteger alertQuantity;
 @property (nonatomic) NSInteger alertPeriod;
 
 - (void) getAlertDateQuantityAndPeriodForAlert:(EKAlarm *)alert onEvent:(EKEvent *)event usingQuantity:(NSInteger *)alertQuantity usingPeriod:(NSInteger *)alertPeriod;
 
-- (void)configureUserControls;
+- (void)configureUserControlsAndAnimate: (BOOL)shouldAnimate;
 - (void)setAlertPropertiesForSelectionAtIndexPath:(NSIndexPath *)indexPath;
-- (void)initializePicker;
+- (void)initializePickerAndAnimate: (BOOL)shouldAnimate;
 - (void)updateAlertSpanning: (EKSpan)span;
 
 - (IBAction)editButton:(id)sender;

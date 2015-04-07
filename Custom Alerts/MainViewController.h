@@ -22,7 +22,8 @@ typedef enum {
     ArrowDirectionRight = 2
     } ArrowDirectionType;
 
-@interface MainViewController : UITableViewController <UITableViewDelegate, EKCalendarChooserDelegate, EKEventEditViewDelegate>
+//@interface MainViewController : UITableViewController <UITableViewDelegate, EKCalendarChooserDelegate, EKEventEditViewDelegate>
+@interface MainViewController : UITableViewController <UITableViewDelegate, EKCalendarChooserDelegate>
 
 @property (nonatomic, strong) NSDate *currentDate;
 
@@ -35,7 +36,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UIButton *nextMonthButton;
 @property (weak, nonatomic) IBOutlet UILabel *monthLabel;
 @property (weak, nonatomic) IBOutlet UIButton *goToCalendarEventsButton;
-@property (weak, nonatomic) IBOutlet UIButton *addEventsButton;
+//@property (weak, nonatomic) IBOutlet UIButton *addEventsButton;
 @property (weak, nonatomic) IBOutlet UILabel *appVersionLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *calendarButtonView;
@@ -45,7 +46,7 @@ typedef enum {
 - (IBAction)nextMonthButtonPressed:(id)sender;
 - (IBAction)calendarsButton:(id)sender;
 - (IBAction)todayButton:(id)sender;
-- (IBAction)addEvents:(id)sender; //for testing
+//- (IBAction)addEvents:(id)sender; //for testing
 
 - (IBAction)buttonPressed:(id)sender;
 - (IBAction)swipeToPreviousMonth:(id)sender;

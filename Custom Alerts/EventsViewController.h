@@ -12,15 +12,16 @@
 #import "AlertsViewController.h"
 
 
-@interface EventsViewController : UITableViewController <AlertsViewControllerDelegate, EKCalendarChooserDelegate>
+//@interface EventsViewController : UITableViewController <AlertsViewControllerDelegate, EKCalendarChooserDelegate>
+@interface EventsViewController : UITableViewController <EKCalendarChooserDelegate>
 
-@property (nonatomic, weak) EKEventStore *eventStore;
-@property (nonatomic, weak) NSArray *currentCalendars;
+@property (nonatomic, strong) EKEventStore *eventStore;
+@property (nonatomic, strong) NSArray *currentCalendars;
 
 @property (nonatomic, strong) NSDate *selectedDate;
 @property (nonatomic, strong) NSMutableArray *eventsList;
 
-- (void)alertsViewControllerDidComplete: (AlertsViewController *)controller;
+//- (void)alertsViewControllerDidComplete: (AlertsViewController *)controller;
 
 - (void)populateEventsList;
 -(BOOL)isDate:(NSDate*)date1 sameDayAsDate:(NSDate*)date2;

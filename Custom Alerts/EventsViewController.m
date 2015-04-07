@@ -28,14 +28,37 @@
 {
     [super viewDidLoad];
 
-    [self populateEventsList];
-    
     // Set Title
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateStyle:NSDateFormatterShortStyle];
     [df setTimeStyle:NSDateFormatterNoStyle];
     self.title = [df stringFromDate:self.selectedDate];
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    
+    UIApplication *app = [UIApplication sharedApplication];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:app];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventStoreChanged:) name:EKEventStoreChangedNotification object:self.eventStore];
+
+
+    [self refreshDataAndUpdateDisplay];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)applicationWillEnterForeground: (NSNotification *)notification {
+    
+    [self refreshDataAndUpdateDisplay];
+}
+
+- (void)eventStoreChanged: (NSNotification *)notification {
+    [self refreshDataAndUpdateDisplay];
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -49,7 +72,7 @@
 	{
 		AlertsViewController *alertsViewController = segue.destinationViewController;
 
-        alertsViewController.delegate = self;
+//        alertsViewController.delegate = self;
         alertsViewController.eventStore = self.eventStore;
         
         NSInteger row = self.tableView.indexPathForSelectedRow.row;
@@ -81,10 +104,33 @@
     
     EKEvent *event = [self.eventsList objectAtIndex:row];
     
+    // set colors to match calendar color
+    UIColor *eventCalendarColor = [UIColor colorWithCGColor:[event.calendar CGColor]];
+    CGFloat r, g, b, a;
+    [eventCalendarColor getRed:&r green:&g blue:&b alpha:&a];
+    eventCalendarColor = [UIColor colorWithRed:r green:g blue:b alpha:0.5f];
+    cell.accessoryView.backgroundColor = eventCalendarColor;
+    cell.accessoryView.tintColor = [UIColor blackColor];
+    cell.contentView.superview.backgroundColor = eventCalendarColor;
+    cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.textLabel.textColor = [UIColor blackColor];
+    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+    cell.detailTextLabel.textColor = [UIColor blackColor];
+
+    UILabel *disclosureArrowLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, cell.contentView.frame.size.height)];
+    disclosureArrowLabel.text = @">";
+    disclosureArrowLabel.textAlignment = NSTextAlignmentRight;
+    disclosureArrowLabel.backgroundColor = [UIColor clearColor];
+    disclosureArrowLabel.textColor = [UIColor blackColor];
+    cell.accessoryView = disclosureArrowLabel;
+    cell.accessoryView.backgroundColor = [UIColor clearColor];
+    
+    
+    
     cell.textLabel.text = event.title;
     
     
-    NSString *calendarString = event.calendar.title;
+//    NSString *calendarString = event.calendar.title;
     
     // Create subtitle string like Calendar: Start-End
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -100,6 +146,7 @@
     NSString *endString = [df stringFromDate:event.endDate];
 
     NSString *eventInfo;
+/*
     if (self.currentCalendars.count > 1) {
         if ([event isAllDay]) {
             eventInfo = [NSString stringWithFormat:@"%@: All Day", calendarString];
@@ -109,27 +156,32 @@
         }
     }
     else {
+ */
         if ([event isAllDay]) {
-            eventInfo = @"All Day";
+            eventInfo = @"     All Day";
         }
         else {
-            eventInfo = [NSString stringWithFormat:@"%@-%@", startString, endString];
+            eventInfo = [NSString stringWithFormat:@"     %@-%@", startString, endString];
         }
-    }
+//    }
     cell.detailTextLabel.text = eventInfo;
     
     return cell;
 }
 
 
+/*
 #pragma mark - AlertsViewController delegate methods
 - (void)alertsViewControllerDidComplete: (AlertsViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
 
 }
+*/
 
-#pragma mark - EventsViewController Utility Methods
+#pragma mark - Utility Methods
 - (void)populateEventsList {
+    
+    [self.eventStore reset];
     
     NSDate *startDate = self.selectedDate;
     NSDate *endDate;
@@ -140,7 +192,6 @@
     
     // Create the predicate. Pass it the default calendar.
     self.eventsList = [[NSMutableArray alloc] init];
-    
     
     NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:startDate endDate:endDate
                                                                     calendars:self.currentCalendars];
@@ -158,4 +209,39 @@
     
     return [comp1 day]==[comp2 day] && [comp1 month]==[comp2 month] && [comp1 year]==[comp2 year];
 }
+
+-(void)refreshDataAndUpdateDisplay {
+    
+    [self populateEventsList];
+    [self.tableView reloadData];
+}
+
+-(UIImage *)disclosureArrowImageWithColor:(UIColor *)arrowColor withSize:(CGSize)size {
+    
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // Draw the arrow
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, size.width * 0.65, size.height/2.0);
+    CGPathAddLineToPoint(path, NULL, size.width * 0.35, size.height * 0.35);
+    CGPathAddLineToPoint(path, NULL, size.width * 0.35, size.height * 0.65);
+    CGPathAddLineToPoint(path, NULL, size.width * 0.65, size.height/2.0);
+    CGPathCloseSubpath(path);
+    
+    CGContextSetFillColorWithColor(context, [arrowColor CGColor]);
+    CGContextAddPath(context, path);
+    CGContextFillPath(context);
+    
+    
+    CGContextStrokePath(context);
+    
+    UIImage *arrowImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return arrowImage;
+}
+
 @end

@@ -10,6 +10,8 @@
 
 @interface AlertsViewController ()
 
+@property (nonatomic, strong) UIActionSheet *addAlertRecurrenceActionSheet;
+@property (nonatomic, strong) EKAlarm *addedAlarm;
 @end
 
 @implementation AlertsViewController
@@ -30,15 +32,39 @@
     UIImage *stretchableButtonImagePressed = [buttonImagePressed stretchableImageWithLeftCapWidth:12 topCapHeight:0];
     [self.saveButton setBackgroundImage:stretchableButtonImagePressed forState:UIControlStateHighlighted];
 */
-    [self configureUserControls];
+    self.addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButton:)];
+    
+    [self configureUserControlsAndAnimate:NO];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+
+    UIApplication *app = [UIApplication sharedApplication];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:app];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventStoreChanged:) name:EKEventStoreChangedNotification object:self.eventStore];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)applicationWillEnterForeground: (NSNotification *)notification {
+    
+    // Refresh event in case something was changed in another app
+    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:NO];
+}
+
+- (void)eventStoreChanged: (NSNotification *)notification {
+    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+}
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 
 #pragma mark - Table view data source
@@ -52,7 +78,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.currentEvent.alarms.count;
+    NSInteger numAlarms = self.currentEvent.alarms.count;
+
+    return numAlarms;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -93,7 +121,7 @@
         alertPeriodText = [NSString stringWithFormat:@"%@s", alertPeriodText];
     }
     
-    NSString *alertText = [NSString stringWithFormat:@"%d %@", alertQuantity, alertPeriodText];
+    NSString *alertText = [NSString stringWithFormat:@"%ld %@", (long)alertQuantity, alertPeriodText];
     
     cell.textLabel.text = alertText;
     
@@ -107,7 +135,7 @@
 {
 
     [self setAlertPropertiesForSelectionAtIndexPath:indexPath];
-    [self initializePicker];
+    [self initializePickerAndAnimate:YES];
 }
 
 #pragma mark - class utility methods
@@ -145,16 +173,17 @@
 }
 
 
-- (void)configureUserControls {
+- (void)configureUserControlsAndAnimate: (BOOL)shouldAnimate {
 
     if (self.currentEvent.alarms.count == 0) {
         [self.alertDetailsPicker setHidden:YES];
         [self.saveButton setHidden:YES];
+        self.navigationItem.rightBarButtonItem = self.addButton;
     }
     else {
         [self.alertDetailsPicker setHidden:NO];
         [self.saveButton setHidden:NO];
-
+        self.navigationItem.rightBarButtonItem = self.editButton;
         
         if (self.tableView.indexPathForSelectedRow == nil) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
@@ -162,7 +191,7 @@
             
         }
         [self setAlertPropertiesForSelectionAtIndexPath:self.tableView.indexPathForSelectedRow];
-        [self initializePicker];
+        [self initializePickerAndAnimate: shouldAnimate];
     }
 }
 
@@ -180,10 +209,10 @@
     self.alertPeriod = alertPeriod;
 }
 
-- (void) initializePicker {
+- (void) initializePickerAndAnimate: (BOOL)shouldAnimate {
     
-    [self.alertDetailsPicker selectRow:self.alertQuantity inComponent:ComponentQuantity animated:YES];
-    [self.alertDetailsPicker selectRow:self.alertPeriod inComponent:ComponentPeriod animated:YES];
+    [self.alertDetailsPicker selectRow:self.alertQuantity inComponent:ComponentQuantity animated:shouldAnimate];
+    [self.alertDetailsPicker selectRow:self.alertPeriod inComponent:ComponentPeriod animated:shouldAnimate];
 }
 
 - (void)updateAlertSpanning:(EKSpan)span {
@@ -224,9 +253,26 @@
 
     [self.tableView reloadData];
     [self.tableView selectRowAtIndexPath:currentIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-    [self configureUserControls];
+    [self configureUserControlsAndAnimate:NO];
 }
 
+- (void)refreshDataAndUpdateDisplayAndNotifyUserOnFail: (BOOL)shouldNotifyUserOnFail {
+    
+    BOOL didRefresh = [self.currentEvent refresh];
+    
+    if (didRefresh) {
+        [self.tableView reloadData];
+        [self configureUserControlsAndAnimate:NO];
+    }
+    else {
+        // something happened to event, and it is no longer valid
+        if (shouldNotifyUserOnFail) {
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This event is no longer valid. It may have been deleted on another device." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [av show];
+        }
+        [self.navigationController popViewControllerAnimated:NO];
+    }
+}
 
 #pragma mark - User Interaction
 - (IBAction)editButton:(id)sender {
@@ -239,7 +285,21 @@
     [self presentViewController:eventEditViewController animated:YES completion:nil];
 }
 
+- (IBAction)addButton:(id)sender {
+    
+    self.addedAlarm = [EKAlarm alarmWithRelativeOffset:(NSTimeInterval)0];
+    [self.currentEvent addAlarm:self.addedAlarm];
+
+    [self saveAlertAndProcessAsAddedAlert:YES];
+}
+
+
 - (IBAction)saveButton:(id)sender {
+    
+    [self saveAlertAndProcessAsAddedAlert:NO];
+}
+
+- (void)saveAlertAndProcessAsAddedAlert: (BOOL)isAddedAlert {
     
     if (self.currentEvent.recurrenceRules == nil) {
         [self updateAlertSpanning:EKSpanThisEvent];
@@ -249,12 +309,19 @@
             [self updateAlertSpanning:EKSpanThisEvent];
         }
         else {
-            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
-            [actionSheet showInView:self.view];
+            // need an action sheet, but need to have different action sheets for an alert that's been edited vs. one that was created with the add button, so that if user hits cancel on an added alert we know we need to delete that alarm from the event vs. if user hits cancel on an edited alert, we don't need to do anything. This conditional code is in the actionSheetCancel code
+            if (isAddedAlert) {
+                self.addAlertRecurrenceActionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Create alert for this event only", @"Create for future events too", nil];
+                [self.addAlertRecurrenceActionSheet showInView:self.view];
+            }
+            else {
+                UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
+                [actionSheet showInView:self.view];
+            }
         }
     }
+    
 }
-
 
 #pragma mark - EKEventEditViewDelegate
 
@@ -262,36 +329,10 @@
 - (void)eventEditViewController:(EKEventEditViewController *)controller
           didCompleteWithAction:(EKEventEditViewAction)action {
 	
-	NSError *error = nil;
-	
-	switch (action) {
-		case EKEventEditViewActionCanceled:
-			// Edit action canceled, do nothing.
-			break;
-			
-		case EKEventEditViewActionSaved:
-			// When user hit "Done" button, save the newly created event to the event store,
-			// and reload table view.
-			// If the new event is being added to the default calendar, then update its
-			// eventsList.
-
-			[controller.eventStore saveEvent:controller.event span:EKSpanThisEvent error:&error];
-            
-            [self.tableView reloadData];
-
-            [self configureUserControls];
-            
-			break;
-			
-		case EKEventEditViewActionDeleted:
-            // Don't allow deleting
-			break;
-			
-		default:
-			break;
-	}
 	// Dismiss the modal view controller
     [controller dismissViewControllerAnimated:YES completion:nil];
+    
+    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:NO];
 }
 
 
@@ -309,7 +350,7 @@
     
     switch (component) {
         case ComponentQuantity:
-            title = [NSString stringWithFormat:@"%d", row];
+            title = [NSString stringWithFormat:@"%ld", (long)row];
             break;
         case ComponentPeriod:
             switch (row) {
@@ -377,22 +418,27 @@
 #pragma mark - ActionSheet delegate methods
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    switch (buttonIndex) {
-        case 0: // update only current event
-            [self updateAlertSpanning:EKSpanThisEvent];
-            break;
-        case 1: // update future events
-            [self updateAlertSpanning:EKSpanFutureEvents];
-            break;
-            
-        default:
-            break;
+    if (actionSheet == self.addAlertRecurrenceActionSheet && buttonIndex == actionSheet.cancelButtonIndex) {
+        // if we're editing an existing alert, nothing needs to be done, but if user has hit the add button on an event that had no alerts and it's a recurring event, and then the user hit cancel on the action sheet asking whether to update one or all occurrences, then we need to delete the alarm that was added to the event.
+        [self.currentEvent removeAlarm:self.addedAlarm];
+        self.addAlertRecurrenceActionSheet = nil; // no need to keep this around anymore
+        self.addedAlarm = nil; // no need to keep this around anymore
+        
+    }
+    else {
+        switch (buttonIndex) {
+            case 0: // update only current event
+                [self updateAlertSpanning:EKSpanThisEvent];
+                break;
+            case 1: // update future events
+                [self updateAlertSpanning:EKSpanFutureEvents];
+                break;
+                
+            default:
+                break;
+        }
     }
 }
 
-- (void)actionSheetCancel:(UIActionSheet *)actionSheet {
-    
-    
-}
 
 @end
