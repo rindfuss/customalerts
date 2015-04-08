@@ -23,7 +23,9 @@
 
 //- (void)alertsViewControllerDidComplete: (AlertsViewController *)controller;
 
+-(void)refreshDataAndUpdateDisplay;
 - (void)populateEventsList;
 -(BOOL)isDate:(NSDate*)date1 sameDayAsDate:(NSDate*)date2;
+
 
 @end

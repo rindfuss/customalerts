@@ -10,7 +10,7 @@
             <objects>
                 <tableViewController id="ego-GL-NgK" customClass="EventsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="uFb-jq-l8e">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="290"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -1020,6 +1020,66 @@
             </objects>
             <point key="canvasLocation" x="603" y="-76"/>
         </scene>
+        <!--Main View Controller-->
+        <scene sceneID="mXj-NV-RYW">
+            <objects>
+                <viewController id="HlB-Tn-xbx" customClass="CAMainViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cig-yg-jCK"/>
+                        <viewControllerLayoutGuide type="bottom" id="iW8-kc-E8M"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="P36-2D-uem">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hTM-Q8-FxA">
+                                <rect key="frame" x="16" y="518" width="41" height="30"/>
+                                <state key="normal" title="Today">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rea-PO-gOd">
+                                <rect key="frame" x="125" y="518" width="70" height="30"/>
+                                <state key="normal" title="Calendars">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="calendarsButtonPressed:" destination="HlB-Tn-xbx" eventType="touchUpInside" id="0iH-Zo-6IX"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqj-61-5Ld">
+                                <rect key="frame" x="137" y="125" width="46" height="30"/>
+                                <state key="normal" title="Apr 13">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="apr13ButtonPressed:" destination="HlB-Tn-xbx" eventType="touchUpInside" id="NZg-a6-5kl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7g-oA-ou9">
+                                <rect key="frame" x="142" y="70" width="37" height="30"/>
+                                <state key="normal" title="Apr 6">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="apr6ButtonPressed:" destination="HlB-Tn-xbx" eventType="touchUpInside" id="0pn-Yg-tbg"/>
+                                </connections>
+                            </button>
+                            <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5eC-52-8US" customClass="Events">
+                                <rect key="frame" x="0.0" y="220" width="320" height="290"/>
+                                <connections>
+                                    <segue destination="ego-GL-NgK" kind="embed" identifier="eventsEmbedSegue" id="KcL-a8-XeM"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="tBX-Om-iOI"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jJw-3X-cLc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="603" y="592"/>
+        </scene>
         <!--Alerts-->
         <scene sceneID="gZ8-wm-XGG">
             <objects>
@@ -1029,7 +1089,7 @@
                         <viewControllerLayoutGuide type="bottom" id="R9i-pC-p2A"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bVT-5G-EX8">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="246"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ngk-PW-Tdf">
@@ -1127,7 +1187,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="JPq-QS-ove" kind="relationship" relationship="rootViewController" id="rfG-aG-HlD"/>
+                        <segue destination="HlB-Tn-xbx" kind="relationship" relationship="rootViewController" id="t1T-cQ-3Tf"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tdm-yX-80c" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1140,4 +1200,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="KcL-a8-XeM"/>
+    </inferredMetricsTieBreakers>
 </document>
