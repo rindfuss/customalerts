@@ -183,11 +183,12 @@
     
     [self.eventStore reset];
     
-    NSDate *startDate = self.selectedDate;
-    NSDate *endDate;
+    NSDate *startDate = [DateCalculator datetimeFromYear:[DateCalculator yearFor:self.selectedDate] fromMonth:[DateCalculator monthFor:self.selectedDate] fromDay:[DateCalculator dayFor:self.selectedDate] fromHour:0 fromMinute:0 fromSecond:0];
+
+    NSDate *endDate = [DateCalculator datetimeFromYear:[DateCalculator yearFor:self.selectedDate] fromMonth:[DateCalculator monthFor:self.selectedDate] fromDay:[DateCalculator dayFor:self.selectedDate] fromHour:23 fromMinute:59 fromSecond:59];
     
     // endDate is 1 day - 1 second = 60*60*24 - 1 seconds = 86400-1 = 86399 seconds from startDate
-    endDate = [startDate dateByAddingTimeInterval:86399];
+    //endDate = [startDate dateByAddingTimeInterval:86399];
     
     
     // Create the predicate. Pass it the default calendar.

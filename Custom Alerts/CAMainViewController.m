@@ -17,17 +17,68 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    self.currentDate = nil;
-    [self selectDate:[NSDate date]];
-    
-    // Set appVersionLabel
-    self.appVersionLabel.text = AppVersion;
+    self.currentCalendars = [[NSMutableArray alloc] init];
     
     
     // Make navigation controller panel at top non-transparent so that tableview has appropriate vertical size
     [self.navigationController.navigationBar setTranslucent:NO];
+
+    // Set appVersionLabel
+    self.appVersionLabel.text = AppVersion;
     
+    // Create and place day select buttons
+    UIImage *highlightedImage = [self circleImageFromColor:[UIColor blueColor] withSize:CGSizeMake(kDayButtonWidth, kDayButtonHeight)];
+
+    for (NSInteger r=1; r<=6; r++) {
+        for (NSInteger c=1; c<=7; c++) {
+            CalendarDayButton *cdb = [[CalendarDayButton alloc] init];
+            [self.calendarButtonView addSubview:cdb];
+            cdb.frame = CGRectMake(kDayButtonMarginLeft + kDayButtonSpacingHorizontal * (c-1) + kDayButtonWidth * (c-1), self.sunLabel.frame.origin.y + self.sunLabel.frame.size.height + kDayButtonMarginTop + kDayButtonSpacingVertical * (r-1) + kDayButtonHeight * (r-1), kDayButtonWidth, kDayButtonHeight);
+            cdb.tag = kDayButtonFirstTag + 7 * (r-1) + (c-1);
+            [cdb setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+            [cdb setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
+            [cdb addTarget:self action:@selector(calendarDayButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+            cdb.backgroundColor = [UIColor brownColor];
+            
+            if (r==1) {
+                // Align the day of week lables to the center of 1st row of day buttons
+                UILabel *dayOfWeekLabel;
+                switch (c) {
+                    case 1:
+                        dayOfWeekLabel = self.sunLabel;
+                        break;
+                    case 2:
+                        dayOfWeekLabel = self.monLabel;
+                        break;
+                    case 3:
+                        dayOfWeekLabel = self.tueLabel;
+                        break;
+                    case 4:
+                        dayOfWeekLabel = self.wedLabel;
+                        break;
+                    case 5:
+                        dayOfWeekLabel = self.thuLabel;
+                        break;
+                    case 6:
+                        dayOfWeekLabel = self.friLabel;
+                        break;
+                    case 7:
+                        dayOfWeekLabel = self.satLabel;
+                        break;
+                }
+                [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:dayOfWeekLabel
+                                                                             attribute:NSLayoutAttributeCenterX
+                                                                             relatedBy:NSLayoutRelationEqual
+                                                                                toItem:cdb
+                                                                             attribute:NSLayoutAttributeCenterX
+                                                                            multiplier:1.0
+                                                                              constant:0]];
+            }
+        }
+    }
+
+    // Do setup for using calendar database
     self.eventStore = [[EKEventStore alloc] init];
     
     if ([self.eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
@@ -62,7 +113,8 @@
         //        [self.addEventsButton setEnabled:YES];
     }
 
-    
+    // configure display
+    [self selectDate:[NSDate date]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -82,11 +134,38 @@
     
 }
 
+#pragma mark - Calendar Chooser delegate methods
+- (void)calendarChooserSelectionDidChange:(EKCalendarChooser *)calendarChooser {
+    
+    NSSet *selectedCalendars = [calendarChooser selectedCalendars];
+    
+}
+
+- (void)calendarChooserDidFinish:(EKCalendarChooser *)calendarChooser {
+    [self.currentCalendars removeAllObjects];
+    [self.currentCalendars addObjectsFromArray:[calendarChooser.selectedCalendars allObjects]];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *selectedCalendarIDs = [[NSMutableArray alloc] init];
+    for (EKCalendar *calendar in self.currentCalendars) {
+        NSString *calendarID = calendar.calendarIdentifier;
+        [selectedCalendarIDs addObject:calendarID];
+    }
+    [defaults setObject:selectedCalendarIDs forKey:@"selected_calendars_preference" ];
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+    [self selectDate:self.currentDate];
+}
+
+- (void)calendarChooserDidCancel:(EKCalendarChooser *)calendarChooser {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 #pragma mark - Class utility methods
 - (void)loadCurrentCalendars {
-    
-    self.currentCalendars = [NSArray arrayWithObject:self.defaultCalendar];
     
     NSMutableArray *savedCalendars = [[NSMutableArray alloc] init];
     
@@ -95,15 +174,26 @@
     for (NSString *calendarID in selectedCalendarIDs) {
         EKCalendar *cal = [self.eventStore calendarWithIdentifier:calendarID];
         if (cal) {
-            [savedCalendars addObject:[self.eventStore calendarWithIdentifier:calendarID]];
+            [savedCalendars addObject:cal];
         }
     }
-    self.currentCalendars = savedCalendars;
+    
+    [self.currentCalendars removeAllObjects];
+    
+    if (savedCalendars.count == 0) {
+        [self.currentCalendars addObject:self.defaultCalendar];
+    }
+    else {
+        self.currentCalendars = savedCalendars;
+    }
 }
 
 -(void)selectDate:(NSDate *)newDate {
+    // configures buttons and display for the given date
+    // loads appropriate data into events controller
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
+    
     CalendarDayButton *dayButton;
     
     NSInteger oldMonth;
@@ -111,36 +201,31 @@
     NSInteger newMonth;
     NSInteger newDay;
     NSInteger newYear;
-    NSDateComponents *newDateComponents = [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:newDate];
+
     BOOL isCurrentDateBlank;
     
     if (self.currentDate) {
         isCurrentDateBlank = NO;
         
         NSDate *oldDate = self.currentDate;
-        NSDateComponents *oldComponents = [calendar components:NSMonthCalendarUnit | NSDayCalendarUnit fromDate:oldDate];
-        oldMonth = [oldComponents month];
-        oldDay = [oldComponents day];
+        oldMonth = [DateCalculator monthFor:oldDate];
+        oldDay = [DateCalculator dayFor:oldDate];
     } else {
         isCurrentDateBlank = YES;
     }
     
-    newMonth = [newDateComponents month];
-    newDay = [newDateComponents day];
-    newYear = [newDateComponents year];
+    newMonth = [DateCalculator monthFor:newDate];
+    newDay = [DateCalculator dayFor:newDate];
+    newYear = [DateCalculator yearFor:newDate];
     
     // Get tag for first of month button
     // Determine which button will be for the 1st of the month
-    NSDateComponents *firstOfMonthComponents = [[NSDateComponents alloc] init];
-    [firstOfMonthComponents setDay:1];
-    [firstOfMonthComponents setMonth:newMonth];
-    [firstOfMonthComponents setYear:[newDateComponents year]];
-    NSDate *firstOfMonthDate = [calendar dateFromComponents:firstOfMonthComponents];
+    NSDate *firstOfMonthDate = [DateCalculator dateFromYear:newYear fromMonth:newMonth fromDay:1];
     
     NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:firstOfMonthDate];
     NSInteger firstOfMonthWeekday = [weekdayComponents weekday];  // 1 corresponds to Sunday
     
-    NSInteger firstOfMonthButtonTag = firstOfMonthWeekday + FirstDayButtonTag - 1;
+    NSInteger firstOfMonthButtonTag = firstOfMonthWeekday + kDayButtonFirstTag - 1;
     
     
     if (isCurrentDateBlank || (oldMonth != newMonth) ) {
@@ -157,18 +242,14 @@
         
         
         // Determine last day of prior month for filling in blank buttons at top
-        NSDateComponents *firstOfPreviousMonthComponents = [[NSDateComponents alloc] init];
-        [firstOfPreviousMonthComponents setDay:1];
-        [firstOfPreviousMonthComponents setMonth: newMonth!=1 ? newMonth-1 : 12];
-        [firstOfPreviousMonthComponents setYear: newMonth!=1 ? newYear : newYear-1];
-        NSDate *firstOfPreviousMonthDate = [calendar dateFromComponents:firstOfPreviousMonthComponents];
+        NSDate *firstOfPreviousMonthDate = [DateCalculator dateFromYear:newMonth!=1 ? newYear : newYear-1 fromMonth:newMonth!=1 ? newMonth-1 : 12 fromDay:1];
         
         NSRange previousMonthDaysRange = [calendar rangeOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:firstOfPreviousMonthDate];
         NSInteger lastOfPreviousMonthDayNumber = previousMonthDaysRange.length;
         
         
         // Configure buttons for days of previous month
-        for (NSInteger i=firstOfMonthButtonTag-1; i>=FirstDayButtonTag; i--) {
+        for (NSInteger i=firstOfMonthButtonTag-1; i>=kDayButtonFirstTag; i--) {
             dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
             [dayButton customSetHighlighted:NO];
             
@@ -195,7 +276,7 @@
         }
         
         // Configure buttons for days of next month
-        for (NSInteger i=lastOfMonthButtonTag+1; i<= LastDayButtonTag; i++) {
+        for (NSInteger i=lastOfMonthButtonTag+1; i<= kDayButtonLastTag; i++) {
             dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
             [dayButton customSetHighlighted:NO];
             dayButton.day = i - lastOfMonthButtonTag;
@@ -211,17 +292,17 @@
             [dayButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         }
         
-        // Hide last row of buttons if none of them are for selected month
-        if (lastOfMonthButtonTag <= LastDayButtonTag-7) {
+        // Hide last row(s) of buttons if none of them are for selected month
+        if (lastOfMonthButtonTag <= kDayButtonLastTag-7) {
             // last of month button is on 2nd to last row, so hide last row
-            for (NSInteger i=LastDayButtonTag; i>=LastDayButtonTag-6; i--) {
+            for (NSInteger i=kDayButtonLastTag; i>=kDayButtonLastTag-6; i--) {
                 dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
                 [dayButton setHidden:YES];
             }
         }
         else {
             // last of month button is on last row, so unhide last row
-            for (NSInteger i=LastDayButtonTag; i>=LastDayButtonTag-6; i--) {
+            for (NSInteger i=kDayButtonLastTag; i>=kDayButtonLastTag-6; i--) {
                 dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
                 [dayButton setHidden:NO];
             }
@@ -244,12 +325,15 @@
     [df setDateStyle:NSDateFormatterShortStyle];
     [df setTimeStyle:NSDateFormatterNoStyle];
     [df setDateFormat:@"MMMM yyyy"];
-    self.monthLabel.text = [df stringFromDate:newDate];
-    
+    self.navigationItem.title = [df stringFromDate:newDate];
     
     self.currentDate = newDate;
     
+    self.eventsViewController.eventStore = self.eventStore;
+    self.eventsViewController.currentCalendars = self.currentCalendars;
+    self.eventsViewController.selectedDate = self.currentDate;
     
+    [self.eventsViewController refreshDataAndUpdateDisplay];
 }
 
 -(void)selectPreviousMonth {
@@ -452,34 +536,25 @@
 
 #pragma mark - User interaction methods
 
-- (IBAction)apr6ButtonPressed:(id)sender {
+- (IBAction)calendarDayButtonPressed:(id)sender {
     
-    NSDate *newDate = [DateCalculator dateFromYear:2015 fromMonth:4 fromDay:6];
-    self.currentDate = newDate;
+    CalendarDayButton *cdb = (CalendarDayButton *)sender;
+
+    NSDate *newDate = [DateCalculator dateFromYear:cdb.year fromMonth:cdb.month fromDay:cdb.day];
     
-    self.eventsViewController.eventStore = self.eventStore;
-    self.eventsViewController.currentCalendars = self.currentCalendars;
-    self.eventsViewController.selectedDate = self.currentDate;
-    
-    [self.eventsViewController refreshDataAndUpdateDisplay];
+    [self selectDate:newDate];
 }
 
-- (IBAction)apr13ButtonPressed:(id)sender {
-    NSDate *newDate = [DateCalculator dateFromYear:2015 fromMonth:4 fromDay:13];
+- (IBAction)todayButton:(id)sender {
     
-    self.currentDate = newDate;
-    
-    self.eventsViewController.eventStore = self.eventStore;
-    self.eventsViewController.currentCalendars = self.currentCalendars;
-    self.eventsViewController.selectedDate = self.currentDate;
-    
-    [self.eventsViewController refreshDataAndUpdateDisplay];
+    [self selectDate:[NSDate date]];  //update current date to today
 }
+
 
 - (IBAction)calendarsButtonPressed:(id)sender {
-    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayAllCalendars eventStore:self.eventStore];
+    //EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayAllCalendars eventStore:self.eventStore];
     //    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly eventStore:self.eventStore];
-    
+    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle: EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayAllCalendars entityType:EKEntityTypeEvent eventStore:self.eventStore];
     
     calendarChooser.delegate = self;
     calendarChooser.showsCancelButton = YES;
