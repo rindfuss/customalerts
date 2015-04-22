@@ -292,6 +292,9 @@
             [dayButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         }
         
+        NSInteger rowsForMonth = lastOfMonthDayNumber + (firstOfMonthButtonTag - kDayButtonFirstTag); // total number of day buttons that have to be displayed (1 for each day of month plus however many are needed to display days from the prior month on the 1st row of the calendar)
+        rowsForMonth = ceil(rowsForMonth / 7.0); // important to use 7.0 and not just 7 so calculation happens as doubles rather than integers
+        
         // Hide last row(s) of buttons if none of them are for selected month
         if (lastOfMonthButtonTag <= kDayButtonLastTag-7) {
             // last of month button is on 2nd to last row, so hide last row
