@@ -19,13 +19,30 @@
     // Do any additional setup after loading the view.
     self.currentCalendars = [[NSMutableArray alloc] init];
     
-    
-    // Make navigation controller panel at top non-transparent so that tableview has appropriate vertical size
-    [self.navigationController.navigationBar setTranslucent:NO];
-
     // Set appVersionLabel
     self.appVersionLabel.text = AppVersion;
     
+    // Make navigation controller panel at top non-transparent so that tableview has appropriate vertical size
+    [self.navigationController.navigationBar setTranslucent:NO];
+    
+    // set up arrow images for next and previous month buttons
+    UIButton *b1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [b1 setFrame:CGRectMake(0.0, 0.0, 55.0, 30.0)];
+    [b1 addTarget:self action:@selector(monthButtonPreviousPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *imageMonthPrevious = [self arrowButtonImageForDirection:ArrowDirectionLeft withArrowColor:[UIColor blackColor] withButtonColor:[UIColor clearColor] withBrightEdgeColor:[UIColor clearColor] withSize:b1.frame.size];
+    [b1 setImage:imageMonthPrevious forState:UIControlStateNormal];
+    UIBarButtonItem *barButtonPrevious = [[UIBarButtonItem alloc]initWithCustomView:b1];
+    self.navigationItem.leftBarButtonItem = barButtonPrevious;
+    
+    UIButton *b2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [b2 setFrame:CGRectMake(0.0, 0.0, 55.0, 30.0)];
+    [b2 addTarget:self action:@selector(monthButtonNextPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *imageMonthNext = [self arrowButtonImageForDirection:ArrowDirectionRight withArrowColor:[UIColor blackColor] withButtonColor:[UIColor clearColor] withBrightEdgeColor:[UIColor clearColor] withSize:b2.frame.size];
+    [b2 setImage:imageMonthNext forState:UIControlStateNormal];
+    UIBarButtonItem *barButtonNext = [[UIBarButtonItem alloc]initWithCustomView:b2];
+    self.navigationItem.rightBarButtonItem = barButtonNext;
+    
+
     // Create and place day select buttons
     UIImage *highlightedImage = [self circleImageFromColor:[UIColor blueColor] withSize:CGSizeMake(kDayButtonWidth, kDayButtonHeight)];
 
@@ -113,6 +130,13 @@
         //        [self.addEventsButton setEnabled:YES];
     }
 
+    // configure display
+    // this happens here and in viewDidAppear, because when program first starts the call below won't size things appropriately, but it will fill in the day numbers, which makes for a more pleasing initial display before viewDidAppear sizes it correctly
+    //[self selectDate:[NSDate date]];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    
     // configure display
     [self selectDate:[NSDate date]];
 }
@@ -295,21 +319,24 @@
         NSInteger rowsForMonth = lastOfMonthDayNumber + (firstOfMonthButtonTag - kDayButtonFirstTag); // total number of day buttons that have to be displayed (1 for each day of month plus however many are needed to display days from the prior month on the 1st row of the calendar)
         rowsForMonth = ceil(rowsForMonth / 7.0); // important to use 7.0 and not just 7 so calculation happens as doubles rather than integers
         
+        // Unhide buttons needed for this month
+        for (NSInteger i=kDayButtonFirstTag; i<=kDayButtonFirstTag + 7*rowsForMonth - 1; i++) {
+            dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
+            [dayButton setHidden:NO];
+        }
         // Hide last row(s) of buttons if none of them are for selected month
-        if (lastOfMonthButtonTag <= kDayButtonLastTag-7) {
-            // last of month button is on 2nd to last row, so hide last row
-            for (NSInteger i=kDayButtonLastTag; i>=kDayButtonLastTag-6; i--) {
-                dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
-                [dayButton setHidden:YES];
-            }
+        for (NSInteger i=kDayButtonFirstTag + 7*rowsForMonth; i<=kDayButtonLastTag; i++) {
+            dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
+            [dayButton setHidden:YES];
         }
-        else {
-            // last of month button is on last row, so unhide last row
-            for (NSInteger i=kDayButtonLastTag; i>=kDayButtonLastTag-6; i--) {
-                dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:i];
-                [dayButton setHidden:NO];
-            }
-        }
+        
+        // resize calendar button view
+        self.calendarButtonView.frame = CGRectMake(self.calendarButtonView.frame.origin.x, self.calendarButtonView.frame.origin.y, self.calendarButtonView.frame.size.width, kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents) ;
+
+        // resize events view
+        self.viewEventsContainer.frame = CGRectMake(self.viewEventsContainer.frame.origin.x, self.calendarButtonView.frame.origin.y + self.calendarButtonView.frame.size.height, self.viewEventsContainer.frame.size.width, self.viewDateAndEvents.frame.size.height - self.calendarButtonView.frame.size.height - kHeightBottomButtons);
+        
+        
     }
     // Update selected date display
     if (!isCurrentDateBlank) {
@@ -337,88 +364,6 @@
     self.eventsViewController.selectedDate = self.currentDate;
     
     [self.eventsViewController refreshDataAndUpdateDisplay];
-}
-
--(void)selectPreviousMonth {
-    
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    
-    NSDateComponents *currentDateComponents = [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:self.currentDate];
-    
-    NSDateComponents *newDateComponents = [[NSDateComponents alloc] init];
-    
-    NSInteger currentDay, currentMonth, currentYear;
-    NSInteger newDay, newMonth, newYear;
-    
-    currentDay = [currentDateComponents day];
-    currentMonth = [currentDateComponents month];
-    currentYear = [currentDateComponents year];
-    
-    
-    newMonth = currentMonth -1;
-    newDay = currentDay;
-    newYear = currentYear;
-    if (newMonth == 0) {
-        newMonth = 12;
-        newYear = currentYear - 1;
-    }
-    
-    [newDateComponents setMonth:newMonth];
-    [newDateComponents setYear:newYear];
-    [newDateComponents setDay:1];
-    
-    NSDate *testDate = [calendar dateFromComponents:newDateComponents];
-    NSRange daysRange = [calendar rangeOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:testDate];
-    NSInteger lastOfMonthDayNumber = daysRange.length;
-    if (newDay > lastOfMonthDayNumber) {
-        newDay = lastOfMonthDayNumber;
-    }
-    
-    [newDateComponents setDay:newDay];
-    NSDate *newDate = [calendar dateFromComponents:newDateComponents];
-    
-    [self selectDate:newDate];
-}
-
--(void)selectNextMonth {
-    
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    
-    NSDateComponents *currentDateComponents = [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:self.currentDate];
-    
-    NSDateComponents *newDateComponents = [[NSDateComponents alloc] init];
-    
-    NSInteger currentDay, currentMonth, currentYear;
-    NSInteger newDay, newMonth, newYear;
-    
-    currentDay = [currentDateComponents day];
-    currentMonth = [currentDateComponents month];
-    currentYear = [currentDateComponents year];
-    
-    
-    newMonth = currentMonth + 1;
-    newDay = currentDay;
-    newYear = currentYear;
-    if (newMonth == 13) {
-        newMonth = 1;
-        newYear = currentYear + 1;
-    }
-    
-    [newDateComponents setMonth:newMonth];
-    [newDateComponents setYear:newYear];
-    [newDateComponents setDay:1];
-    
-    NSDate *testDate = [calendar dateFromComponents:newDateComponents];
-    NSRange daysRange = [calendar rangeOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:testDate];
-    NSInteger lastOfMonthDayNumber = daysRange.length;
-    if (newDay > lastOfMonthDayNumber) {
-        newDay = lastOfMonthDayNumber;
-    }
-    
-    [newDateComponents setDay:newDay];
-    NSDate *newDate = [calendar dateFromComponents:newDateComponents];
-    
-    [self selectDate:newDate];
 }
 
 
@@ -544,6 +489,20 @@
     CalendarDayButton *cdb = (CalendarDayButton *)sender;
 
     NSDate *newDate = [DateCalculator dateFromYear:cdb.year fromMonth:cdb.month fromDay:cdb.day];
+    
+    [self selectDate:newDate];
+}
+
+- (IBAction)monthButtonPreviousPressed:(id)sender {
+    
+    NSDate *newDate = [DateCalculator dateThatIs:1 monthsEarlierThan:self.currentDate];
+    
+    [self selectDate:newDate];
+}
+
+- (IBAction)monthButtonNextPressed:(id)sender {
+    
+    NSDate *newDate = [DateCalculator dateThatIs:1 monthsLaterThan:self.currentDate];
     
     [self selectDate:newDate];
 }

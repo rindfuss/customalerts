@@ -15,12 +15,15 @@
 #import "CalendarDayButton.h"
 #import "DateCalculator.h"
 
-#define kDayButtonWidth 44
-#define kDayButtonHeight 44
-#define kDayButtonMarginTop 3
-#define kDayButtonMarginLeft 3
-#define kDayButtonSpacingHorizontal 1
-#define kDayButtonSpacingVertical 1
+#define kDayOfWeekLabelHeight 20.0
+#define kDayButtonWidth 44.0
+#define kDayButtonHeight 44.0
+#define kDayButtonMarginTop 3.0
+#define kDayButtonMarginLeft 3.0
+#define kDayButtonSpacingHorizontal 1.0
+#define kDayButtonSpacingVertical 1.0
+#define kSpacingCalendarAndEvents 8.0
+#define kHeightBottomButtons 46.0
 
 #define kDayButtonFirstTag 101
 #define kDayButtonLastTag 142
@@ -39,9 +42,12 @@ typedef enum {
 @property (nonatomic, strong) NSMutableArray *currentCalendars;
 
 @property (nonatomic, strong) EventsViewController *eventsViewController;
+@property (weak, nonatomic) IBOutlet UIView *viewEventsContainer;
 
-@property (weak, nonatomic) IBOutlet UIButton *previousMonthButton;
-@property (weak, nonatomic) IBOutlet UIButton *nextMonthButton;
+@property (strong, nonatomic) IBOutlet UIView *viewDateAndEvents;
+
+@property (weak, nonatomic) UIBarButtonItem *monthButtonPrevious;
+@property (weak, nonatomic) UIBarButtonItem *monthButtonNext;
 //@property (weak, nonatomic) IBOutlet UIButton *addEventsButton;
 @property (weak, nonatomic) IBOutlet UILabel *appVersionLabel;
 @property (weak, nonatomic) IBOutlet UIView *calendarButtonView;
@@ -53,6 +59,9 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UILabel *thuLabel;
 @property (weak, nonatomic) IBOutlet UILabel *friLabel;
 @property (weak, nonatomic) IBOutlet UILabel *satLabel;
+
+- (IBAction)monthButtonPreviousPressed:(id)sender;
+- (IBAction)monthButtonNextPressed:(id)sender;
 
 - (IBAction)todayButton:(id)sender;
 - (IBAction)calendarsButtonPressed:(id)sender;
