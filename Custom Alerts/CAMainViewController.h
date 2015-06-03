@@ -51,6 +51,7 @@ typedef enum {
 //@property (weak, nonatomic) IBOutlet UIButton *addEventsButton;
 @property (weak, nonatomic) IBOutlet UILabel *appVersionLabel;
 @property (weak, nonatomic) IBOutlet UIView *calendarButtonView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *calendarButtonViewConstraintHeight;
 @property (weak, nonatomic) IBOutlet UIView *calendarHeaderView;
 @property (weak, nonatomic) IBOutlet UILabel *sunLabel;
 @property (weak, nonatomic) IBOutlet UILabel *monLabel;

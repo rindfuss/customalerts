@@ -131,13 +131,6 @@
     }
 
     // configure display
-    // this happens here and in viewDidAppear, because when program first starts the call below won't size things appropriately, but it will fill in the day numbers, which makes for a more pleasing initial display before viewDidAppear sizes it correctly
-    //[self selectDate:[NSDate date]];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    
-    // configure display
     [self selectDate:[NSDate date]];
 }
 
@@ -331,10 +324,15 @@
         }
         
         // resize calendar button view
-        self.calendarButtonView.frame = CGRectMake(self.calendarButtonView.frame.origin.x, self.calendarButtonView.frame.origin.y, self.calendarButtonView.frame.size.width, kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents) ;
+//        self.calendarButtonView.frame = CGRectMake(self.calendarButtonView.frame.origin.x, self.calendarButtonView.frame.origin.y, self.calendarButtonView.frame.size.width, kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents) ;
+        
+        self.calendarButtonViewConstraintHeight.constant = kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents;
+        
+        
+        
 
         // resize events view
-        self.viewEventsContainer.frame = CGRectMake(self.viewEventsContainer.frame.origin.x, self.calendarButtonView.frame.origin.y + self.calendarButtonView.frame.size.height, self.viewEventsContainer.frame.size.width, self.viewDateAndEvents.frame.size.height - self.calendarButtonView.frame.size.height - kHeightBottomButtons);
+//        self.viewEventsContainer.frame = CGRectMake(self.viewEventsContainer.frame.origin.x, self.calendarButtonView.frame.origin.y + self.calendarButtonView.frame.size.height, self.viewEventsContainer.frame.size.width, self.viewDateAndEvents.frame.size.height - self.calendarButtonView.frame.size.height - kHeightBottomButtons);
         
         
     }
@@ -514,8 +512,7 @@
 
 
 - (IBAction)calendarsButtonPressed:(id)sender {
-    //EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayAllCalendars eventStore:self.eventStore];
-    //    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly eventStore:self.eventStore];
+     //   EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly entityType:EKEntityTypeEvent eventStore:self.eventStore];
     EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle: EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayAllCalendars entityType:EKEntityTypeEvent eventStore:self.eventStore];
     
     calendarChooser.delegate = self;
