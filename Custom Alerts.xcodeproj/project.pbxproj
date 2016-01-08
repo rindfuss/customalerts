@@ -12,7 +12,6 @@
 		9B4E0AC01839625A00B41777 /* CalendarDayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B4E0ABF1839625A00B41777 /* CalendarDayButton.m */; };
 		9B93713016FABB9600E83DA4 /* AlertsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B93712F16FABB9600E83DA4 /* AlertsViewController.m */; };
 		9B9D867C1AD4494A00F68F04 /* CAMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9D867B1AD4494A00F68F04 /* CAMainViewController.m */; };
-		9BBBB50E1B4CBBA3008226B8 /* DateCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBBB50D1B4CBBA3008226B8 /* DateCalculator.m */; };
 		9BDAAE7E16F9539B008C4102 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAE7D16F9539B008C4102 /* UIKit.framework */; };
 		9BDAAE8016F9539B008C4102 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAE7F16F9539B008C4102 /* Foundation.framework */; };
 		9BDAAE8816F9539B008C4102 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9BDAAE8616F9539B008C4102 /* InfoPlist.strings */; };
@@ -37,8 +36,6 @@
 		9B93712F16FABB9600E83DA4 /* AlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertsViewController.m; sourceTree = "<group>"; };
 		9B9D867A1AD4494A00F68F04 /* CAMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMainViewController.h; sourceTree = "<group>"; };
 		9B9D867B1AD4494A00F68F04 /* CAMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CAMainViewController.m; sourceTree = "<group>"; };
-		9BBBB50C1B4CBBA3008226B8 /* DateCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DateCalculator.h; path = "../../iOS Libraries/DateCalculator.h"; sourceTree = "<group>"; };
-		9BBBB50D1B4CBBA3008226B8 /* DateCalculator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DateCalculator.m; path = "../../iOS Libraries/DateCalculator.m"; sourceTree = "<group>"; };
 		9BDAAE7916F9539B008C4102 /* Custom Alerts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Custom Alerts.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BDAAE7D16F9539B008C4102 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9BDAAE7F16F9539B008C4102 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -111,8 +108,6 @@
 			children = (
 				9BDAAE8C16F9539B008C4102 /* AppDelegate.h */,
 				9BDAAE8D16F9539B008C4102 /* AppDelegate.m */,
-				9BBBB50C1B4CBBA3008226B8 /* DateCalculator.h */,
-				9BBBB50D1B4CBBA3008226B8 /* DateCalculator.m */,
 				9BDAAE9516F9539B008C4102 /* MainStoryboard_iPhone.storyboard */,
 				9B2880C71B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.h */,
 				9B2880C81B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m */,
@@ -215,7 +210,6 @@
 				9B2880C91B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m in Sources */,
 				9BDAAE8E16F9539B008C4102 /* AppDelegate.m in Sources */,
 				9B9D867C1AD4494A00F68F04 /* CAMainViewController.m in Sources */,
-				9BBBB50E1B4CBBA3008226B8 /* DateCalculator.m in Sources */,
 				9BDAAEAD16F95CD6008C4102 /* EventsViewController.m in Sources */,
 				9B93713016FABB9600E83DA4 /* AlertsViewController.m in Sources */,
 				9B4E0AC01839625A00B41777 /* CalendarDayButton.m in Sources */,
