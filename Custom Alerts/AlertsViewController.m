@@ -244,8 +244,11 @@
     [self.currentAlert setRelativeOffset:alertInterval];
     
     NSError *error;
-    [self.eventStore saveEvent:self.currentEvent span:span error:&error];
+    BOOL returnValue = [self.eventStore saveEvent:self.currentEvent span:span error:&error];
     
+    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+    
+    /*
     NSIndexPath *currentIndexPath = self.tableView.indexPathForSelectedRow;
     if (currentIndexPath == nil) {
             currentIndexPath = [NSIndexPath indexPathForItem:0 inSection:0];
@@ -254,6 +257,7 @@
     [self.tableView reloadData];
     [self.tableView selectRowAtIndexPath:currentIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     [self configureUserControlsAndAnimate:NO];
+     */
 }
 
 - (void)refreshDataAndUpdateDisplayAndNotifyUserOnFail: (BOOL)shouldNotifyUserOnFail {
@@ -289,6 +293,7 @@
     
     self.addedAlarm = [EKAlarm alarmWithRelativeOffset:(NSTimeInterval)0];
     [self.currentEvent addAlarm:self.addedAlarm];
+    self.currentAlert = [self.currentEvent.alarms objectAtIndex: 0];
 
     [self saveAlertAndProcessAsAddedAlert:YES];
 }

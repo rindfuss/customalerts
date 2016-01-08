@@ -14,15 +14,16 @@
 #import "AppDelegate.h"
 #import "CalendarDayButton.h"
 #import "DateCalculator.h"
+#import "SelectCalendarsTableViewController.h"
 
 #define kDayOfWeekLabelHeight 20.0
 #define kDayButtonWidth 44.0
-#define kDayButtonHeight 44.0
+#define kDayButtonHeight 40.0
 #define kDayButtonMarginTop 3.0
 #define kDayButtonMarginLeft 3.0
 #define kDayButtonSpacingHorizontal 1.0
 #define kDayButtonSpacingVertical 1.0
-#define kSpacingCalendarAndEvents 8.0
+#define kSpacingCalendarAndEvents 4.0
 #define kHeightBottomButtons 46.0
 
 #define kDayButtonFirstTag 101
@@ -33,7 +34,7 @@ typedef enum {
     ArrowDirectionRight = 2
 } ArrowDirectionType;
 
-@interface CAMainViewController : UIViewController <EKCalendarChooserDelegate>
+@interface CAMainViewController : UIViewController <EKCalendarChooserDelegate, EKEventEditViewDelegate>
 
 @property (nonatomic, strong) NSDate *currentDate;
 
@@ -52,7 +53,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UILabel *appVersionLabel;
 @property (weak, nonatomic) IBOutlet UIView *calendarButtonView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *calendarButtonViewConstraintHeight;
-@property (weak, nonatomic) IBOutlet UIView *calendarHeaderView;
+//@property (weak, nonatomic) IBOutlet UIView *calendarHeaderView;
 @property (weak, nonatomic) IBOutlet UILabel *sunLabel;
 @property (weak, nonatomic) IBOutlet UILabel *monLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tueLabel;
@@ -63,7 +64,11 @@ typedef enum {
 
 - (IBAction)monthButtonPreviousPressed:(id)sender;
 - (IBAction)monthButtonNextPressed:(id)sender;
+- (IBAction)swipeToPreviousMonth:(id)sender;
+- (IBAction)swipeToNextMonth:(id)sender;
+
+
 
 - (IBAction)todayButton:(id)sender;
-- (IBAction)calendarsButtonPressed:(id)sender;
+
 @end

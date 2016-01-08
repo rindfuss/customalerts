@@ -27,20 +27,22 @@
     
     // set up arrow images for next and previous month buttons
     UIButton *b1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [b1 setFrame:CGRectMake(0.0, 0.0, 55.0, 30.0)];
+    [b1 setFrame:CGRectMake(0.0, 0.0, 47.0, 40.0)];
     [b1 addTarget:self action:@selector(monthButtonPreviousPressed:) forControlEvents:UIControlEventTouchUpInside];
     UIImage *imageMonthPrevious = [self arrowButtonImageForDirection:ArrowDirectionLeft withArrowColor:[UIColor blackColor] withButtonColor:[UIColor clearColor] withBrightEdgeColor:[UIColor clearColor] withSize:b1.frame.size];
     [b1 setImage:imageMonthPrevious forState:UIControlStateNormal];
     UIBarButtonItem *barButtonPrevious = [[UIBarButtonItem alloc]initWithCustomView:b1];
-    self.navigationItem.leftBarButtonItem = barButtonPrevious;
+    UIBarButtonItem *barButtonBlank = [[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:barButtonBlank, barButtonBlank, barButtonPrevious, nil];
     
     UIButton *b2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [b2 setFrame:CGRectMake(0.0, 0.0, 55.0, 30.0)];
+    [b2 setFrame:CGRectMake(0.0, 0.0, 47.0, 40.0)];
     [b2 addTarget:self action:@selector(monthButtonNextPressed:) forControlEvents:UIControlEventTouchUpInside];
     UIImage *imageMonthNext = [self arrowButtonImageForDirection:ArrowDirectionRight withArrowColor:[UIColor blackColor] withButtonColor:[UIColor clearColor] withBrightEdgeColor:[UIColor clearColor] withSize:b2.frame.size];
     [b2 setImage:imageMonthNext forState:UIControlStateNormal];
     UIBarButtonItem *barButtonNext = [[UIBarButtonItem alloc]initWithCustomView:b2];
-    self.navigationItem.rightBarButtonItem = barButtonNext;
+    UIBarButtonItem *barButtonAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed:)];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:barButtonAdd, barButtonNext, nil];
     
 
     // Create and place day select buttons
@@ -56,7 +58,7 @@
             [cdb setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
             [cdb addTarget:self action:@selector(calendarDayButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 
-            cdb.backgroundColor = [UIColor brownColor];
+            //cdb.backgroundColor = [UIColor brownColor];
             
             if (r==1) {
                 // Align the day of week lables to the center of 1st row of day buttons
@@ -129,9 +131,18 @@
         //[self.goToCalendarEventsButton setEnabled:YES];
         //        [self.addEventsButton setEnabled:YES];
     }
+}
 
-    // configure display
-    [self selectDate:[NSDate date]];
+- (void)viewWillAppear:(BOOL)animated {
+
+    // The logic below should call the selectDate method with today's date if this is the initial load of the view. If the view is appearing because we've just selected a new set of calendars, for example, from another view controller, the logic below should simply refresh the display (which will take into account any changes to the calendars selected to display)
+    
+    if (self.currentDate) {
+        [self selectDate:self.currentDate];
+    }
+    else {
+        [self selectDate:[NSDate date]];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -144,14 +155,43 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString: @"eventsEmbedSegue"]) {
+   if ([segue.identifier isEqualToString: @"eventsEmbedSegue"]) {
         EventsViewController *evc = (EventsViewController *)segue.destinationViewController;
         self.eventsViewController = evc;
     }
-    
+    else if ([segue.identifier isEqualToString:@"calendarsSelectSegue"]) {
+
+        SelectCalendarsTableViewController *vc = (SelectCalendarsTableViewController *)segue.destinationViewController;
+        
+        
+        /*
+        NSArray *calendarsAvailable = [self.eventStore calendarsForEntityType:EKEntityTypeEvent];
+        NSSet *calendarsPreselected = [NSSet setWithArray:self.currentCalendars];
+        
+        vc.calendarIDs = [[NSMutableArray alloc] init];
+        vc.calendarNames = [[NSMutableArray alloc] init];
+        vc.calendarSelected = [[NSMutableArray alloc] init];
+        NSUInteger i=0;
+        for (EKCalendar *cal in calendarsAvailable) {
+            [vc.calendarNames insertObject:cal.title atIndex:i];
+            [vc.calendarIDs insertObject:cal.calendarIdentifier atIndex:i];
+            if ([calendarsPreselected containsObject:cal]) {
+                [vc.calendarSelected insertObject:@"Y" atIndex:i];
+            }
+            else {
+                [vc.calendarSelected insertObject:@"N" atIndex:i];
+            }
+            i++;
+        } */
+        
+        vc.availableCalendars = [self.eventStore calendarsForEntityType:EKEntityTypeEvent];
+        vc.currentCalendars = self.currentCalendars;
+    }
 }
 
+/*
 #pragma mark - Calendar Chooser delegate methods
+
 - (void)calendarChooserSelectionDidChange:(EKCalendarChooser *)calendarChooser {
     
     NSSet *selectedCalendars = [calendarChooser selectedCalendars];
@@ -179,7 +219,45 @@
     
     [self.navigationController popViewControllerAnimated:YES];
 }
+*/
 
+#pragma mark - EKEventEditViewDelegate
+
+- (void)eventEditViewController:(EKEventEditViewController *)controller didCompleteWithAction:(EKEventEditViewAction)action {
+    
+    // Overriding EKEventEditViewDelegate method to update event store according to user actions.
+    NSError *error = nil;
+    EKEvent *thisEvent = controller.event;
+    
+    switch (action) {
+        case EKEventEditViewActionCanceled:
+            // Edit action canceled, do nothing.
+            break;
+            
+        case EKEventEditViewActionSaved:
+            // When user hit "Done" button, save the newly created event to the event store
+            [controller.eventStore saveEvent:controller.event span:EKSpanFutureEvents error:&error];
+            break;
+            
+        case EKEventEditViewActionDeleted:
+            // When deleting an event, remove the event from the event store,
+            [controller.eventStore removeEvent:thisEvent span:EKSpanThisEvent error:&error];
+            break;
+            
+        default:
+            break;
+    }
+    // Dismiss the modal view controller
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+- (EKCalendar *)eventEditViewControllerDefaultCalendarForNewEvents:(EKEventEditViewController *)controller {
+    // Set the calendar edited by EKEventEditViewController to our chosen calendar - the default calendar.
+    
+    EKCalendar *calendarForEdit = self.defaultCalendar;
+    return calendarForEdit;
+}
 
 #pragma mark - Class utility methods
 - (void)loadCurrentCalendars {
@@ -324,18 +402,9 @@
         }
         
         // resize calendar button view
-//        self.calendarButtonView.frame = CGRectMake(self.calendarButtonView.frame.origin.x, self.calendarButtonView.frame.origin.y, self.calendarButtonView.frame.size.width, kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents) ;
-        
         self.calendarButtonViewConstraintHeight.constant = kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents;
-        
-        
-        
-
-        // resize events view
-//        self.viewEventsContainer.frame = CGRectMake(self.viewEventsContainer.frame.origin.x, self.calendarButtonView.frame.origin.y + self.calendarButtonView.frame.size.height, self.viewEventsContainer.frame.size.width, self.viewDateAndEvents.frame.size.height - self.calendarButtonView.frame.size.height - kHeightBottomButtons);
-        
-        
     }
+
     // Update selected date display
     if (!isCurrentDateBlank) {
         CalendarDayButton *oldDayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:firstOfMonthButtonTag + oldDay - 1];
@@ -343,6 +412,7 @@
     }
     dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:firstOfMonthButtonTag + newDay - 1];
     [dayButton customSetHighlighted:YES];
+
     //    [self performSelector:@selector(doHighlight:) withObject:dayButton afterDelay:0]; // have to set the highlight this way using afterDelay so that this code runs after selectDate finishes and the button automatically unhighlights itself
     
     
@@ -353,7 +423,12 @@
     [df setDateStyle:NSDateFormatterShortStyle];
     [df setTimeStyle:NSDateFormatterNoStyle];
     [df setDateFormat:@"MMMM yyyy"];
-    self.navigationItem.title = [df stringFromDate:newDate];
+    UILabel *monthTitleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 200, 40)];
+    monthTitleLabel.text=[df stringFromDate:newDate];
+    monthTitleLabel.textAlignment = NSTextAlignmentCenter;
+    monthTitleLabel.font = [UIFont boldSystemFontOfSize:18];
+    monthTitleLabel.adjustsFontSizeToFitWidth=YES;
+    self.navigationItem.titleView=monthTitleLabel;
     
     self.currentDate = newDate;
     
@@ -364,21 +439,33 @@
     [self.eventsViewController refreshDataAndUpdateDisplay];
 }
 
+-(void)selectPreviousMonth {
 
-/*
- -(UIImage *)squareImageFromColor:(UIColor *)color {
- CGRect rect = CGRectMake(0, 0, 1, 1);
- UIGraphicsBeginImageContext(rect.size);
- CGContextRef context = UIGraphicsGetCurrentContext();
- CGContextSetFillColorWithColor(context, [color CGColor]);
- CGContextFillRect(context, rect);
- UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
- UIGraphicsEndImageContext();
- return img;
- }
- */
+    NSDate *newDate = [DateCalculator dateThatIs:1 monthsLaterThan:self.currentDate];
+    [self selectDate:newDate];
+}
+
+-(void)selectNextMonth {
+
+    NSDate *newDate = [DateCalculator dateThatIs:1 monthsEarlierThan: self.currentDate];
+    [self selectDate:newDate];
+}
 
 -(UIImage *)circleImageFromColor:(UIColor *)color withSize:(CGSize)size {
+
+    // set width and height of circle to smaller dimension of the size passed in. This ensures the result is a circle even if a rectangle is passed in the size argument
+    CGFloat circleHeight;
+    CGFloat circleWidth;
+    
+    if (size.height < size.width) {
+        circleHeight = size.height;
+        circleWidth = size.height;
+    }
+    else {
+        circleHeight = size.height;
+        circleWidth = size.width;
+    }
+    
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -394,49 +481,13 @@
 }
 
 
--(UIImage *)buttonImageWithColor:(UIColor *)color withBrightEdgeColor:(UIColor *)brightEdgeColor withSize:(CGSize)size {
-    
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    //    CGContextSetAlpha(context, 1.0f);
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    
-    
-    CGContextSetStrokeColorWithColor(context, [brightEdgeColor CGColor]);
-    //Set the width of the pen mark
-    CGContextSetLineWidth(context, 1.0);
-    
-    // Draw a line
-    //Start at this point
-    CGContextMoveToPoint(context, 1, 1);
-    
-    //Give instructions to the CGContext
-    //(move "pen" around the screen)
-    CGContextAddLineToPoint(context, size.width-1.0, 1);
-    CGContextMoveToPoint(context, size.width-0.0, 1);
-    CGContextAddLineToPoint(context, size.width-0.0, size.height-0.0);
-    
-    
-    //Draw it
-    CGContextStrokePath(context);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-}
 
 
 -(UIImage *)arrowButtonImageForDirection:(ArrowDirectionType)arrowDirection withArrowColor:(UIColor *)arrowColor withButtonColor:(UIColor *)buttonColor withBrightEdgeColor:(UIColor *)brightEdgeColor withSize:(CGSize)size {
     
-    UIImage *startingImage = [self buttonImageWithColor:buttonColor withBrightEdgeColor:brightEdgeColor withSize:size];
-    
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    // Draw the UIImage in the image context to get the button background
-    CGContextDrawImage(context, rect, startingImage.CGImage);
     
     // Draw the arrow
     switch (arrowDirection) {
@@ -482,10 +533,29 @@
 
 #pragma mark - User interaction methods
 
+- (IBAction)addButtonPressed:(id)sender {
+
+    EKEventEditViewController *addController = [[EKEventEditViewController alloc] initWithNibName:nil bundle:nil];
+    
+    // set the addController's event store to the current event store.
+    addController.eventStore = self.eventStore;
+    
+    addController.event = [EKEvent eventWithEventStore:self.eventStore];
+    NSDate *today = [NSDate date];
+    NSDate *eventDate = [DateCalculator datetimeFromYear:[DateCalculator yearFor:today] fromMonth:[DateCalculator monthFor:today] fromDay:[DateCalculator dayFor:today] fromHour:[DateCalculator hourFor:today] fromMinute:0 fromSecond:0];
+    addController.event.startDate = eventDate;
+    addController.event.endDate = [NSDate dateWithTimeInterval:60*60 sinceDate:eventDate];
+    
+    // present EventsAddViewController as a modal view controller
+    [self presentViewController:addController animated:YES completion:nil];
+    
+    addController.editViewDelegate = self;
+}
+
 - (IBAction)calendarDayButtonPressed:(id)sender {
     
     CalendarDayButton *cdb = (CalendarDayButton *)sender;
-
+    
     NSDate *newDate = [DateCalculator dateFromYear:cdb.year fromMonth:cdb.month fromDay:cdb.day];
     
     [self selectDate:newDate];
@@ -505,23 +575,20 @@
     [self selectDate:newDate];
 }
 
+- (IBAction)swipeToPreviousMonth:(id)sender {
+    
+        [self selectPreviousMonth];
+}
+
+- (IBAction)swipeToNextMonth:(id)sender {
+
+    [self selectNextMonth];
+}
+
 - (IBAction)todayButton:(id)sender {
     
     [self selectDate:[NSDate date]];  //update current date to today
 }
 
 
-- (IBAction)calendarsButtonPressed:(id)sender {
-     //   EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle:EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayWritableCalendarsOnly entityType:EKEntityTypeEvent eventStore:self.eventStore];
-    EKCalendarChooser *calendarChooser = [[EKCalendarChooser alloc] initWithSelectionStyle: EKCalendarChooserSelectionStyleMultiple displayStyle:EKCalendarChooserDisplayAllCalendars entityType:EKEntityTypeEvent eventStore:self.eventStore];
-    
-    calendarChooser.delegate = self;
-    calendarChooser.showsCancelButton = YES;
-    calendarChooser.showsDoneButton = YES;
-    NSSet *preselectedCalendars = [NSSet setWithArray:self.currentCalendars];
-    calendarChooser.selectedCalendars = preselectedCalendars;
-    
-    [self.navigationController pushViewController:calendarChooser animated:YES];
-
-}
 @end
