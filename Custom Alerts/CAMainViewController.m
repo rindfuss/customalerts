@@ -276,7 +276,9 @@
     [self.currentCalendars removeAllObjects];
     
     if (savedCalendars.count == 0) {
-        [self.currentCalendars addObject:self.defaultCalendar];
+        if (self.defaultCalendar) {
+            [self.currentCalendars addObject:self.defaultCalendar];
+        }
     }
     else {
         self.currentCalendars = savedCalendars;

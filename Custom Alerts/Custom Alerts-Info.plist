@@ -32,6 +32,8 @@
 	<string>MainStoryboard_iPhone</string>
 	<key>UIPrerenderedIcon</key>
 	<true/>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app reads and updates calendar entries in order to set custom alerts.</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
