@@ -32,9 +32,11 @@
     UIImage *imageMonthPrevious = [self arrowButtonImageForDirection:ArrowDirectionLeft withArrowColor:[UIColor blackColor] withButtonColor:[UIColor clearColor] withBrightEdgeColor:[UIColor clearColor] withSize:b1.frame.size];
     [b1 setImage:imageMonthPrevious forState:UIControlStateNormal];
     UIBarButtonItem *barButtonPrevious = [[UIBarButtonItem alloc]initWithCustomView:b1];
-    UIBarButtonItem *barButtonBlank = [[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:barButtonBlank, barButtonBlank, barButtonPrevious, nil];
+//    UIBarButtonItem *barButtonBlank = [[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil];
+//    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:barButtonBlank, barButtonBlank, barButtonPrevious, nil];
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects: barButtonPrevious, nil];
     
+
     UIButton *b2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [b2 setFrame:CGRectMake(0.0, 0.0, 47.0, 40.0)];
     [b2 addTarget:self action:@selector(monthButtonNextPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -319,7 +321,7 @@
     // Determine which button will be for the 1st of the month
     NSDate *firstOfMonthDate = [DateCalculator dateFromYear:newYear fromMonth:newMonth fromDay:1];
     
-    NSDateComponents *weekdayComponents = [calendar components:NSWeekdayCalendarUnit fromDate:firstOfMonthDate];
+    NSDateComponents *weekdayComponents = [calendar components:NSCalendarUnitWeekday fromDate:firstOfMonthDate];
     NSInteger firstOfMonthWeekday = [weekdayComponents weekday];  // 1 corresponds to Sunday
     
     NSInteger firstOfMonthButtonTag = firstOfMonthWeekday + kDayButtonFirstTag - 1;
@@ -332,7 +334,7 @@
         // Update day buttons
         
         // Determine which button will be for the last of the month
-        NSRange daysRange = [calendar rangeOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:newDate];
+        NSRange daysRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:newDate];
         NSInteger lastOfMonthDayNumber = daysRange.length;
         
         NSInteger lastOfMonthButtonTag = firstOfMonthButtonTag + lastOfMonthDayNumber - 1;
@@ -341,7 +343,7 @@
         // Determine last day of prior month for filling in blank buttons at top
         NSDate *firstOfPreviousMonthDate = [DateCalculator dateFromYear:newMonth!=1 ? newYear : newYear-1 fromMonth:newMonth!=1 ? newMonth-1 : 12 fromDay:1];
         
-        NSRange previousMonthDaysRange = [calendar rangeOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:firstOfPreviousMonthDate];
+        NSRange previousMonthDaysRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:firstOfPreviousMonthDate];
         NSInteger lastOfPreviousMonthDayNumber = previousMonthDaysRange.length;
         
         
@@ -429,7 +431,7 @@
     monthTitleLabel.text=[df stringFromDate:newDate];
     monthTitleLabel.textAlignment = NSTextAlignmentCenter;
     monthTitleLabel.font = [UIFont boldSystemFontOfSize:18];
-    monthTitleLabel.adjustsFontSizeToFitWidth=YES;
+    monthTitleLabel.adjustsFontSizeToFitWidth=NO;
     self.navigationItem.titleView=monthTitleLabel;
     
     self.currentDate = newDate;

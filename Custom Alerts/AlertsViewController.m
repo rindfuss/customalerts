@@ -148,23 +148,23 @@
     
     NSCalendar *cal = [NSCalendar currentCalendar];
     
-    NSDateComponents *components = [cal components:(NSWeekCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:alertDate toDate:eventDate options:0];
+    NSDateComponents *components = [cal components:(NSCalendarUnitWeekOfYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:alertDate toDate:eventDate options:0];
     
     if (components.minute) {
         *alertPeriod = ComponentRowMinutes;
-        *alertQuantity = components.minute + 60*components.hour + 24*60*components.day + 7*24*60*components.week;
+        *alertQuantity = components.minute + 60*components.hour + 24*60*components.day + 7*24*60*components.weekOfYear;
     }
     else if (components.hour) {
         *alertPeriod = ComponentRowHours;
-        *alertQuantity = components.hour + 24*components.day + 7*24*components.week;
+        *alertQuantity = components.hour + 24*components.day + 7*24*components.weekOfYear;
     }
     else if (components.day) {
         *alertPeriod = ComponentRowDays;
-        *alertQuantity = components.day + 7*components.week;
+        *alertQuantity = components.day + 7*components.weekOfYear;
     }
-    else if (components.week) {
+    else if (components.weekOfYear) {
         *alertPeriod = ComponentRowWeeks;
-        *alertQuantity = components.week;
+        *alertQuantity = components.weekOfYear;
     }
     else {
         *alertPeriod = ComponentRowMinutes;
