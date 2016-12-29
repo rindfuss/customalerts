@@ -186,7 +186,14 @@
             i++;
         } */
         
-        vc.availableCalendars = [self.eventStore calendarsForEntityType:EKEntityTypeEvent];
+        NSMutableArray *availableCalendars = [[NSMutableArray alloc] init];
+        for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
+            if (cal.allowsContentModifications && !cal.isImmutable) {
+                [availableCalendars addObject:cal];
+            }
+        }
+
+        vc.availableCalendars = availableCalendars; // [self.eventStore calendarsForEntityType:EKEntityTypeEvent];
         vc.currentCalendars = self.currentCalendars;
     }
 }
@@ -271,7 +278,9 @@
     for (NSString *calendarID in selectedCalendarIDs) {
         EKCalendar *cal = [self.eventStore calendarWithIdentifier:calendarID];
         if (cal) {
-            [savedCalendars addObject:cal];
+            if (cal.allowsContentModifications && !cal.isImmutable) {
+                [savedCalendars addObject:cal];
+            }
         }
     }
     
