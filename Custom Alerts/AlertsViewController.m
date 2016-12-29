@@ -141,9 +141,11 @@
 #pragma mark - class utility methods
 - (void) getAlertDateQuantityAndPeriodForAlert:(EKAlarm *)alert onEvent:(EKEvent *)event usingQuantity:(NSInteger *)alertQuantity usingPeriod:(NSInteger *)alertPeriod {
 
-    NSTimeInterval alertInterval = alert.relativeOffset;
-    
+    NSTimeInterval alertInterval = (NSTimeInterval)-1 * alert.relativeOffset;
+
+/*
     NSDate *eventDate = event.startDate;
+
     NSDate *alertDate = [NSDate dateWithTimeInterval:alertInterval sinceDate:eventDate];
     
     NSCalendar *cal = [NSCalendar currentCalendar];
@@ -169,6 +171,31 @@
     else {
         *alertPeriod = ComponentRowMinutes;
         *alertQuantity = 0;
+    }
+ */
+    
+    *alertPeriod = ComponentRowMinutes;
+    *alertQuantity = alertInterval / (NSTimeInterval) 60;
+    
+    NSInteger alertHours = alertInterval / (NSTimeInterval) 3600;
+    NSInteger alertMinutesRemaining = alertInterval / (NSTimeInterval) 60 - (NSTimeInterval)alertHours * (NSTimeInterval)60;
+    if (alertHours >= 1 && alertMinutesRemaining < 1) {
+        *alertPeriod = ComponentRowHours;
+        *alertQuantity = alertHours;
+    }
+    
+    NSInteger alertDays = alertInterval / (NSTimeInterval) 86400;
+    alertMinutesRemaining = alertInterval / (NSTimeInterval) 60 - ((NSTimeInterval)alertDays * (NSTimeInterval)24 * (NSTimeInterval)60);
+    if (alertDays >= 1 && alertMinutesRemaining < 1) {
+        *alertPeriod = ComponentRowDays;
+        *alertQuantity = alertDays;
+    }
+    
+    NSInteger alertWeeks = alertInterval / (NSTimeInterval) 604800;
+    alertMinutesRemaining = alertInterval / (NSTimeInterval)60 - ((NSTimeInterval)alertWeeks * (NSTimeInterval)7 * (NSTimeInterval)24 * (NSTimeInterval)60);
+    if (alertWeeks >= 1 && alertMinutesRemaining < 1) {
+        *alertPeriod = ComponentRowWeeks;
+        *alertQuantity = alertWeeks;
     }
 }
 
@@ -245,6 +272,11 @@
     
     NSError *error;
     BOOL returnValue = [self.eventStore saveEvent:self.currentEvent span:span error:&error];
+    
+    if (returnValue) {
+    }
+    else {
+    }
     
     [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
     
