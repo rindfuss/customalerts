@@ -18,6 +18,8 @@
 // updated to reflect changes to events made in another app or on another device while Custom Alerts is running
 // color-coded events to match color of their calendar
 // moved event list to same screen as date selection calendar
+// updated for deprecated functions in newer versions of iOS
+// changed algorithm for calculating alert period and quantity
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
