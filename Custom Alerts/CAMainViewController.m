@@ -25,6 +25,16 @@
     // Make navigation controller panel at top non-transparent so that tableview has appropriate vertical size
     [self.navigationController.navigationBar setTranslucent:NO];
     
+    // Create placeholder for month label
+//TESTING
+    UILabel *monthTitleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 200, 40)];
+    monthTitleLabel.text= @"Rich-uary";
+    monthTitleLabel.textAlignment = NSTextAlignmentCenter;
+    monthTitleLabel.font = [UIFont boldSystemFontOfSize:18];
+    monthTitleLabel.adjustsFontSizeToFitWidth=NO;
+    self.navigationItem.titleView=monthTitleLabel;
+    //TESTING
+    
     // set up arrow images for next and previous month buttons
     UIButton *b1 = [UIButton buttonWithType:UIButtonTypeCustom];
     [b1 setFrame:CGRectMake(0.0, 0.0, 47.0, 40.0)];
@@ -188,10 +198,10 @@
         
         NSMutableArray *availableCalendars = [[NSMutableArray alloc] init];
         for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
-            if (cal.allowsContentModifications && !cal.isImmutable) {
+//TESTING            if (cal.allowsContentModifications && !cal.isImmutable) {
                 [availableCalendars addObject:cal];
             }
-        }
+//TESTING        }
 
         vc.availableCalendars = availableCalendars; // [self.eventStore calendarsForEntityType:EKEntityTypeEvent];
         vc.currentCalendars = self.currentCalendars;
