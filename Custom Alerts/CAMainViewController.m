@@ -26,14 +26,7 @@
     [self.navigationController.navigationBar setTranslucent:NO];
     
     // Create placeholder for month label
-//TESTING
-    UILabel *monthTitleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 200, 40)];
-    monthTitleLabel.text= @"Rich-uary";
-    monthTitleLabel.textAlignment = NSTextAlignmentCenter;
-    monthTitleLabel.font = [UIFont boldSystemFontOfSize:18];
-    monthTitleLabel.adjustsFontSizeToFitWidth=NO;
-    self.navigationItem.titleView=monthTitleLabel;
-    //TESTING
+    self.navigationItem.title = @"";
     
     // set up arrow images for next and previous month buttons
     UIButton *b1 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -41,7 +34,7 @@
     [b1 addTarget:self action:@selector(monthButtonPreviousPressed:) forControlEvents:UIControlEventTouchUpInside];
     UIImage *imageMonthPrevious = [self arrowButtonImageForDirection:ArrowDirectionLeft withArrowColor:[UIColor blackColor] withButtonColor:[UIColor clearColor] withBrightEdgeColor:[UIColor clearColor] withSize:b1.frame.size];
     [b1 setImage:imageMonthPrevious forState:UIControlStateNormal];
-    UIBarButtonItem *barButtonPrevious = [[UIBarButtonItem alloc]initWithCustomView:b1];
+    UIBarButtonItem *barButtonPrevious = [[UIBarButtonItem alloc] initWithCustomView:b1];
 //    UIBarButtonItem *barButtonBlank = [[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil];
 //    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:barButtonBlank, barButtonBlank, barButtonPrevious, nil];
     self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects: barButtonPrevious, nil];
@@ -52,7 +45,7 @@
     [b2 addTarget:self action:@selector(monthButtonNextPressed:) forControlEvents:UIControlEventTouchUpInside];
     UIImage *imageMonthNext = [self arrowButtonImageForDirection:ArrowDirectionRight withArrowColor:[UIColor blackColor] withButtonColor:[UIColor clearColor] withBrightEdgeColor:[UIColor clearColor] withSize:b2.frame.size];
     [b2 setImage:imageMonthNext forState:UIControlStateNormal];
-    UIBarButtonItem *barButtonNext = [[UIBarButtonItem alloc]initWithCustomView:b2];
+    UIBarButtonItem *barButtonNext = [[UIBarButtonItem alloc] initWithCustomView:b2];
     UIBarButtonItem *barButtonAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed:)];
     self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:barButtonAdd, barButtonNext, nil];
     
@@ -198,10 +191,11 @@
         
         NSMutableArray *availableCalendars = [[NSMutableArray alloc] init];
         for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
-//TESTING            if (cal.allowsContentModifications && !cal.isImmutable) {
+//          if (cal.allowsContentModifications && !cal.isImmutable) {
+            if (cal.allowsContentModifications) {
                 [availableCalendars addObject:cal];
             }
-//TESTING        }
+        }
 
         vc.availableCalendars = availableCalendars; // [self.eventStore calendarsForEntityType:EKEntityTypeEvent];
         vc.currentCalendars = self.currentCalendars;
@@ -446,12 +440,13 @@
     [df setDateStyle:NSDateFormatterShortStyle];
     [df setTimeStyle:NSDateFormatterNoStyle];
     [df setDateFormat:@"MMMM yyyy"];
-    UILabel *monthTitleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 200, 40)];
-    monthTitleLabel.text=[df stringFromDate:newDate];
-    monthTitleLabel.textAlignment = NSTextAlignmentCenter;
-    monthTitleLabel.font = [UIFont boldSystemFontOfSize:18];
-    monthTitleLabel.adjustsFontSizeToFitWidth=NO;
-    self.navigationItem.titleView=monthTitleLabel;
+    //UILabel *monthTitleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 200, 40)];
+    //monthTitleLabel.text=[df stringFromDate:newDate];
+    //monthTitleLabel.textAlignment = NSTextAlignmentCenter;
+    //monthTitleLabel.font = [UIFont boldSystemFontOfSize:18];
+    //monthTitleLabel.adjustsFontSizeToFitWidth=NO;
+    //self.navigationItem.titleView=monthTitleLabel;
+    self.navigationItem.title = [df stringFromDate:newDate];
     
     self.currentDate = newDate;
     

@@ -20,6 +20,8 @@
 // moved event list to same screen as date selection calendar
 // updated for deprecated functions in newer versions of iOS
 // changed algorithm for calculating alert period and quantity
+// fixed re-sizing month name at top of calendar
+// added custom calendar-selection view
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
