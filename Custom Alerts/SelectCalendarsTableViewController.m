@@ -69,8 +69,11 @@
     UILabel *calendarTitleLabel = [cell viewWithTag:TagTitleUILabel];
     UIImageView *checkmarkImageView = [cell viewWithTag:TagCheckmarkUIImageView];
     UIImageView *calendarColorCircleImageView = [cell viewWithTag:TagCalendarColorCircleUIImageView];
-    //cell.textLabel.text = calendarForRow.title;
+    
     calendarTitleLabel.text = calendarForRow.title;
+    calendarTitleLabel.adjustsFontSizeToFitWidth = YES;
+    //calendarTitleLabel.minimumScaleFactor = 0.25f;
+    
     // make a circle image that fills 80% of the enclosing view.
     UIColor *calendarColor = [UIColor colorWithCGColor:[calendarForRow CGColor]];
     calendarColorCircleImageView.image = [self circleImageFromColor:calendarColor withSize:CGSizeMake(calendarColorCircleImageView.frame.size.width * 0.8, calendarColorCircleImageView.frame.size.height * 0.8)];
