@@ -203,16 +203,10 @@
     // Sort the array by start datetime and then by title
     [self.eventsList sortUsingComparator:^NSComparisonResult(id a, id b) {
         EKEvent *firstEvent = (EKEvent *)a;
-        NSDate *firstDate = [a startDate];
-        NSLog(@"firstDate = %@",firstDate);
         NSString *firstTitle = [a title];
-        NSLog(@"firstTitle = %@",firstTitle);
         
         EKEvent *secondEvent = (EKEvent *)b;
-        NSDate *secondDate = [b startDate];
-        NSLog(@"secondDate = %@",secondDate);
         NSString *secondTitle = [b title];
-        NSLog(@"secondTitle = %@",secondTitle);
 
         NSComparisonResult compareResult = [firstEvent compareStartDateWithEvent:secondEvent];
         if (compareResult == NSOrderedSame) {
