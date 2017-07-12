@@ -22,6 +22,7 @@
 // changed algorithm for calculating alert period and quantity
 // fixed re-sizing month name at top of calendar
 // added custom calendar-selection view
+// sorted event list by start datetime and then by title for events with the same start datetime
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
