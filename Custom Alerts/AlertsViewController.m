@@ -56,7 +56,9 @@
 }
 
 - (void)eventStoreChanged: (NSNotification *)notification {
+    //TESTING
     [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+    //TESTING
 }
 
 - (void)didReceiveMemoryWarning
