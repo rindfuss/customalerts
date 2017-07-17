@@ -56,9 +56,9 @@
 }
 
 - (void)eventStoreChanged: (NSNotification *)notification {
-    //TESTING
-    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
-    //TESTING
+    if (!self.isAddedAlert) { //TESTING
+        [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+    } //TESTING
 }
 
 - (void)didReceiveMemoryWarning
@@ -236,6 +236,7 @@
     
     self.alertQuantity = alertQuantity;
     self.alertPeriod = alertPeriod;
+    self.isAddedAlert = NO; //TESTING
 }
 
 - (void) initializePickerAndAnimate: (BOOL)shouldAnimate {
@@ -328,6 +329,7 @@
     self.addedAlarm = [EKAlarm alarmWithRelativeOffset:(NSTimeInterval)0];
     [self.currentEvent addAlarm:self.addedAlarm];
     self.currentAlert = [self.currentEvent.alarms objectAtIndex: 0];
+    self.isAddedAlert = YES;
 
     [self saveAlertAndProcessAsAddedAlert:YES];
 }
@@ -335,6 +337,9 @@
 
 - (IBAction)saveButton:(id)sender {
     
+    // TESTING
+    self.isAddedAlert = NO;
+    // TESTING
     [self saveAlertAndProcessAsAddedAlert:NO];
 }
 

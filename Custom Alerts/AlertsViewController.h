@@ -45,6 +45,7 @@
 
 @property (nonatomic) NSInteger alertQuantity;
 @property (nonatomic) NSInteger alertPeriod;
+@property (nonatomic) BOOL isAddedAlert; //TESTING
 
 - (void) getAlertDateQuantityAndPeriodForAlert:(EKAlarm *)alert onEvent:(EKEvent *)event usingQuantity:(NSInteger *)alertQuantity usingPeriod:(NSInteger *)alertPeriod;
 
