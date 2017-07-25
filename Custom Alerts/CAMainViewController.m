@@ -112,10 +112,13 @@
                 if (error)
                 {
                     // display error message here
+                    
                 }
                 else if (!accessGranted)
                 {
                     // display access denied error message here
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Need permission to access calendar" message:@"Custom Alerts does not have permission to access your calendar. Please go to the Privacy section of your Settings app, select Calendars, and enable Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
                 }
                 else
                 {
