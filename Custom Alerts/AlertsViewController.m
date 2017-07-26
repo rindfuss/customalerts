@@ -80,8 +80,26 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    NSInteger numAlarms = self.currentEvent.alarms.count;
-
+    // TESTING
+    NSInteger numAlarms = 0;
+    NSArray<EKAlarm *> *alarms = self.currentEvent.alarms;
+    if (alarms) { // need to be aware that alarms could be nil in which case reading the count would give an undefined result
+        // TESTING
+        numAlarms = self.currentEvent.alarms.count;
+    // TESTING
+    }
+    else {
+        BOOL nilAlarms;
+        nilAlarms = YES;
+    }
+    NSInteger i = 1;
+    for (EKAlarm *al in alarms) {
+        NSTimeInterval alarmInterval = [al relativeOffset];
+        NSLog(@"event: %@, alarm #%ld: interval=%f\n", self.currentEvent.title, i, alarmInterval);
+        i++;
+    }
+    //TESTING
+    
     return numAlarms;
 }
 
@@ -328,7 +346,9 @@
     
     self.addedAlarm = [EKAlarm alarmWithRelativeOffset:(NSTimeInterval)0];
     [self.currentEvent addAlarm:self.addedAlarm];
-    self.currentAlert = [self.currentEvent.alarms objectAtIndex: 0];
+    self.currentAlert = self.addedAlarm; //[self.currentEvent.alarms objectAtIndex: 0];
+    self.alertPeriod = ComponentRowMinutes;
+    self.alertQuantity = 0;
     self.isAddedAlert = YES;
 
     [self saveAlertAndProcessAsAddedAlert:YES];

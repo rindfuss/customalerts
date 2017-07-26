@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
+// TESTING
+#import "DateCalculator.h"
+
+//TESTING
 
 #define ComponentsNum     2
 #define ComponentQuantity 0

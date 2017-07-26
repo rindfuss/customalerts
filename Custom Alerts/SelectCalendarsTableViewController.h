@@ -23,7 +23,7 @@
 @property (strong, nonatomic) NSMutableArray *calendarSelected;
 */
 
-@property (strong, nonatomic) NSArray *availableCalendars;
+@property (strong, nonatomic) NSArray *availableCalendars; // needs to be set by CAMainViewController to point to its property that contains an array of currently available (i.e. displayed and not displayed) EKCalendars
 @property (weak, nonatomic) NSMutableArray *currentCalendars; // needs to be set by CAMainViewController to point to its property that contains an array of currently displayed EKCalendars
 
 @end

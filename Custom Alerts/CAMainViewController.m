@@ -126,8 +126,18 @@
                     // Get the default calendar from store.
                     self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
                     [self loadCurrentCalendars];
-                    //[self.goToCalendarEventsButton setEnabled:YES];
-                    //                    [self.addEventsButton setEnabled:YES];
+
+                    BOOL calendarsExist = NO;
+                    for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
+                        if (cal.allowsContentModifications) {
+                            calendarsExist = YES;
+                            break;
+                        }
+                    }
+                    if (!calendarsExist) {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                        [alert show];
+                    }
                 }
             });
         }];
@@ -192,6 +202,7 @@
             i++;
         } */
         
+        // [self.eventStore refreshSourcesIfNecessary]; This line was ineffective at re-populating the eventStore with available calendars if no calendars existed when Custom Alerts was initially launched and then user created an event (and, automatically, a calendar) in the calendar app and then switched back to Custom Alerts. Solution is to swipe closed Custom Alerts and re-launch it. Now that a calendar exists, it and its events will show in Custom Alerts
         NSMutableArray *availableCalendars = [[NSMutableArray alloc] init];
         for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
 //          if (cal.allowsContentModifications && !cal.isImmutable) {
@@ -563,7 +574,7 @@
     
     addController.event = [EKEvent eventWithEventStore:self.eventStore];
     NSDate *today = [NSDate date];
-    NSDate *eventDate = [DateCalculator datetimeFromYear:[DateCalculator yearFor:today] fromMonth:[DateCalculator monthFor:today] fromDay:[DateCalculator dayFor:today] fromHour:[DateCalculator hourFor:today] fromMinute:0 fromSecond:0];
+    NSDate *eventDate = [DateCalculator datetimeFromYear:[DateCalculator yearFor:self.currentDate] fromMonth:[DateCalculator monthFor:self.currentDate] fromDay:[DateCalculator dayFor:self.currentDate] fromHour:[DateCalculator hourFor:today] fromMinute:0 fromSecond:0];
     addController.event.startDate = eventDate;
     addController.event.endDate = [NSDate dateWithTimeInterval:60*60 sinceDate:eventDate];
     
