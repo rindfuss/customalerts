@@ -12,8 +12,6 @@
 
 @property (nonatomic, strong) NSMutableArray<CustomAlert *> *alerts;
 
-@property (nonatomic, strong) UIActionSheet *addAlertRecurrenceActionSheet;
-
 -(void)loadAlertsFromEvent;
 @end
 
@@ -160,51 +158,32 @@
 }
 
 
-- (void)updateAlertSpanning:(EKSpan)span {
+- (void)updateAlertsSpanning:(EKSpan)span {
 
-    NSTimeInterval alertInterval = 0;
+    NSMutableArray<EKAlarm *> *alarms = [[NSMutableArray alloc] init];
     
-    switch (period) {
-        case ComponentRowMinutes:
-            alertInterval = -1 * quantity * 60;
-            break;
-        case ComponentRowHours:
-            alertInterval = -1 * quantity * 60 * 60;
-            break;
-        case ComponentRowDays:
-            alertInterval = -1 * quantity * 24 * 60 * 60;
-            break;
-        case ComponentRowWeeks:
-            alertInterval = -1 * quantity * 7 * 24 * 60 * 60;
-            break;
-            
-        default:
-            break;
+    for (CustomAlert *alert in self.alerts) {
+        NSTimeInterval alarmInterval = 0;
+        alarmInterval = alert.alarmIntervalForCustomAlert;
+        EKAlarm *alarm = [[EKAlarm alloc]init];
+        [alarm setRelativeOffset:alarmInterval];
+        [alarms addObject:alarm];
     }
     
+    NSArray *alarmArray = [[NSArray alloc] initWithArray:alarms];
     
-    [self.currentAlert setRelativeOffset:alertInterval];
+    self.currentEvent.alarms = alarmArray;
     
-    NSError *error;
-    BOOL returnValue = [self.eventStore saveEvent:self.currentEvent span:span error:&error];
+    NSError *error = nil;
+    [self.eventStore saveEvent:self.currentEvent span:span error:&error];
     
-    if (returnValue) {
+    if (error) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"An error occured while saving. The event may have been deleted in another app. Try selecting the event again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alertView show];
     }
-    else {
-    }
     
-    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
-    
-    /*
-    NSIndexPath *currentIndexPath = self.tableView.indexPathForSelectedRow;
-    if (currentIndexPath == nil) {
-            currentIndexPath = [NSIndexPath indexPathForItem:0 inSection:0];
-    }
-
-    [self.tableView reloadData];
-    [self.tableView selectRowAtIndexPath:currentIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-    [self configureUserControlsAndAnimate:NO];
-     */
+    [self.navigationController popViewControllerAnimated:YES];
+   
 }
 
 - (void)refreshDataAndUpdateDisplayAndNotifyUserOnFail: (BOOL)shouldNotifyUserOnFail {
@@ -212,6 +191,8 @@
     BOOL didRefresh = [self.currentEvent refresh];
     
     if (didRefresh) {
+        // note: the sequence below is important. Configuring user controls assumes tableview has been loaded with current data
+        [self loadAlertsFromEvent];
         [self.tableView reloadData];
         [self configureUserControlsAndAnimate:NO];
     }
@@ -226,6 +207,7 @@
 }
 
 #pragma mark - User Interaction
+{ } // NEED TO WORK ON THE CODE FOR EDITING
 - (IBAction)editButton:(id)sender {
     EKEventEditViewController *eventEditViewController = [[EKEventEditViewController alloc] init];
     
@@ -248,31 +230,24 @@
 
 - (IBAction)saveButton:(id)sender {
     
-    [self saveAlertAndProcessAsAddedAlert:NO];
+    [self saveAlerts];
 }
 
-- (void)saveAlertAndProcessAsAddedAlert: (BOOL)isAddedAlert {
+- (void)saveAlerts {
     
     if (self.currentEvent.recurrenceRules == nil) {
-        [self updateAlertSpanning:EKSpanThisEvent];
+        [self updateAlertsSpanning:EKSpanThisEvent];
     }
     else {
         if (self.currentEvent.recurrenceRules.count == 0 ) {
-            [self updateAlertSpanning:EKSpanThisEvent];
+            [self updateAlertsSpanning:EKSpanThisEvent];
         }
         else {
             // need an action sheet, but need to have different action sheets for an alert that's been edited vs. one that was created with the add button, so that if user hits cancel on an added alert we know we need to delete that alarm from the event vs. if user hits cancel on an edited alert, we don't need to do anything. This conditional code is in the actionSheetCancel code
-            if (isAddedAlert) {
-                self.addAlertRecurrenceActionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Create alert for this event only", @"Create for future events too", nil];
-                [self.addAlertRecurrenceActionSheet showInView:self.view];
-            }
-            else {
-                UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
                 [actionSheet showInView:self.view];
-            }
         }
     }
-    
 }
 
 #pragma mark - EKEventEditViewDelegate
@@ -340,7 +315,7 @@
     
     CustomAlert *alert = nil;
     
-    NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow);
+    NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
     if (indexPath != nil) {
         alert = [self.alerts objectAtIndex:indexPath.row];
         
@@ -403,25 +378,16 @@
 #pragma mark - ActionSheet delegate methods
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    if (actionSheet == self.addAlertRecurrenceActionSheet && buttonIndex == actionSheet.cancelButtonIndex) {
-        // if we're editing an existing alert, nothing needs to be done, but if user has hit the add button on an event that had no alerts and it's a recurring event, and then the user hit cancel on the action sheet asking whether to update one or all occurrences, then we need to delete the alarm that was added to the event.
-        [self.currentEvent removeAlarm:self.addedAlarm];
-        self.addAlertRecurrenceActionSheet = nil; // no need to keep this around anymore
-        self.addedAlarm = nil; // no need to keep this around anymore
-        
-    }
-    else {
-        switch (buttonIndex) {
-            case 0: // update only current event
-                [self updateAlertSpanning:EKSpanThisEvent];
-                break;
-            case 1: // update future events
-                [self updateAlertSpanning:EKSpanFutureEvents];
-                break;
-                
-            default:
-                break;
-        }
+    switch (buttonIndex) {
+        case 0: // update only current event
+            [self updateAlertsSpanning:EKSpanThisEvent];
+            break;
+        case 1: // update future events
+            [self updateAlertsSpanning:EKSpanFutureEvents];
+            break;
+            
+        default:
+            break;
     }
 }
 

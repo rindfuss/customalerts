@@ -37,6 +37,7 @@ enum TextCaseType {
 
 +(NSString *)alertPeriodDescriptionForPeriod: (enum AlertPeriodType)periodType withTextCase: (enum TextCaseType)textCase isPlural: (BOOL)plural;
 
+-(NSTimeInterval) alarmIntervalForCustomAlert;
 -(void) setAlertQuantityAndPeriodUsingAlarm:(EKAlarm *)alarm;
 @end
 

@@ -67,6 +67,33 @@
     return descr;
 }
 
+-(NSTimeInterval) alarmIntervalForCustomAlert {
+    NSTimeInterval interval = 0;
+
+    switch (self.alertPeriod) {
+        case PeriodTypeMinutes: {
+            interval = -1 * self.alertQuantity * 60;
+            break;
+        }
+        case PeriodTypeHours: {
+            interval = -1 * self.alertQuantity * 60 * 60;
+            break;
+        }
+        case PeriodTypeDays: {
+            interval = -1 * self.alertQuantity * 24 * 60 * 60;
+            break;
+        }
+        case PeriodTypeWeeks:
+            interval = -1 * self.alertQuantity * 7 * 24 * 60 * 60;
+            break;
+            
+        default:
+            break;
+    }
+
+    return interval;
+}
+
 -(void) setAlertQuantityAndPeriodUsingAlarm:(EKAlarm *)alarm {
     NSTimeInterval alertInterval = (NSTimeInterval)-1 * alarm.relativeOffset;
     
