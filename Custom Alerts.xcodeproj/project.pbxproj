@@ -10,6 +10,7 @@
 		9B143E4118550CB2006DB54E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B143E4018550CB2006DB54E /* Images.xcassets */; };
 		9B2880C91B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B2880C81B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m */; };
 		9B4E0AC01839625A00B41777 /* CalendarDayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B4E0ABF1839625A00B41777 /* CalendarDayButton.m */; };
+		9B7B0D341F283CF80023849C /* CustomAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B7B0D331F283CF80023849C /* CustomAlert.m */; };
 		9B8842481C402A8C009B829A /* DateCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8842471C402A8C009B829A /* DateCalculator.m */; };
 		9B93713016FABB9600E83DA4 /* AlertsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B93712F16FABB9600E83DA4 /* AlertsViewController.m */; };
 		9B9D867C1AD4494A00F68F04 /* CAMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9D867B1AD4494A00F68F04 /* CAMainViewController.m */; };
@@ -33,6 +34,8 @@
 		9B2880C81B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectCalendarsTableViewController.m; sourceTree = "<group>"; };
 		9B4E0ABE1839625A00B41777 /* CalendarDayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarDayButton.h; sourceTree = "<group>"; };
 		9B4E0ABF1839625A00B41777 /* CalendarDayButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarDayButton.m; sourceTree = "<group>"; };
+		9B7B0D301F283BB90023849C /* CustomAlert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomAlert.h; sourceTree = "<group>"; };
+		9B7B0D331F283CF80023849C /* CustomAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAlert.m; sourceTree = "<group>"; };
 		9B8842461C402A79009B829A /* DateCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DateCalculator.h; path = ../../Libraries/DateCalculator/DateCalculator/DateCalculator.h; sourceTree = "<group>"; };
 		9B8842471C402A8C009B829A /* DateCalculator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DateCalculator.m; path = ../../Libraries/DateCalculator/DateCalculator/DateCalculator.m; sourceTree = "<group>"; };
 		9B93712E16FABB9600E83DA4 /* AlertsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertsViewController.h; sourceTree = "<group>"; };
@@ -132,6 +135,8 @@
 				9BDAAEAC16F95CD6008C4102 /* EventsViewController.m */,
 				9B93712E16FABB9600E83DA4 /* AlertsViewController.h */,
 				9B93712F16FABB9600E83DA4 /* AlertsViewController.m */,
+				9B7B0D301F283BB90023849C /* CustomAlert.h */,
+				9B7B0D331F283CF80023849C /* CustomAlert.m */,
 				9B143E4018550CB2006DB54E /* Images.xcassets */,
 				9BDAAE8416F9539B008C4102 /* Supporting Files */,
 			);
@@ -221,6 +226,7 @@
 			files = (
 				9BDAAE8A16F9539B008C4102 /* main.m in Sources */,
 				9B2880C91B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m in Sources */,
+				9B7B0D341F283CF80023849C /* CustomAlert.m in Sources */,
 				9BDAAE8E16F9539B008C4102 /* AppDelegate.m in Sources */,
 				9B8842481C402A8C009B829A /* DateCalculator.m in Sources */,
 				9B9D867C1AD4494A00F68F04 /* CAMainViewController.m in Sources */,

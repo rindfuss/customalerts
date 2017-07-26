@@ -9,10 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
-// TESTING
-#import "DateCalculator.h"
 
-//TESTING
+#import "DateCalculator.h"
+#import "CustomAlert.h"
 
 #define ComponentsNum     2
 #define ComponentQuantity 0
@@ -29,12 +28,7 @@
 
 @class AlertsViewController;
 
-/*
-@protocol AlertsViewControllerDelegate <NSObject>
-- (void)alertsViewControllerDidComplete: (AlertsViewController *)controller;
-@end
-*/
- 
+
 @interface AlertsViewController : UIViewController <EKEventEditViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -42,16 +36,11 @@
 @property (strong, nonatomic) UIBarButtonItem *addButton;
 @property (weak, nonatomic) IBOutlet UIPickerView *alertDetailsPicker;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-//@property (nonatomic, weak) id <AlertsViewControllerDelegate> delegate;
+
+// Must set the properties below before loading this view
 @property (nonatomic, strong) EKEventStore *eventStore;
 @property (nonatomic, strong) EKEvent *currentEvent;
-@property (nonatomic, strong) EKAlarm *currentAlert;
 
-@property (nonatomic) NSInteger alertQuantity;
-@property (nonatomic) NSInteger alertPeriod;
-@property (nonatomic) BOOL isAddedAlert; //TESTING
-
-- (void) getAlertDateQuantityAndPeriodForAlert:(EKAlarm *)alert onEvent:(EKEvent *)event usingQuantity:(NSInteger *)alertQuantity usingPeriod:(NSInteger *)alertPeriod;
 
 - (void)configureUserControlsAndAnimate: (BOOL)shouldAnimate;
 - (void)setAlertPropertiesForSelectionAtIndexPath:(NSIndexPath *)indexPath;

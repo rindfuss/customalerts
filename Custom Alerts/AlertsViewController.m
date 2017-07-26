@@ -10,8 +10,11 @@
 
 @interface AlertsViewController ()
 
+@property (nonatomic, strong) NSMutableArray<CustomAlert *> *alerts;
+
 @property (nonatomic, strong) UIActionSheet *addAlertRecurrenceActionSheet;
-@property (nonatomic, strong) EKAlarm *addedAlarm;
+
+-(void)loadAlertsFromEvent;
 @end
 
 @implementation AlertsViewController
@@ -21,45 +24,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Customize look of buttons
-/*
-    UIImage *buttonImageNormal = [UIImage imageNamed:@"whiteButton.png"];
-    UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:12 topCapHeight:0];
-    [self.saveButton setBackgroundImage:stretchableButtonImageNormal forState:UIControlStateNormal];
     
-    UIImage *buttonImagePressed = [UIImage imageNamed:@"blueButton.png"];
-    UIImage *stretchableButtonImagePressed = [buttonImagePressed stretchableImageWithLeftCapWidth:12 topCapHeight:0];
-    [self.saveButton setBackgroundImage:stretchableButtonImagePressed forState:UIControlStateHighlighted];
-*/
+    // Customize buttons
     self.addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButton:)];
-    
+
+    // Initialize properties
+    self.alerts = [NSMutableArray alloc];
+    [self loadAlertsFromEvent];
+
+    // configure visual controls
     [self configureUserControlsAndAnimate:NO];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-
-    UIApplication *app = [UIApplication sharedApplication];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:app];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventStoreChanged:) name:EKEventStoreChangedNotification object:self.eventStore];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)applicationWillEnterForeground: (NSNotification *)notification {
-    
-    // Refresh event in case something was changed in another app
-    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:NO];
-}
-
-- (void)eventStoreChanged: (NSNotification *)notification {
-    if (!self.isAddedAlert) { //TESTING
-        [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
-    } //TESTING
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -80,26 +56,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    // TESTING
-    NSInteger numAlarms = 0;
-    NSArray<EKAlarm *> *alarms = self.currentEvent.alarms;
-    if (alarms) { // need to be aware that alarms could be nil in which case reading the count would give an undefined result
-        // TESTING
-        numAlarms = self.currentEvent.alarms.count;
-    // TESTING
-    }
-    else {
-        BOOL nilAlarms;
-        nilAlarms = YES;
-    }
-    NSInteger i = 1;
-    for (EKAlarm *al in alarms) {
-        NSTimeInterval alarmInterval = [al relativeOffset];
-        NSLog(@"event: %@, alarm #%ld: interval=%f\n", self.currentEvent.title, i, alarmInterval);
-        i++;
-    }
-    //TESTING
-    
+    NSInteger numAlarms = self.alerts.count;
     return numAlarms;
 }
 
@@ -110,38 +67,13 @@
     
     // Configure the cell...
     NSInteger row = indexPath.row;
-    EKAlarm *alert = [self.currentEvent.alarms objectAtIndex:row];
+    CustomAlert *alert = [self.alerts objectAtIndex:row];
     
-    NSInteger alertQuantity;
-    NSInteger alertPeriod;
+    BOOL plural = alert.alertQuantity != 1 ? YES : NO;
     
-    [self getAlertDateQuantityAndPeriodForAlert:alert onEvent:self.currentEvent usingQuantity:&alertQuantity usingPeriod:&alertPeriod];
+    NSString *alertPeriodText = [CustomAlert alertPeriodDescriptionForPeriod:alert.alertPeriod withTextCase:TextCaseLower isPlural:plural];
     
-    NSString *alertPeriodText;
-    switch (alertPeriod) {
-        case ComponentRowMinutes:
-            alertPeriodText = @"minute";
-            break;
-        case ComponentRowHours:
-            alertPeriodText = @"hour";
-            break;
-        case ComponentRowDays:
-            alertPeriodText = @"day";
-            break;
-        case ComponentRowWeeks:
-            alertPeriodText = @"week";
-            break;
-            
-        default:
-            alertPeriodText = @"unknown alert period";
-            break;
-    }
-    
-    if (alertQuantity != 1) {
-        alertPeriodText = [NSString stringWithFormat:@"%@s", alertPeriodText];
-    }
-    
-    NSString *alertText = [NSString stringWithFormat:@"%ld %@", (long)alertQuantity, alertPeriodText];
+    NSString *alertText = [NSString stringWithFormat:@"%ld %@", (long)alert.alertQuantity, alertPeriodText];
     
     cell.textLabel.text = alertText;
     
@@ -153,76 +85,28 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-    [self setAlertPropertiesForSelectionAtIndexPath:indexPath];
     [self initializePickerAndAnimate:YES];
 }
 
 #pragma mark - class utility methods
-- (void) getAlertDateQuantityAndPeriodForAlert:(EKAlarm *)alert onEvent:(EKEvent *)event usingQuantity:(NSInteger *)alertQuantity usingPeriod:(NSInteger *)alertPeriod {
-
-    NSTimeInterval alertInterval = (NSTimeInterval)-1 * alert.relativeOffset;
-
-/*
-    NSDate *eventDate = event.startDate;
-
-    NSDate *alertDate = [NSDate dateWithTimeInterval:alertInterval sinceDate:eventDate];
+-(void)loadAlertsFromEvent {
+// reads alerts from self.currentEvent into this class' properties
+    [self.alerts removeAllObjects];
     
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    
-    NSDateComponents *components = [cal components:(NSCalendarUnitWeekOfYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:alertDate toDate:eventDate options:0];
-    
-    if (components.minute) {
-        *alertPeriod = ComponentRowMinutes;
-        *alertQuantity = components.minute + 60*components.hour + 24*60*components.day + 7*24*60*components.weekOfYear;
-    }
-    else if (components.hour) {
-        *alertPeriod = ComponentRowHours;
-        *alertQuantity = components.hour + 24*components.day + 7*24*components.weekOfYear;
-    }
-    else if (components.day) {
-        *alertPeriod = ComponentRowDays;
-        *alertQuantity = components.day + 7*components.weekOfYear;
-    }
-    else if (components.weekOfYear) {
-        *alertPeriod = ComponentRowWeeks;
-        *alertQuantity = components.weekOfYear;
-    }
-    else {
-        *alertPeriod = ComponentRowMinutes;
-        *alertQuantity = 0;
-    }
- */
-    
-    *alertPeriod = ComponentRowMinutes;
-    *alertQuantity = alertInterval / (NSTimeInterval) 60;
-    
-    NSInteger alertHours = alertInterval / (NSTimeInterval) 3600;
-    NSInteger alertMinutesRemaining = alertInterval / (NSTimeInterval) 60 - (NSTimeInterval)alertHours * (NSTimeInterval)60;
-    if (alertHours >= 1 && alertMinutesRemaining < 1) {
-        *alertPeriod = ComponentRowHours;
-        *alertQuantity = alertHours;
-    }
-    
-    NSInteger alertDays = alertInterval / (NSTimeInterval) 86400;
-    alertMinutesRemaining = alertInterval / (NSTimeInterval) 60 - ((NSTimeInterval)alertDays * (NSTimeInterval)24 * (NSTimeInterval)60);
-    if (alertDays >= 1 && alertMinutesRemaining < 1) {
-        *alertPeriod = ComponentRowDays;
-        *alertQuantity = alertDays;
-    }
-    
-    NSInteger alertWeeks = alertInterval / (NSTimeInterval) 604800;
-    alertMinutesRemaining = alertInterval / (NSTimeInterval)60 - ((NSTimeInterval)alertWeeks * (NSTimeInterval)7 * (NSTimeInterval)24 * (NSTimeInterval)60);
-    if (alertWeeks >= 1 && alertMinutesRemaining < 1) {
-        *alertPeriod = ComponentRowWeeks;
-        *alertQuantity = alertWeeks;
+    if (self.currentEvent.alarms) {
+        if (self.currentEvent.alarms.count != 0) {
+            for (EKAlarm *alarm in self.currentEvent.alarms) {
+                CustomAlert *alert = [[CustomAlert alloc] init];
+                [alert setAlertQuantityAndPeriodUsingAlarm:alarm];
+                [self.alerts addObject:alert];
+            }
+        }
     }
 }
 
-
 - (void)configureUserControlsAndAnimate: (BOOL)shouldAnimate {
 
-    if (self.currentEvent.alarms.count == 0) {
+    if (self.alerts.count == 0) {
         [self.alertDetailsPicker setHidden:YES];
         [self.saveButton setHidden:YES];
         self.navigationItem.rightBarButtonItem = self.addButton;
@@ -235,39 +119,49 @@
         if (self.tableView.indexPathForSelectedRow == nil) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
             [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
-            
         }
-        [self setAlertPropertiesForSelectionAtIndexPath:self.tableView.indexPathForSelectedRow];
+
         [self initializePickerAndAnimate: shouldAnimate];
     }
 }
 
-
-- (void)setAlertPropertiesForSelectionAtIndexPath:(NSIndexPath *)indexPath {
-
-    self.currentAlert = [self.currentEvent.alarms objectAtIndex: indexPath.row];
-    
-    NSInteger alertQuantity;
-    NSInteger alertPeriod;
-    
-    [self getAlertDateQuantityAndPeriodForAlert:self.currentAlert onEvent:self.currentEvent usingQuantity:&alertQuantity usingPeriod:&alertPeriod];
-    
-    self.alertQuantity = alertQuantity;
-    self.alertPeriod = alertPeriod;
-    self.isAddedAlert = NO; //TESTING
-}
-
 - (void) initializePickerAndAnimate: (BOOL)shouldAnimate {
-    
-    [self.alertDetailsPicker selectRow:self.alertQuantity inComponent:ComponentQuantity animated:shouldAnimate];
-    [self.alertDetailsPicker selectRow:self.alertPeriod inComponent:ComponentPeriod animated:shouldAnimate];
+    if (self.tableView.indexPathForSelectedRow == nil) {
+        [self.alertDetailsPicker selectRow:0 inComponent:ComponentQuantity animated:shouldAnimate];
+        [self.alertDetailsPicker selectRow:ComponentRowMinutes inComponent:ComponentPeriod animated:shouldAnimate];
+    }
+    else {
+        NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
+        CustomAlert *alert = [self.alerts objectAtIndex:indexPath.row];
+        
+        [self.alertDetailsPicker selectRow:alert.alertQuantity inComponent:ComponentQuantity animated:shouldAnimate];
+        
+        NSInteger desiredComponentRow = 0;
+        switch (alert.alertPeriod) {
+            case PeriodTypeMinutes: {
+                desiredComponentRow = ComponentRowMinutes;
+                break;
+            }
+            case PeriodTypeHours: {
+                desiredComponentRow = ComponentRowHours;
+                break;
+            }
+            case PeriodTypeDays: {
+                desiredComponentRow = ComponentRowDays;
+                break;
+            }
+            case PeriodTypeWeeks: {
+                desiredComponentRow = ComponentRowWeeks;
+                break;
+            }
+        }
+        [self.alertDetailsPicker selectRow:desiredComponentRow inComponent:ComponentPeriod animated:shouldAnimate];
+    }
 }
+
 
 - (void)updateAlertSpanning:(EKSpan)span {
 
-    NSInteger quantity = self.alertQuantity;
-    NSInteger period = self.alertPeriod;
-    
     NSTimeInterval alertInterval = 0;
     
     switch (period) {
@@ -344,22 +238,16 @@
 
 - (IBAction)addButton:(id)sender {
     
-    self.addedAlarm = [EKAlarm alarmWithRelativeOffset:(NSTimeInterval)0];
-    [self.currentEvent addAlarm:self.addedAlarm];
-    self.currentAlert = self.addedAlarm; //[self.currentEvent.alarms objectAtIndex: 0];
-    self.alertPeriod = ComponentRowMinutes;
-    self.alertQuantity = 0;
-    self.isAddedAlert = YES;
-
-    [self saveAlertAndProcessAsAddedAlert:YES];
+    CustomAlert *newAlert = [[CustomAlert alloc] init];
+    
+    [self.alerts addObject:newAlert];
+    
+    [self.tableView reloadData];
 }
 
 
 - (IBAction)saveButton:(id)sender {
     
-    // TESTING
-    self.isAddedAlert = NO;
-    // TESTING
     [self saveAlertAndProcessAsAddedAlert:NO];
 }
 
@@ -410,32 +298,39 @@
 #pragma mark - Picker delegate methods
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     
-    NSString *title;
+    NSString *title=@"";
     
     switch (component) {
         case ComponentQuantity:
             title = [NSString stringWithFormat:@"%ld", (long)row];
             break;
-        case ComponentPeriod:
+        case ComponentPeriod: {
             switch (row) {
-                case ComponentRowMinutes:
-                    title = @"Minutes";
+                case ComponentRowMinutes: {
+                    title = [CustomAlert alertPeriodDescriptionForPeriod:PeriodTypeMinutes withTextCase:TextCaseMixed isPlural:YES];
                     break;
-                case ComponentRowHours:
-                    title = @"Hours";
+                }
+                case ComponentRowHours: {
+                    title = [CustomAlert alertPeriodDescriptionForPeriod:PeriodTypeHours withTextCase:TextCaseMixed isPlural:YES];;
                     break;
-                case ComponentRowDays:
-                    title = @"Days";
+                }
+                case ComponentRowDays: {
+                    title = [CustomAlert alertPeriodDescriptionForPeriod:PeriodTypeDays withTextCase:TextCaseMixed isPlural:YES];
                     break;
-                case ComponentRowWeeks:
-                    title = @"Weeks";
+                }
+                case ComponentRowWeeks: {
+                    title = [CustomAlert alertPeriodDescriptionForPeriod:PeriodTypeWeeks withTextCase:TextCaseMixed isPlural:YES];
                     break;
+                }
                     
-                default:
+                default: {
                     break;
+                }
             }
-        default:
+        }
+        default: {
             break;
+        }
     }
     
     return title;
@@ -443,13 +338,39 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     
-    switch (component) {
-        case ComponentQuantity:
-            self.alertQuantity = row;
-            break;
-        case ComponentPeriod:
-            self.alertPeriod = row;
-            break;
+    CustomAlert *alert = nil;
+    
+    NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow);
+    if (indexPath != nil) {
+        alert = [self.alerts objectAtIndex:indexPath.row];
+        
+        switch (component) {
+            case ComponentQuantity: {
+                alert.alertQuantity = row;
+                break;
+            }
+            case ComponentPeriod: {
+                switch (row) {
+                    case ComponentRowMinutes: {
+                        alert.alertPeriod = PeriodTypeMinutes;
+                        break;
+                    }
+                    case ComponentRowHours: {
+                        alert.alertPeriod = PeriodTypeHours;
+                        break;
+                    }
+                    case ComponentRowDays: {
+                        alert.alertPeriod = PeriodTypeDays;
+                        break;
+                    }
+                    case ComponentRowWeeks: {
+                        alert.alertPeriod = PeriodTypeWeeks;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
     }
 }
 
