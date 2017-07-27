@@ -43,9 +43,8 @@
 
 
 - (void)configureUserControlsAndAnimate: (BOOL)shouldAnimate;
-- (void)setAlertPropertiesForSelectionAtIndexPath:(NSIndexPath *)indexPath;
 - (void)initializePickerAndAnimate: (BOOL)shouldAnimate;
-- (void)updateAlertSpanning: (EKSpan)span;
+- (void)updateAlertsSpanning: (EKSpan)span;
 
 - (IBAction)editButton:(id)sender;
 - (IBAction)saveButton:(id)sender;

@@ -11,6 +11,10 @@
 @interface AlertsViewController ()
 
 @property (nonatomic, strong) NSMutableArray<CustomAlert *> *alerts;
+@property (nonatomic) BOOL alertsHaveChanged;
+@property (nonatomic, strong) UIActionSheet *alertSpanActionSheet;
+@property (nonatomic, strong) UIActionSheet *saveChangesActionSheetForEdit;
+@property (nonatomic, strong) UIActionSheet *saveChangesActionSheetForExit;
 
 -(void)loadAlertsFromEvent;
 @end
@@ -27,13 +31,27 @@
     self.addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButton:)];
 
     // Initialize properties
-    self.alerts = [NSMutableArray alloc];
+    self.alertSpanActionSheet = nil;
+    self.saveChangesActionSheetForEdit = nil;
+    self.saveChangesActionSheetForExit = nil;
+    self.alerts = [[NSMutableArray alloc] init];
     [self loadAlertsFromEvent];
+    self.alertsHaveChanged = NO;
 
     // configure visual controls
     [self configureUserControlsAndAnimate:NO];
+    
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+
+    if (self.alertsHaveChanged) {
+        self.saveChangesActionSheetForExit = [[UIActionSheet alloc] initWithTitle:@"Unsaved Changes Exist" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"Don't save changes" otherButtonTitles:@"Save changes", nil];
+        [self.saveChangesActionSheetForExit showInView:self.view];
+    }
+    
+    [super viewWillDisappear:animated];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -182,6 +200,7 @@
         [alertView show];
     }
     
+    self.alertsHaveChanged = NO;
     [self.navigationController popViewControllerAnimated:YES];
    
 }
@@ -206,9 +225,7 @@
     }
 }
 
-#pragma mark - User Interaction
-{ } // NEED TO WORK ON THE CODE FOR EDITING
-- (IBAction)editButton:(id)sender {
+-(void) presentEditController {
     EKEventEditViewController *eventEditViewController = [[EKEventEditViewController alloc] init];
     
     eventEditViewController.editViewDelegate = self;
@@ -218,13 +235,29 @@
     [self presentViewController:eventEditViewController animated:YES completion:nil];
 }
 
+#pragma mark - User Interaction
+- (IBAction)editButton:(id)sender {
+    if (self.alertsHaveChanged) {
+        self.saveChangesActionSheetForEdit = [[UIActionSheet alloc] initWithTitle:@"Unsaved Changes Exist" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Don't save changes" otherButtonTitles:@"Save changes", nil];
+        [self.saveChangesActionSheetForEdit showInView:self.view];
+    }
+    else {
+        [self presentEditController];
+    }
+}
+
 - (IBAction)addButton:(id)sender {
     
     CustomAlert *newAlert = [[CustomAlert alloc] init];
     
     [self.alerts addObject:newAlert];
     
+    self.alertsHaveChanged = YES;
+    
     [self.tableView reloadData];
+    [self configureUserControlsAndAnimate:NO];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.alerts.count-1 inSection:0];
+    [[self tableView] selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
 }
 
 
@@ -244,8 +277,8 @@
         }
         else {
             // need an action sheet, but need to have different action sheets for an alert that's been edited vs. one that was created with the add button, so that if user hits cancel on an added alert we know we need to delete that alarm from the event vs. if user hits cancel on an edited alert, we don't need to do anything. This conditional code is in the actionSheetCancel code
-            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
-                [actionSheet showInView:self.view];
+            self.alertSpanActionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
+                [self.alertSpanActionSheet showInView:self.view];
         }
     }
 }
@@ -318,6 +351,7 @@
     NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
     if (indexPath != nil) {
         alert = [self.alerts objectAtIndex:indexPath.row];
+        self.alertsHaveChanged = YES;
         
         switch (component) {
             case ComponentQuantity: {
@@ -378,18 +412,50 @@
 #pragma mark - ActionSheet delegate methods
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    switch (buttonIndex) {
-        case 0: // update only current event
-            [self updateAlertsSpanning:EKSpanThisEvent];
-            break;
-        case 1: // update future events
-            [self updateAlertsSpanning:EKSpanFutureEvents];
-            break;
-            
-        default:
-            break;
+    if (actionSheet == self.alertSpanActionSheet) {
+        switch (buttonIndex) {
+            case 0: { // update only current event
+                [self updateAlertsSpanning:EKSpanThisEvent];
+                break;
+            }
+            case 1: { // update future events
+                [self updateAlertsSpanning:EKSpanFutureEvents];
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+    else if (actionSheet == self.saveChangesActionSheetForEdit) {
+        switch (buttonIndex) {
+            case 0: { // don't save changes
+                [self presentEditController];
+                break;
+            }
+            case 1: { // save changes
+                [self saveAlerts];
+                [self presentEditController];
+                break;
+            }
+        }
+    }
+    else if (actionSheet == self.saveChangesActionSheetForExit) {
+        switch (buttonIndex) {
+            case 0: { // don't save changes
+                self.alertsHaveChanged = NO;
+                [self.navigationController popViewControllerAnimated:YES];
+                break;
+            }
+            case 1: { // save changes
+                [self saveAlerts];
+                break;
+            }
+            case 2: { // cancel
+                break;
+            }
+        }
     }
 }
-
 
 @end
