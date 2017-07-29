@@ -43,16 +43,6 @@
     
 }
 
--(void)viewWillDisappear:(BOOL)animated {
-
-    if (self.alertsHaveChanged) {
-        self.saveChangesActionSheetForExit = [[UIActionSheet alloc] initWithTitle:@"Unsaved Changes Exist" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"Don't save changes" otherButtonTitles:@"Save changes", nil];
-        [self.saveChangesActionSheetForExit showInView:self.view];
-    }
-    
-    [super viewWillDisappear:animated];
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -101,7 +91,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self initializePickerAndAnimate:YES];
+    [self initializePickerAndAnimate:NO];
 }
 
 #pragma mark - class utility methods
@@ -176,7 +166,7 @@
 }
 
 
-- (void)updateAlertsSpanning:(EKSpan)span {
+- (void)updateEventSpanning:(EKSpan)span {
 
     NSMutableArray<EKAlarm *> *alarms = [[NSMutableArray alloc] init];
     
@@ -201,8 +191,6 @@
     }
     
     self.alertsHaveChanged = NO;
-    [self.navigationController popViewControllerAnimated:YES];
-   
 }
 
 - (void)refreshDataAndUpdateDisplayAndNotifyUserOnFail: (BOOL)shouldNotifyUserOnFail {
@@ -235,15 +223,35 @@
     [self presentViewController:eventEditViewController animated:YES completion:nil];
 }
 
+- (void)saveAlerts {
+    
+    if (self.currentEvent.recurrenceRules == nil) {
+        [self updateEventSpanning:EKSpanThisEvent];
+        [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+    }
+    else {
+        if (self.currentEvent.recurrenceRules.count == 0 ) {
+            [self updateEventSpanning:EKSpanThisEvent];
+            [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+        }
+        else {
+            // need an action sheet, but need to have different action sheets for an alert that's been edited vs. one that was created with the add button, so that if user hits cancel on an added alert we know we need to delete that alarm from the event vs. if user hits cancel on an edited alert, we don't need to do anything. This conditional code is in the actionSheetCancel code
+            self.alertSpanActionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
+            [self.alertSpanActionSheet showInView:self.view];
+        }
+    }
+}
+
 #pragma mark - User Interaction
 - (IBAction)editButton:(id)sender {
+/*
     if (self.alertsHaveChanged) {
         self.saveChangesActionSheetForEdit = [[UIActionSheet alloc] initWithTitle:@"Unsaved Changes Exist" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Don't save changes" otherButtonTitles:@"Save changes", nil];
         [self.saveChangesActionSheetForEdit showInView:self.view];
     }
-    else {
+    else { */
         [self presentEditController];
-    }
+    //}
 }
 
 - (IBAction)addButton:(id)sender {
@@ -254,10 +262,8 @@
     
     self.alertsHaveChanged = YES;
     
-    [self.tableView reloadData];
-    [self configureUserControlsAndAnimate:NO];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.alerts.count-1 inSection:0];
-    [[self tableView] selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    [self saveAlerts];
+    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
 }
 
 
@@ -266,22 +272,6 @@
     [self saveAlerts];
 }
 
-- (void)saveAlerts {
-    
-    if (self.currentEvent.recurrenceRules == nil) {
-        [self updateAlertsSpanning:EKSpanThisEvent];
-    }
-    else {
-        if (self.currentEvent.recurrenceRules.count == 0 ) {
-            [self updateAlertsSpanning:EKSpanThisEvent];
-        }
-        else {
-            // need an action sheet, but need to have different action sheets for an alert that's been edited vs. one that was created with the add button, so that if user hits cancel on an added alert we know we need to delete that alarm from the event vs. if user hits cancel on an edited alert, we don't need to do anything. This conditional code is in the actionSheetCancel code
-            self.alertSpanActionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
-                [self.alertSpanActionSheet showInView:self.view];
-        }
-    }
-}
 
 #pragma mark - EKEventEditViewDelegate
 
@@ -292,7 +282,16 @@
 	// Dismiss the modal view controller
     [controller dismissViewControllerAnimated:YES completion:nil];
     
-    [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:NO];
+    if (action == EKEventEditViewActionSaved) {
+        [self loadAlertsFromEvent];
+        if (self.currentEvent.isDetached || !self.currentEvent.hasRecurrenceRules) {
+            [self updateEventSpanning:EKSpanThisEvent];
+        }
+        else {
+            [self updateEventSpanning:EKSpanFutureEvents];
+        }
+        [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+    }
 }
 
 
@@ -415,17 +414,18 @@
     if (actionSheet == self.alertSpanActionSheet) {
         switch (buttonIndex) {
             case 0: { // update only current event
-                [self updateAlertsSpanning:EKSpanThisEvent];
+                [self updateEventSpanning:EKSpanThisEvent];
                 break;
             }
             case 1: { // update future events
-                [self updateAlertsSpanning:EKSpanFutureEvents];
+                [self updateEventSpanning:EKSpanFutureEvents];
                 break;
             }
             default: {
                 break;
             }
         }
+        [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
     }
     else if (actionSheet == self.saveChangesActionSheetForEdit) {
         switch (buttonIndex) {

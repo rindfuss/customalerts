@@ -34,6 +34,10 @@
 	<true/>
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app reads and updates calendar entries in order to set custom alerts.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Custom alerts needs location information when you edit an event&apos;s location.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Custom alerts needs to access your contacts&apos; addresses when you edit an event&apos;s location.</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

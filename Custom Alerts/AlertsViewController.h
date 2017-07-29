@@ -44,7 +44,7 @@
 
 - (void)configureUserControlsAndAnimate: (BOOL)shouldAnimate;
 - (void)initializePickerAndAnimate: (BOOL)shouldAnimate;
-- (void)updateAlertsSpanning: (EKSpan)span;
+- (void)updateEventSpanning: (EKSpan)span;
 
 - (IBAction)editButton:(id)sender;
 - (IBAction)saveButton:(id)sender;
