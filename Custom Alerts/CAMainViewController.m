@@ -149,6 +149,10 @@
         //[self.goToCalendarEventsButton setEnabled:YES];
         //        [self.addEventsButton setEnabled:YES];
     }
+    
+    // NEED TO ADD CODE TO CHECK ACCESS PERMISSIONS TO LOCATION SERVICES - in case user edits an event's location
+    // NEED TO ADD CODE TO CHECK ACCESS PERMISSIONS TO CONTACTS INFORMATION - in case user edits an event's location (iOS will automatically look at contacts' addresses)
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
