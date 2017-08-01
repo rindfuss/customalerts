@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9B143E4118550CB2006DB54E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B143E4018550CB2006DB54E /* Images.xcassets */; };
+		9B1F62991F30F00500C5B8A8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1F62981F30F00500C5B8A8 /* CoreLocation.framework */; };
 		9B2880C91B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B2880C81B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m */; };
 		9B4E0AC01839625A00B41777 /* CalendarDayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B4E0ABF1839625A00B41777 /* CalendarDayButton.m */; };
 		9B7B0D341F283CF80023849C /* CustomAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B7B0D331F283CF80023849C /* CustomAlert.m */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		9B143E4018550CB2006DB54E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		9B1F62981F30F00500C5B8A8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		9B21152C1836B9E200C6EB1E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9B2880C71B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectCalendarsTableViewController.h; sourceTree = "<group>"; };
 		9B2880C81B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectCalendarsTableViewController.m; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B1F62991F30F00500C5B8A8 /* CoreLocation.framework in Frameworks */,
 				9BE4E1981839CBD80080B8EF /* CoreGraphics.framework in Frameworks */,
 				9BDAAEA516F953D9008C4102 /* EventKit.framework in Frameworks */,
 				9BDAAEA616F953D9008C4102 /* EventKitUI.framework in Frameworks */,
@@ -110,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				9BE4E1971839CBD80080B8EF /* CoreGraphics.framework */,
+				9B1F62981F30F00500C5B8A8 /* CoreLocation.framework */,
 				9B21152C1836B9E200C6EB1E /* QuartzCore.framework */,
 				9BDAAE7D16F9539B008C4102 /* UIKit.framework */,
 				9BDAAE7F16F9539B008C4102 /* Foundation.framework */,

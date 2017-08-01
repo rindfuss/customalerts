@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
+#import <CoreLocation/CoreLocation.h>
 #import "EventsViewController.h"
 #import "AppDelegate.h"
 #import "CalendarDayButton.h"
@@ -34,9 +35,11 @@ typedef enum {
     ArrowDirectionRight = 2
 } ArrowDirectionType;
 
-@interface CAMainViewController : UIViewController <EKCalendarChooserDelegate, EKEventEditViewDelegate>
+@interface CAMainViewController : UIViewController <EKCalendarChooserDelegate, EKEventEditViewDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic, strong) NSDate *currentDate;
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @property (nonatomic, strong) EKEventStore *eventStore;
 @property (nonatomic, strong) EKCalendar *defaultCalendar;

@@ -150,7 +150,31 @@
         //        [self.addEventsButton setEnabled:YES];
     }
     
-    // NEED TO ADD CODE TO CHECK ACCESS PERMISSIONS TO LOCATION SERVICES - in case user edits an event's location
+    // Do setup for location services (used if user selects to edit an existing event
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted: {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location services not authorized" message:@"Custom Alerts does not have permission to use location services. This may generate an error if you try to edit an existing event. Please enable location services for Custom Alerts in the Settings app." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+            break;
+        }
+        case kCLAuthorizationStatusNotDetermined: {
+            self.locationManager = [[CLLocationManager alloc] init];
+            self.locationManager.delegate = self;
+            if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+                [self.locationManager requestWhenInUseAuthorization];
+            }
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+        case kCLAuthorizationStatusAuthorizedAlways: {
+            // all is good
+            break;
+        }
+    }
+    
+    
+    
     // NEED TO ADD CODE TO CHECK ACCESS PERMISSIONS TO CONTACTS INFORMATION - in case user edits an event's location (iOS will automatically look at contacts' addresses)
     
 }
