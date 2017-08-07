@@ -12,6 +12,7 @@
 
 #import "DateCalculator.h"
 #import "CustomAlert.h"
+#import "NSObject+Log_Properties.h"
 
 #define ComponentsNum     2
 #define ComponentQuantity 0

@@ -98,8 +98,11 @@
     [self.alerts removeAllObjects];
     
     if (self.currentEvent.alarms) {
+        [self.currentEvent.alarms logProperties];
         if (self.currentEvent.alarms.count != 0) {
+            NSLog(@"**** Alarms count: %ld****\n", (long)self.currentEvent.alarms.count);
             for (EKAlarm *alarm in self.currentEvent.alarms) {
+                [alarm logProperties];
                 CustomAlert *alert = [[CustomAlert alloc] init];
                 [alert setAlertQuantityAndPeriodUsingAlarm:alarm];
                 [self.alerts addObject:alert];
