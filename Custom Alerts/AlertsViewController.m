@@ -11,7 +11,6 @@
 @interface AlertsViewController ()
 
 @property (nonatomic, strong) NSMutableArray<CustomAlert *> *alerts;
-@property (nonatomic) BOOL alertsHaveChanged;
 @property (nonatomic, strong) UIActionSheet *alertSpanActionSheet;
 @property (nonatomic, strong) UIActionSheet *saveChangesActionSheetForEdit;
 @property (nonatomic, strong) UIActionSheet *saveChangesActionSheetForExit;
@@ -36,7 +35,6 @@
     self.saveChangesActionSheetForExit = nil;
     self.alerts = [[NSMutableArray alloc] init];
     [self loadAlertsFromEvent];
-    self.alertsHaveChanged = NO;
 
     // configure visual controls
     [self configureUserControlsAndAnimate:NO];
@@ -190,7 +188,6 @@
         [alertView show];
     }
     
-    self.alertsHaveChanged = NO;
 }
 
 - (void)refreshDataAndUpdateDisplayAndNotifyUserOnFail: (BOOL)shouldNotifyUserOnFail {
@@ -244,14 +241,7 @@
 
 #pragma mark - User Interaction
 - (IBAction)editButton:(id)sender {
-/*
-    if (self.alertsHaveChanged) {
-        self.saveChangesActionSheetForEdit = [[UIActionSheet alloc] initWithTitle:@"Unsaved Changes Exist" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Don't save changes" otherButtonTitles:@"Save changes", nil];
-        [self.saveChangesActionSheetForEdit showInView:self.view];
-    }
-    else { */
-        [self presentEditController];
-    //}
+    [self presentEditController];
 }
 
 - (IBAction)addButton:(id)sender {
@@ -259,8 +249,6 @@
     CustomAlert *newAlert = [[CustomAlert alloc] init];
     
     [self.alerts addObject:newAlert];
-    
-    self.alertsHaveChanged = YES;
     
     [self saveAlerts];
     [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
@@ -350,7 +338,6 @@
     NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
     if (indexPath != nil) {
         alert = [self.alerts objectAtIndex:indexPath.row];
-        self.alertsHaveChanged = YES;
         
         switch (component) {
             case ComponentQuantity: {
@@ -443,7 +430,6 @@
     else if (actionSheet == self.saveChangesActionSheetForExit) {
         switch (buttonIndex) {
             case 0: { // don't save changes
-                self.alertsHaveChanged = NO;
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
             }

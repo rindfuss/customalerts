@@ -172,11 +172,7 @@
             break;
         }
     }
-    
-    
-    
-    // NEED TO ADD CODE TO CHECK ACCESS PERMISSIONS TO CONTACTS INFORMATION - in case user edits an event's location (iOS will automatically look at contacts' addresses)
-    
+        
 }
 
 - (void)viewWillAppear:(BOOL)animated {
