@@ -23,6 +23,18 @@
     return self;
 }
 
+- (BOOL) isEqual:(id)object {
+    BOOL isMatch = NO;
+    
+    if ([object isKindOfClass:[CustomAlert class]]) {
+        if (self.alertPeriod==[(CustomAlert *)object alertPeriod] && self.alertQuantity==[(CustomAlert *)object alertQuantity]) {
+            isMatch = YES;
+        }
+    }
+    
+    return isMatch;
+}
+
 +(NSString *)alertPeriodDescriptionForPeriod: (enum AlertPeriodType)periodType withTextCase: (enum TextCaseType)textCase isPlural:(BOOL)plural {
     
     NSString *descr;

@@ -109,6 +109,19 @@
             }
         }
     }
+    // Filter out duplicates
+    NSMutableArray *removeList = [[NSMutableArray alloc] init];
+    
+    for (CustomAlert *alert in self.alerts) {
+        if (![removeList containsObject:alert]) {
+            for (CustomAlert *otherAlert in self.alerts) {
+                if([alert isEqual:otherAlert] && alert!=otherAlert ) {
+                    // the "content" of the alerts match but they're not pointing to the same object
+                    [removeList addObject:otherAlert];
+                }
+            }
+        }
+    }
 }
 
 - (void)configureUserControlsAndAnimate: (BOOL)shouldAnimate {
