@@ -10,7 +10,6 @@
 		9B1219791F30F196002636E4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1219781F30F196002636E4 /* CoreLocation.framework */; };
 		9B12197A1F30F1B0002636E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAE8116F9539B008C4102 /* CoreGraphics.framework */; };
 		9B143E4118550CB2006DB54E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B143E4018550CB2006DB54E /* Images.xcassets */; };
-		9B2340481F42950300A45E92 /* NSObject+Log_Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B2340471F42950300A45E92 /* NSObject+Log_Properties.m */; };
 		9B2880C91B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B2880C81B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m */; };
 		9B4E0AC01839625A00B41777 /* CalendarDayButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B4E0ABF1839625A00B41777 /* CalendarDayButton.m */; };
 		9B7B0D341F283CF80023849C /* CustomAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B7B0D331F283CF80023849C /* CustomAlert.m */; };
@@ -33,8 +32,6 @@
 		9B1219781F30F196002636E4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9B143E4018550CB2006DB54E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9B21152C1836B9E200C6EB1E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		9B2340461F42950300A45E92 /* NSObject+Log_Properties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Log_Properties.h"; path = "../Libraries/NSObject_Log_Properties/NSObject+Log_Properties.h"; sourceTree = "<group>"; };
-		9B2340471F42950300A45E92 /* NSObject+Log_Properties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Log_Properties.m"; path = "../Libraries/NSObject_Log_Properties/NSObject+Log_Properties.m"; sourceTree = "<group>"; };
 		9B2880C71B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectCalendarsTableViewController.h; sourceTree = "<group>"; };
 		9B2880C81B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectCalendarsTableViewController.m; sourceTree = "<group>"; };
 		9B4E0ABE1839625A00B41777 /* CalendarDayButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarDayButton.h; sourceTree = "<group>"; };
@@ -94,8 +91,6 @@
 		9BDAAE6E16F9539B008C4102 = {
 			isa = PBXGroup;
 			children = (
-				9B2340461F42950300A45E92 /* NSObject+Log_Properties.h */,
-				9B2340471F42950300A45E92 /* NSObject+Log_Properties.m */,
 				9BEF28C3172AE350000EF122 /* whiteButton.png */,
 				9BDAAEA316F953D9008C4102 /* EventKit.framework */,
 				9BDAAEA416F953D9008C4102 /* EventKitUI.framework */,
@@ -240,7 +235,6 @@
 				9BDAAEAD16F95CD6008C4102 /* EventsViewController.m in Sources */,
 				9B93713016FABB9600E83DA4 /* AlertsViewController.m in Sources */,
 				9B4E0AC01839625A00B41777 /* CalendarDayButton.m in Sources */,
-				9B2340481F42950300A45E92 /* NSObject+Log_Properties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
