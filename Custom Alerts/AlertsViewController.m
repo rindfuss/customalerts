@@ -299,6 +299,9 @@
         }
         [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
     }
+    else if (action == EKEventEditViewActionDeleted) {
+        [self.navigationController popViewControllerAnimated:NO];
+    }
 }
 
 
