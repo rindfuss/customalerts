@@ -157,7 +157,7 @@
         //        [self.addEventsButton setEnabled:YES];
     }
     
-    // Do setup for location services (used if user selects to edit an existing event
+    // Do setup for location services (used if user selects to edit an existing event)
     switch ([CLLocationManager authorizationStatus]) {
         case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted: {
