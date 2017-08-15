@@ -122,6 +122,9 @@
             }
         }
     }
+    for (CustomAlert *alertToRemove in removeList) {
+        [self.alerts removeObject:alertToRemove];
+    }
 }
 
 - (void)configureUserControlsAndAnimate: (BOOL)shouldAnimate {
