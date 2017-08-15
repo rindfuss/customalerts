@@ -194,28 +194,41 @@
     // Create the predicate. Pass it the default calendar.
     self.eventsList = [[NSMutableArray alloc] init];
     
-    NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:startDate endDate:endDate
-                                                                    calendars:self.currentCalendars];
-    
-    // Fetch all events that match the predicate.
-    [self.eventsList addObjectsFromArray:[self.eventStore eventsMatchingPredicate:predicate]];
-    
-    // Sort the array by start datetime and then by title
-    [self.eventsList sortUsingComparator:^NSComparisonResult(id a, id b) {
-        EKEvent *firstEvent = (EKEvent *)a;
-        NSString *firstTitle = [a title];
-        
-        EKEvent *secondEvent = (EKEvent *)b;
-        NSString *secondTitle = [b title];
-
-        NSComparisonResult compareResult = [firstEvent compareStartDateWithEvent:secondEvent];
-        if (compareResult == NSOrderedSame) {
-            // start date-time is the same, so now sort on title
-            compareResult = [firstTitle caseInsensitiveCompare:secondTitle];
+    BOOL calendarsSelected = NO;
+    if (self.currentCalendars) {
+        if (self.currentCalendars.count !=0) {
+            calendarsSelected = YES;
         }
+    }
+    
+    if (calendarsSelected) {
+        NSPredicate *predicate = [self.eventStore predicateForEventsWithStartDate:startDate endDate:endDate
+                                                                        calendars:self.currentCalendars];
         
-        return compareResult;
-    }];
+        // Fetch all events that match the predicate.
+        [self.eventsList addObjectsFromArray:[self.eventStore eventsMatchingPredicate:predicate]];
+        
+        // Sort the array by start datetime and then by title
+        [self.eventsList sortUsingComparator:^NSComparisonResult(id a, id b) {
+            EKEvent *firstEvent = (EKEvent *)a;
+            NSString *firstTitle = [a title];
+            
+            EKEvent *secondEvent = (EKEvent *)b;
+            NSString *secondTitle = [b title];
+            
+            NSComparisonResult compareResult = [firstEvent compareStartDateWithEvent:secondEvent];
+            if (compareResult == NSOrderedSame) {
+                // start date-time is the same, so now sort on title
+                compareResult = [firstTitle caseInsensitiveCompare:secondTitle];
+            }
+            
+            return compareResult;
+        }];
+    }
+    else {
+        [self.eventsList removeAllObjects];
+    }
+    
 }
 
 

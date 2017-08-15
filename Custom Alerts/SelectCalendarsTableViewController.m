@@ -52,16 +52,6 @@
     
     // Configure the cell...
     
-    /*
-    cell.textLabel.text = [self.calendarNames objectAtIndex:indexPath.row];
-    for (EKCalendar *cal in self.currentCalendars) {
-        if ([cal.calendarIdentifier isEqualToString:[self.calendarIDs objectAtIndex:indexPath.row]]) {
-            cell.selected = @"Y";
-        }
-        else {
-            cell.selected = @"N";
-        }
-    } */
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     EKCalendar *calendarForRow = [self.availableCalendars objectAtIndex:indexPath.row];

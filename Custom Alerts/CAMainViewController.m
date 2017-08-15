@@ -138,6 +138,13 @@
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                         [alert show];
                     }
+                    else {
+                        self.eventsViewController.eventStore = self.eventStore;
+                        self.eventsViewController.currentCalendars = self.currentCalendars;
+                        self.eventsViewController.selectedDate = self.currentDate;
+                        
+                        [self.eventsViewController refreshDataAndUpdateDisplay];
+                    }
                 }
             });
         }];
@@ -205,28 +212,8 @@
 
         SelectCalendarsTableViewController *vc = (SelectCalendarsTableViewController *)segue.destinationViewController;
         
-        
-        /*
-        NSArray *calendarsAvailable = [self.eventStore calendarsForEntityType:EKEntityTypeEvent];
-        NSSet *calendarsPreselected = [NSSet setWithArray:self.currentCalendars];
-        
-        vc.calendarIDs = [[NSMutableArray alloc] init];
-        vc.calendarNames = [[NSMutableArray alloc] init];
-        vc.calendarSelected = [[NSMutableArray alloc] init];
-        NSUInteger i=0;
-        for (EKCalendar *cal in calendarsAvailable) {
-            [vc.calendarNames insertObject:cal.title atIndex:i];
-            [vc.calendarIDs insertObject:cal.calendarIdentifier atIndex:i];
-            if ([calendarsPreselected containsObject:cal]) {
-                [vc.calendarSelected insertObject:@"Y" atIndex:i];
-            }
-            else {
-                [vc.calendarSelected insertObject:@"N" atIndex:i];
-            }
-            i++;
-        } */
-        
         // [self.eventStore refreshSourcesIfNecessary]; This line was ineffective at re-populating the eventStore with available calendars if no calendars existed when Custom Alerts was initially launched and then user created an event (and, automatically, a calendar) in the calendar app and then switched back to Custom Alerts. Solution is to swipe closed Custom Alerts and re-launch it. Now that a calendar exists, it and its events will show in Custom Alerts
+        
         NSMutableArray *availableCalendars = [[NSMutableArray alloc] init];
         for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
 //          if (cal.allowsContentModifications && !cal.isImmutable) {
