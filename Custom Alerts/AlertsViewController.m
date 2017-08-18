@@ -98,18 +98,35 @@
     [self.alerts removeAllObjects];
     
     if (self.currentEvent.alarms) {
-        [self.currentEvent.alarms logProperties];
         if (self.currentEvent.alarms.count != 0) {
-            NSLog(@"**** Alarms count: %ld****\n", (long)self.currentEvent.alarms.count);
             for (EKAlarm *alarm in self.currentEvent.alarms) {
-                [alarm logProperties];
                 CustomAlert *alert = [[CustomAlert alloc] init];
                 [alert setAlertQuantityAndPeriodUsingAlarm:alarm];
                 [self.alerts addObject:alert];
             }
         }
     }
+    
     // Filter out duplicates
+    [self removeDuplicateAlerts];
+    
+    // Sort alers with alert nearest to event coming first
+    NSArray *sortedArray;
+    sortedArray = [self.alerts sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        NSTimeInterval first = -1 * [(CustomAlert *)a alarmIntervalForCustomAlert];
+        NSTimeInterval second = -1 * [(CustomAlert *)b alarmIntervalForCustomAlert];
+        
+        NSComparisonResult comparisonResult = first < second ? NSOrderedAscending : NSOrderedDescending;
+        
+        return comparisonResult;
+    }];
+    
+    self.alerts = [NSMutableArray arrayWithArray:sortedArray];
+}
+
+- (void)removeDuplicateAlerts {
+
+    // removes duplicate alerts from self.alerts
     NSMutableArray *removeList = [[NSMutableArray alloc] init];
     
     for (CustomAlert *alert in self.alerts) {
@@ -122,8 +139,9 @@
             }
         }
     }
+
     for (CustomAlert *alertToRemove in removeList) {
-        [self.alerts removeObject:alertToRemove];
+        [self.alerts removeObjectIdenticalTo:alertToRemove];
     }
 }
 
@@ -241,6 +259,9 @@
 
 - (void)saveAlerts {
     
+    // Remove duplicate alerts before saving
+    [self removeDuplicateAlerts];
+    
     if (self.currentEvent.recurrenceRules == nil) {
         [self updateEventSpanning:EKSpanThisEvent];
         [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
@@ -251,7 +272,6 @@
             [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
         }
         else {
-            // need an action sheet, but need to have different action sheets for an alert that's been edited vs. one that was created with the add button, so that if user hits cancel on an added alert we know we need to delete that alarm from the event vs. if user hits cancel on an edited alert, we don't need to do anything. This conditional code is in the actionSheetCancel code
             self.alertSpanActionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
             [self.alertSpanActionSheet showInView:self.view];
         }
@@ -290,13 +310,8 @@
     [controller dismissViewControllerAnimated:YES completion:nil];
     
     if (action == EKEventEditViewActionSaved) {
+        //view controller has saved any changes to self.currentEvent, so re-load alerts from the event
         [self loadAlertsFromEvent];
-        if (self.currentEvent.isDetached || !self.currentEvent.hasRecurrenceRules) {
-            [self updateEventSpanning:EKSpanThisEvent];
-        }
-        else {
-            [self updateEventSpanning:EKSpanFutureEvents];
-        }
         [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
     }
     else if (action == EKEventEditViewActionDeleted) {
