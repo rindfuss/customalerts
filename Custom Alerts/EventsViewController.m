@@ -37,6 +37,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    [super viewWillAppear:animated];
+    
     UIApplication *app = [UIApplication sharedApplication];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:app];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(eventStoreChanged:) name:EKEventStoreChangedNotification object:self.eventStore];
@@ -48,6 +50,8 @@
 - (void)viewWillDisappear:(BOOL)animated {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [super viewWillDisappear:animated];
 }
 
 - (void)applicationWillEnterForeground: (NSNotification *)notification {
@@ -272,6 +276,7 @@
     
     UIImage *arrowImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    CGPathRelease(path);
     
     return arrowImage;
 }

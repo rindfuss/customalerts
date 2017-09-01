@@ -184,6 +184,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 
+    [super viewWillAppear:animated];
+    
     // The logic below should call the selectDate method with today's date if this is the initial load of the view. If the view is appearing because we've just selected a new set of calendars, for example, from another view controller, the logic below should simply refresh the display (which will take into account any changes to the calendars selected to display)
     
     if (self.currentDate) {
@@ -509,7 +511,7 @@
         circleWidth = size.width;
     }
     
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    CGRect rect = CGRectMake(0, 0, circleWidth, circleHeight);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [color CGColor]);
@@ -545,6 +547,7 @@
             CGContextSetFillColorWithColor(context, [arrowColor CGColor]);
             CGContextAddPath(context, path);
             CGContextFillPath(context);
+            CGPathRelease(path);
             
             break;
         }
@@ -560,6 +563,7 @@
             CGContextSetFillColorWithColor(context, [arrowColor CGColor]);
             CGContextAddPath(context, path);
             CGContextFillPath(context);
+            CGPathRelease(path);
             
             break;
         }

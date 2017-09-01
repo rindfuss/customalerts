@@ -133,7 +133,7 @@
         circleWidth = size.width;
     }
     
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    CGRect rect = CGRectMake(0, 0, circleWidth, circleHeight);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [color CGColor]);
@@ -144,6 +144,7 @@
     
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
     return img;
 }
 
@@ -175,6 +176,8 @@
     
     UIImage *checkmarkImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
+    CGPathRelease(path);
     
     return checkmarkImage;
 }
