@@ -51,54 +51,94 @@
     
 
     // Create and place day select buttons
-    UIImage *highlightedImage = [self circleImageFromColor:[UIColor blueColor] withSize:CGSizeMake(kDayButtonWidth, kDayButtonHeight)];
+    UIImage *highlightedImage = [self circleImageFromColor:[UIColor blueColor] withSize:CGSizeMake(self.sunLabel.frame.size.width, kDayButtonHeight)];
 
+    /*
+    CGFloat bigViewWidth = self.calendarButtonView.frame.size.width;
+    CGFloat dayButtonMarginLeft = kDayButtonMarginLeft;
+    CGFloat dayButtonSpacingHorizontal = kDayButtonSpacingHorizontal;
+    CGFloat dayButtonWidth = kDayButtonWidth;
+    CGFloat marginLeftForCenteringView = (self.calendarButtonView.frame.size.width - kDayButtonMarginLeft * 2 - kDayButtonSpacingHorizontal * 6 - kDayButtonWidth * 7) / 2.0f; // additional left margin to add so that entire calendar button view is centered within its containing frame, which will larger than the calendar button view on devices wider than the iPhone 5s
+     */
+    
     for (NSInteger r=1; r<=6; r++) {
         for (NSInteger c=1; c<=7; c++) {
             CalendarDayButton *cdb = [[CalendarDayButton alloc] init];
             [self.calendarButtonView addSubview:cdb];
-            cdb.frame = CGRectMake(kDayButtonMarginLeft + kDayButtonSpacingHorizontal * (c-1) + kDayButtonWidth * (c-1), self.sunLabel.frame.origin.y + self.sunLabel.frame.size.height + kDayButtonMarginTop + kDayButtonSpacingVertical * (r-1) + kDayButtonHeight * (r-1), kDayButtonWidth, kDayButtonHeight);
+
             cdb.tag = kDayButtonFirstTag + 7 * (r-1) + (c-1);
             [cdb setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
             [cdb setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
             [cdb addTarget:self action:@selector(calendarDayButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 
-            //cdb.backgroundColor = [UIColor brownColor];
+            //cdb.frame = CGRectMake(marginLeftForCenteringView + kDayButtonMarginLeft + kDayButtonSpacingHorizontal * (c-1) + kDayButtonWidth * (c-1), self.sunLabel.frame.origin.y + self.sunLabel.frame.size.height + kDayButtonMarginTop + kDayButtonSpacingVertical * (r-1) + kDayButtonHeight * (r-1), kDayButtonWidth, kDayButtonHeight);
+
+            cdb.translatesAutoresizingMaskIntoConstraints = NO;
             
+            // set height of day button
+            [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:cdb
+                                                                                attribute:NSLayoutAttributeHeight
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:nil
+                                                                                attribute:NSLayoutAttributeNotAnAttribute
+                                                                               multiplier:1.0
+                                                                                 constant:kDayButtonHeight]];
+            // set width of day button
+            [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:cdb
+                                                                                attribute:NSLayoutAttributeWidth
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:nil
+                                                                                attribute:NSLayoutAttributeNotAnAttribute
+                                                                               multiplier:1.0
+                                                                                 constant:self.sunLabel.frame.size.width]];
+            
+            // get the appropriate view directly above the day button (either a day label or a previous row's day button
+            UIView *viewAbove = nil;
             if (r==1) {
-                // Align the day of week lables to the center of 1st row of day buttons
-                UILabel *dayOfWeekLabel;
                 switch (c) {
                     case 1:
-                        dayOfWeekLabel = self.sunLabel;
+                        viewAbove = self.sunLabel;
                         break;
                     case 2:
-                        dayOfWeekLabel = self.monLabel;
+                        viewAbove = self.monLabel;
                         break;
                     case 3:
-                        dayOfWeekLabel = self.tueLabel;
+                        viewAbove = self.tueLabel;
                         break;
                     case 4:
-                        dayOfWeekLabel = self.wedLabel;
+                        viewAbove = self.wedLabel;
                         break;
                     case 5:
-                        dayOfWeekLabel = self.thuLabel;
+                        viewAbove = self.thuLabel;
                         break;
                     case 6:
-                        dayOfWeekLabel = self.friLabel;
+                        viewAbove = self.friLabel;
                         break;
                     case 7:
-                        dayOfWeekLabel = self.satLabel;
+                        viewAbove = self.satLabel;
                         break;
                 }
-                [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:dayOfWeekLabel
-                                                                             attribute:NSLayoutAttributeCenterX
-                                                                             relatedBy:NSLayoutRelationEqual
-                                                                                toItem:cdb
-                                                                             attribute:NSLayoutAttributeCenterX
-                                                                            multiplier:1.0
-                                                                              constant:0]];
+            } else {
+                viewAbove = [self.calendarButtonView viewWithTag:(kDayButtonFirstTag + 7 * (r-2) + (c-1))];
             }
+            
+            // set y position of day button as kDayButtonSpacingVertical units below the view about it
+            [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:cdb
+                                                                                attribute:NSLayoutAttributeTop
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:viewAbove
+                                                                                attribute:NSLayoutAttributeBottom
+                                                                               multiplier:1.0
+                                                                                 constant:kDayButtonSpacingVertical]];
+            
+            // set x position of day button to center of view above it
+            [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:cdb
+                                                                                attribute:NSLayoutAttributeCenterX
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:viewAbove
+                                                                                attribute:NSLayoutAttributeCenterX
+                                                                               multiplier:1.0
+                                                                                 constant:0]];
         }
     }
 
@@ -446,7 +486,21 @@
         }
         
         // resize calendar button view
-        self.calendarButtonViewConstraintHeight.constant = kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents;
+        //self.calendarButtonViewConstraintHeight.constant = kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents;
+        
+        
+        // ***** Need to fix this *****
+        UIView *sunButtonBottomRow = [self.calendarButtonView viewWithTag:kDayButtonFirstTag + 7 * (rowsForMonth-1)];
+        self.calendarButtonViewConstraintBottom = [NSLayoutConstraint constraintWithItem:self.calendarButtonView
+                                                                               attribute:NSLayoutAttributeBottom
+                                                                               relatedBy:NSLayoutRelationEqual
+                                                                                  toItem:sunButtonBottomRow
+                                                                               attribute:NSLayoutAttributeBottom
+                                                                              multiplier:1.0
+                                                                                constant:kSpacingCalendarAndEvents];
+        [self.calendarButtonView setNeedsLayout];
+        [self.calendarButtonView.superview layoutSubviews];
+        // ***** Need to fix this *****
     }
 
     // Update selected date display
