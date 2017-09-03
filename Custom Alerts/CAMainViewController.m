@@ -491,7 +491,9 @@
         
         // ***** Need to fix this *****
         UIView *sunButtonBottomRow = [self.calendarButtonView viewWithTag:kDayButtonFirstTag + 7 * (rowsForMonth-1)];
-        self.calendarButtonViewConstraintBottom = [NSLayoutConstraint constraintWithItem:self.calendarButtonView
+        CGFloat heightCalendarButtonView = sunButtonBottomRow.frame.origin.y + sunButtonBottomRow.frame.size.height + kSpacingCalendarAndEvents;
+        
+        self.calendarButtonViewConstraintHeight = [NSLayoutConstraint constraintWithItem:self.calendarButtonView
                                                                                attribute:NSLayoutAttributeBottom
                                                                                relatedBy:NSLayoutRelationEqual
                                                                                   toItem:sunButtonBottomRow
