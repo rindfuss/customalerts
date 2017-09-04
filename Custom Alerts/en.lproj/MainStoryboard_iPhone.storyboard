@@ -14,9 +14,9 @@
             <objects>
                 <tableViewController id="ego-GL-NgK" customClass="EventsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="uFb-jq-l8e">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="529"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="293"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EventCell" textLabel="5Pb-3U-aSR" detailTextLabel="hpP-An-fMp" style="IBUITableViewCellStyleSubtitle" id="Ng7-rb-8iv">
                                 <rect key="frame" x="0.0" y="22" width="375" height="44"/>
@@ -74,20 +74,20 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DhM-QJ-3q0">
-                                            <rect key="frame" x="7" y="5" width="36" height="28"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        </imageView>
-                                        <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="urs-5x-btt">
-                                            <rect key="frame" x="52" y="5" width="35" height="28"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                            <rect key="frame" x="8" y="11" width="32" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UXw-2m-GXC">
-                                            <rect key="frame" x="96" y="11" width="271" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                            <rect key="frame" x="82" y="12" width="285" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="urs-5x-btt">
+                                            <rect key="frame" x="48" y="10" width="26" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
+                                        </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -136,13 +136,13 @@
                                 </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5eC-52-8US">
-                                <rect key="frame" x="0.0" y="28" width="375" height="529"/>
+                                <rect key="frame" x="0.0" y="264" width="375" height="293"/>
                                 <connections>
                                     <segue destination="ego-GL-NgK" kind="embed" identifier="eventsEmbedSegue" id="KcL-a8-XeM"/>
                                 </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K2D-cm-N0b" userLabel="Calendar Button View">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="28"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="264"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sun" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BDs-8h-QLK">
                                         <rect key="frame" x="3" y="8" width="44" height="12"/>
@@ -235,7 +235,6 @@
                                     <constraint firstItem="bDY-gm-FnH" firstAttribute="leading" secondItem="zNg-pK-ObU" secondAttribute="trailing" id="1WF-c6-adT"/>
                                     <constraint firstItem="BDs-8h-QLK" firstAttribute="top" secondItem="K2D-cm-N0b" secondAttribute="top" constant="8" id="4WB-xY-IPh"/>
                                     <constraint firstItem="4qA-8U-rfJ" firstAttribute="leading" secondItem="BDs-8h-QLK" secondAttribute="trailing" id="6Jl-bB-GVs"/>
-                                    <constraint firstAttribute="bottom" secondItem="BDs-8h-QLK" secondAttribute="bottom" constant="8" id="8gH-7M-lcs"/>
                                     <constraint firstItem="bDY-gm-FnH" firstAttribute="centerY" secondItem="BDs-8h-QLK" secondAttribute="centerY" id="8zt-Wk-PF0"/>
                                     <constraint firstItem="rwc-Fs-5bu" firstAttribute="centerY" secondItem="BDs-8h-QLK" secondAttribute="centerY" id="9Op-3M-VQ2"/>
                                     <constraint firstItem="Z1h-0k-Jfp" firstAttribute="centerY" secondItem="BDs-8h-QLK" secondAttribute="centerY" id="BU6-VW-G1g"/>
@@ -266,6 +265,7 @@
                                     <constraint firstItem="CXq-MW-Ug9" firstAttribute="leading" secondItem="Dpg-zT-eEc" secondAttribute="trailing" id="iI9-Zk-wOn"/>
                                     <constraint firstItem="Yan-ZT-xO4" firstAttribute="leading" secondItem="6Pq-iy-zjG" secondAttribute="trailing" id="iOQ-GN-OvV"/>
                                     <constraint firstItem="Yan-ZT-xO4" firstAttribute="width" secondItem="4qA-8U-rfJ" secondAttribute="width" id="ojq-0G-PhI"/>
+                                    <constraint firstAttribute="height" constant="264" id="pq4-pn-Klg"/>
                                     <constraint firstItem="Dpg-zT-eEc" firstAttribute="centerY" secondItem="BDs-8h-QLK" secondAttribute="centerY" id="rj8-y6-9G2"/>
                                     <constraint firstItem="Yan-ZT-xO4" firstAttribute="centerY" secondItem="BDs-8h-QLK" secondAttribute="centerY" id="tsv-PD-38v"/>
                                     <constraint firstItem="rwc-Fs-5bu" firstAttribute="leading" secondItem="Z1h-0k-Jfp" secondAttribute="trailing" id="xUI-EJ-STu"/>
@@ -289,6 +289,7 @@
                             <constraint firstItem="K2D-cm-N0b" firstAttribute="leading" secondItem="P36-2D-uem" secondAttribute="leading" id="0ta-rT-S0O"/>
                             <constraint firstAttribute="bottom" secondItem="5eC-52-8US" secondAttribute="bottom" constant="46" id="4Q5-Hb-Ks2"/>
                             <constraint firstAttribute="centerX" secondItem="rea-PO-gOd" secondAttribute="centerX" id="8TP-8U-dhe"/>
+                            <constraint firstItem="5eC-52-8US" firstAttribute="top" secondItem="K2D-cm-N0b" secondAttribute="bottom" id="AHW-om-7s4"/>
                             <constraint firstAttribute="trailing" secondItem="cIf-Vg-Z2E" secondAttribute="trailing" constant="16" id="IdP-Mi-SqO"/>
                             <constraint firstItem="K2D-cm-N0b" firstAttribute="top" secondItem="P36-2D-uem" secondAttribute="top" id="K6I-Tc-MrU"/>
                             <constraint firstAttribute="trailing" secondItem="K2D-cm-N0b" secondAttribute="trailing" id="Kmz-DA-nLp"/>
@@ -296,7 +297,6 @@
                             <constraint firstAttribute="trailing" secondItem="5eC-52-8US" secondAttribute="trailing" id="TIi-Dk-q2k"/>
                             <constraint firstItem="hTM-Q8-FxA" firstAttribute="leading" secondItem="P36-2D-uem" secondAttribute="leading" constant="16" id="b63-y6-qWu"/>
                             <constraint firstAttribute="bottom" secondItem="rea-PO-gOd" secondAttribute="bottom" constant="8" id="fFq-j0-eKJ"/>
-                            <constraint firstItem="5eC-52-8US" firstAttribute="top" secondItem="K2D-cm-N0b" secondAttribute="bottom" id="ktM-1r-3Ed"/>
                             <constraint firstItem="5eC-52-8US" firstAttribute="leading" secondItem="P36-2D-uem" secondAttribute="leading" id="tAs-1I-i9l"/>
                             <constraint firstAttribute="bottom" secondItem="hTM-Q8-FxA" secondAttribute="bottom" constant="8" id="tkM-BA-rLJ"/>
                         </constraints>
@@ -311,7 +311,7 @@
                     <connections>
                         <outlet property="appVersionLabel" destination="cIf-Vg-Z2E" id="JAn-Bs-X9i"/>
                         <outlet property="calendarButtonView" destination="K2D-cm-N0b" id="xnb-jn-Vfx"/>
-                        <outlet property="calendarButtonViewConstraintBottom" destination="8gH-7M-lcs" id="EGa-hJ-NKW"/>
+                        <outlet property="calendarButtonViewConstraintHeight" destination="pq4-pn-Klg" id="4cL-4F-MkU"/>
                         <outlet property="friLabel" destination="sEZ-Lb-n0O" id="urf-L4-zDW"/>
                         <outlet property="monLabel" destination="6Pq-iy-zjG" id="Ygl-Vv-bEk"/>
                         <outlet property="satLabel" destination="CXq-MW-Ug9" id="FB1-ji-yFA"/>
@@ -348,7 +348,7 @@
                         <viewControllerLayoutGuide type="bottom" id="R9i-pC-p2A"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bVT-5G-EX8">
-                        <rect key="frame" x="0.0" y="64" width="375" height="465"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="229"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ngk-PW-Tdf">

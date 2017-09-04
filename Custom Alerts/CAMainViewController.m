@@ -486,26 +486,14 @@
         }
         
         // resize calendar button view
-        //self.calendarButtonViewConstraintHeight.constant = kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents;
+        // start by laying out day buttons so we can use their frame information
+        [self.calendarButtonView setNeedsLayout];
+        [self.calendarButtonView layoutIfNeeded];
         
-        
-        // ***** Need to fix this *****
         UIView *sunButtonBottomRow = [self.calendarButtonView viewWithTag:kDayButtonFirstTag + 7 * (rowsForMonth-1)];
         CGFloat heightCalendarButtonView = sunButtonBottomRow.frame.origin.y + sunButtonBottomRow.frame.size.height + kSpacingCalendarAndEvents;
         
-        //self.calendarButtonViewConstraintHeight.constant = kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents;
         self.calendarButtonViewConstraintHeight.constant = heightCalendarButtonView;
-        
-/*        self.calendarButtonViewConstraintHeight = [NSLayoutConstraint constraintWithItem:self.calendarButtonView
-                                                                               attribute:NSLayoutAttributeBottom
-                                                                               relatedBy:NSLayoutRelationEqual
-                                                                                  toItem:sunButtonBottomRow
-                                                                               attribute:NSLayoutAttributeBottom
-                                                                              multiplier:1.0
-                                                                                constant:kSpacingCalendarAndEvents];
-        [self.calendarButtonView setNeedsLayout];
-        [self.calendarButtonView.superview layoutSubviews]; */
-        // ***** Need to fix this *****
     }
 
     // Update selected date display

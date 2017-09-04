@@ -26,7 +26,6 @@
 		9BDAAEA516F953D9008C4102 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAEA316F953D9008C4102 /* EventKit.framework */; };
 		9BDAAEA616F953D9008C4102 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAEA416F953D9008C4102 /* EventKitUI.framework */; };
 		9BDAAEAD16F95CD6008C4102 /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDAAEAC16F95CD6008C4102 /* EventsViewController.m */; };
-		9BEF28C4172AE350000EF122 /* whiteButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 9BEF28C3172AE350000EF122 /* whiteButton.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,7 +61,6 @@
 		9BDAAEA416F953D9008C4102 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		9BDAAEAB16F95CD5008C4102 /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
 		9BDAAEAC16F95CD6008C4102 /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
-		9BEF28C3172AE350000EF122 /* whiteButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteButton.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,7 +94,6 @@
 			children = (
 				9B04E4631F42967A00C295A5 /* NSObject+Log_Properties.h */,
 				9B04E4641F42967A00C295A5 /* NSObject+Log_Properties.m */,
-				9BEF28C3172AE350000EF122 /* whiteButton.png */,
 				9BDAAEA316F953D9008C4102 /* EventKit.framework */,
 				9BDAAEA416F953D9008C4102 /* EventKitUI.framework */,
 				9BDAAE8316F9539B008C4102 /* Custom Alerts */,
@@ -221,7 +218,6 @@
 				9BDAAE8816F9539B008C4102 /* InfoPlist.strings in Resources */,
 				9B143E4118550CB2006DB54E /* Images.xcassets in Resources */,
 				9BDAAE9716F9539B008C4102 /* MainStoryboard_iPhone.storyboard in Resources */,
-				9BEF28C4172AE350000EF122 /* whiteButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
