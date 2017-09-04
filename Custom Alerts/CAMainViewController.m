@@ -145,35 +145,6 @@
     // Do setup for using calendar database
     self.eventStore = [[EKEventStore alloc] init];
     
-    if ([self.eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
-    {
-        [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL accessGranted, NSError *error) {
-            //dispatch_async(dispatch_get_main_queue(), ^{
-                if (error)
-                {
-                    // display error message here
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Occurred" message:@"An error occurred while seeking permission to access Calendar data. Try closing Custom Alerts by double-tapping the home button and swiping Custom Alerts up. Then restart Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                    [alert show];
-                }
-                else if (!accessGranted)
-                {
-                    // display access denied error message here
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Need permission to access calendar" message:@"Custom Alerts does not have permission to access your calendar. Please go to the Privacy section of your Settings app, select Calendars, and enable Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                    [alert show];
-                }
-                else
-                {
-                    // access granted
-                    [self receivedCalendarPermission];
-                }
-            //});
-        }];
-    }
-    else
-    {
-        self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
-        [self loadCurrentCalendars];
-    }
     
     // Do setup for location services (used if user selects to edit an existing event)
     switch ([CLLocationManager authorizationStatus]) {
@@ -319,34 +290,85 @@
 
 #pragma mark - Class utility methods
 
+- (void) getAccessToEventStoreAndRefreshEventsView {
+    // requests permission to access calendar and when received updates the event view controller display on the main thread
+
+    if ([self.eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+    {
+        [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL accessGranted, NSError *error) {
+            if (error)
+            {
+                // display error message here
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Occurred" message:@"An error occurred while seeking permission to access Calendar data. Try closing Custom Alerts by double-tapping the home button and swiping Custom Alerts up. Then restart Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
+            else if (!accessGranted)
+            {
+                // display access denied error message here
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Need permission to access calendar" message:@"Custom Alerts does not have permission to access your calendar. Please go to the Privacy section of your Settings app, select Calendars, and enable Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
+            else
+            {
+                // access granted
+                [self.eventStore reset]; // this refreshes event store data. Necessary, because granting access permission happens asynchronously, and Custom Alerts may have accessed the event store prior to the access-granting having completed.
+                
+                // Get the default calendar from store.
+                self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
+                [self loadCurrentCalendars];
+                
+                BOOL calendarsExist = NO;
+                for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
+                    if (cal.allowsContentModifications) {
+                        calendarsExist = YES;
+                        break;
+                    }
+                }
+                if (!calendarsExist) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
+                }
+                else {
+                    self.eventsViewController.eventStore = self.eventStore;
+                    self.eventsViewController.currentCalendars = self.currentCalendars;
+                    self.eventsViewController.selectedDate = self.currentDate;
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.eventsViewController refreshDataAndUpdateDisplay]; // need to run code that affects the UI on the main thread
+                    });
+                }
+
+            }
+        }];
+    }
+    else
+    {
+        self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
+        [self loadCurrentCalendars];
+        BOOL calendarsExist = NO;
+        for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
+            if (cal.allowsContentModifications) {
+                calendarsExist = YES;
+                break;
+            }
+        }
+        if (!calendarsExist) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+        }
+        else {
+            self.eventsViewController.eventStore = self.eventStore;
+            self.eventsViewController.currentCalendars = self.currentCalendars;
+            self.eventsViewController.selectedDate = self.currentDate;
+            
+            [self.eventsViewController refreshDataAndUpdateDisplay];
+        }
+    }
+}
+
 - (void) receivedCalendarPermission {
     // code to run after receiving permission to access calendar data
 
-    [self.eventStore reset]; // this refreshes event store data. Necessary, because granting access permission happens asynchronously, and Custom Alerts may have accessed the event store prior to the access-granting having completed.
-
-    // Get the default calendar from store.
-    // Get the default calendar from store.
-    self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
-    [self loadCurrentCalendars];
-    
-    BOOL calendarsExist = NO;
-    for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
-        if (cal.allowsContentModifications) {
-            calendarsExist = YES;
-            break;
-        }
-    }
-    if (!calendarsExist) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
-    }
-    else {
-        self.eventsViewController.eventStore = self.eventStore;
-        self.eventsViewController.currentCalendars = self.currentCalendars;
-        self.eventsViewController.selectedDate = self.currentDate;
-        
-        [self.eventsViewController refreshDataAndUpdateDisplay];
-    }
 }
 
 - (void)loadCurrentCalendars {
@@ -513,8 +535,6 @@
     dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:firstOfMonthButtonTag + newDay - 1];
     [dayButton customSetHighlighted:YES];
 
-    //    [self performSelector:@selector(doHighlight:) withObject:dayButton afterDelay:0]; // have to set the highlight this way using afterDelay so that this code runs after selectDate finishes and the button automatically unhighlights itself
-    
     
     NSDateFormatter *df;
     
@@ -523,21 +543,18 @@
     [df setDateStyle:NSDateFormatterShortStyle];
     [df setTimeStyle:NSDateFormatterNoStyle];
     [df setDateFormat:@"MMMM yyyy"];
-    //UILabel *monthTitleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 200, 40)];
-    //monthTitleLabel.text=[df stringFromDate:newDate];
-    //monthTitleLabel.textAlignment = NSTextAlignmentCenter;
-    //monthTitleLabel.font = [UIFont boldSystemFontOfSize:18];
-    //monthTitleLabel.adjustsFontSizeToFitWidth=NO;
-    //self.navigationItem.titleView=monthTitleLabel;
     self.navigationItem.title = [df stringFromDate:newDate];
     
     self.currentDate = newDate;
     
+    [self getAccessToEventStoreAndRefreshEventsView];
+/*
     self.eventsViewController.eventStore = self.eventStore;
     self.eventsViewController.currentCalendars = self.currentCalendars;
     self.eventsViewController.selectedDate = self.currentDate;
     
     [self.eventsViewController refreshDataAndUpdateDisplay];
+ */
 }
 
 -(void)selectPreviousMonth {
