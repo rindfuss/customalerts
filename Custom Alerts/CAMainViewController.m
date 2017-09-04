@@ -148,7 +148,7 @@
     if ([self.eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
     {
         [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL accessGranted, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            //dispatch_async(dispatch_get_main_queue(), ^{
                 if (error)
                 {
                     // display error message here
@@ -186,15 +186,13 @@
                         [self.eventsViewController refreshDataAndUpdateDisplay];
                     }
                 }
-            });
+            //});
         }];
     }
     else
     {
         self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
         [self loadCurrentCalendars];
-        //[self.goToCalendarEventsButton setEnabled:YES];
-        //        [self.addEventsButton setEnabled:YES];
     }
     
     // Do setup for location services (used if user selects to edit an existing event)
