@@ -164,29 +164,7 @@
                 else
                 {
                     // access granted
-                    // Get the default calendar from store.
-                    [self.eventStore reset]; // this refreshes event store data. Necessary, because granting access permission happens asynchronously, and Custom Alerts may have accessed the event store prior to the access-granting having completed.
-                    self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
-                    [self loadCurrentCalendars];
-
-                    BOOL calendarsExist = NO;
-                    for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
-                        if (cal.allowsContentModifications) {
-                            calendarsExist = YES;
-                            break;
-                        }
-                    }
-                    if (!calendarsExist) {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                        [alert show];
-                    }
-                    else {
-                        self.eventsViewController.eventStore = self.eventStore;
-                        self.eventsViewController.currentCalendars = self.currentCalendars;
-                        self.eventsViewController.selectedDate = self.currentDate;
-                        
-                        [self.eventsViewController refreshDataAndUpdateDisplay];
-                    }
+                    [self receivedCalendarPermission];
                 }
             //});
         }];
@@ -340,6 +318,37 @@
 }
 
 #pragma mark - Class utility methods
+
+- (void) receivedCalendarPermission {
+    // code to run after receiving permission to access calendar data
+
+    [self.eventStore reset]; // this refreshes event store data. Necessary, because granting access permission happens asynchronously, and Custom Alerts may have accessed the event store prior to the access-granting having completed.
+
+    // Get the default calendar from store.
+    // Get the default calendar from store.
+    self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
+    [self loadCurrentCalendars];
+    
+    BOOL calendarsExist = NO;
+    for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
+        if (cal.allowsContentModifications) {
+            calendarsExist = YES;
+            break;
+        }
+    }
+    if (!calendarsExist) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
+    else {
+        self.eventsViewController.eventStore = self.eventStore;
+        self.eventsViewController.currentCalendars = self.currentCalendars;
+        self.eventsViewController.selectedDate = self.currentDate;
+        
+        [self.eventsViewController refreshDataAndUpdateDisplay];
+    }
+}
+
 - (void)loadCurrentCalendars {
     
     NSMutableArray *savedCalendars = [[NSMutableArray alloc] init];
