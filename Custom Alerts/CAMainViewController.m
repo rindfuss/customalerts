@@ -152,7 +152,8 @@
                 if (error)
                 {
                     // display error message here
-                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Occurred" message:@"An error occurred while seeking permission to access Calendar data. Try closing Custom Alerts by double-tapping the home button and swiping Custom Alerts up. Then restart Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
                 }
                 else if (!accessGranted)
                 {
@@ -164,6 +165,7 @@
                 {
                     // access granted
                     // Get the default calendar from store.
+                    [self.eventStore reset]; // this refreshes event store data. Necessary, because granting access permission happens asynchronously, and Custom Alerts may have accessed the event store prior to the access-granting having completed.
                     self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
                     [self loadCurrentCalendars];
 
