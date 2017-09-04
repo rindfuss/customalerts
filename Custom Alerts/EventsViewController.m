@@ -20,6 +20,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        self.hasCalendarAccess = NO; // the main view controller will set this to YES once the app has permission to access calendar data
     }
     return self;
 }
@@ -248,7 +249,9 @@
 
 -(void)refreshDataAndUpdateDisplay {
     
-    [self populateEventsList];
+    if (self.hasCalendarAccess) {
+        [self populateEventsList];
+    }
     [self.tableView reloadData];
 }
 

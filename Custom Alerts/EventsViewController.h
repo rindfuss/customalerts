@@ -16,6 +16,7 @@
 //@interface EventsViewController : UITableViewController <AlertsViewControllerDelegate, EKCalendarChooserDelegate>
 @interface EventsViewController : UITableViewController <EKCalendarChooserDelegate>
 
+@property (nonatomic) BOOL hasCalendarAccess;
 @property (nonatomic, strong) EKEventStore *eventStore;
 @property (nonatomic, strong) NSArray *currentCalendars;
 

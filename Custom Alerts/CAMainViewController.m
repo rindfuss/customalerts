@@ -145,30 +145,6 @@
     // Do setup for using calendar database
     self.eventStore = [[EKEventStore alloc] init];
     
-    
-    // Do setup for location services (used if user selects to edit an existing event)
-    switch ([CLLocationManager authorizationStatus]) {
-        case kCLAuthorizationStatusDenied:
-        case kCLAuthorizationStatusRestricted: {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location services not authorized" message:@"Custom Alerts does not have permission to use location services. This may generate an error if you try to edit an existing event. Please enable location services for Custom Alerts in the Settings app." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert show];
-            break;
-        }
-        case kCLAuthorizationStatusNotDetermined: {
-            self.locationManager = [[CLLocationManager alloc] init];
-            self.locationManager.delegate = self;
-            if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-                [self.locationManager requestWhenInUseAuthorization];
-            }
-            break;
-        }
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-        case kCLAuthorizationStatusAuthorizedAlways: {
-            // all is good
-            break;
-        }
-    }
-        
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -300,18 +276,18 @@
             {
                 // display error message here
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Occurred" message:@"An error occurred while seeking permission to access Calendar data. Try closing Custom Alerts by double-tapping the home button and swiping Custom Alerts up. Then restart Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [alert show];
+                dispatch_async(dispatch_get_main_queue(), ^{ [alert show]; });
             }
             else if (!accessGranted)
             {
                 // display access denied error message here
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Need permission to access calendar" message:@"Custom Alerts does not have permission to access your calendar. Please go to the Privacy section of your Settings app, select Calendars, and enable Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [alert show];
+                dispatch_async(dispatch_get_main_queue(), ^{ [alert show]; });
             }
             else
             {
                 // access granted
-                [self.eventStore reset]; // this refreshes event store data. Necessary, because granting access permission happens asynchronously, and Custom Alerts may have accessed the event store prior to the access-granting having completed.
+                //[self.eventStore reset]; // this refreshes event store data. Necessary, because granting access permission happens asynchronously, and Custom Alerts may have accessed the event store prior to the access-granting having completed.
                 
                 // Get the default calendar from store.
                 self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
@@ -326,12 +302,13 @@
                 }
                 if (!calendarsExist) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                    [alert show];
+                    dispatch_async(dispatch_get_main_queue(), ^{ [alert show]; });
                 }
                 else {
                     self.eventsViewController.eventStore = self.eventStore;
                     self.eventsViewController.currentCalendars = self.currentCalendars;
                     self.eventsViewController.selectedDate = self.currentDate;
+                    self.eventsViewController.hasCalendarAccess = YES;
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.eventsViewController refreshDataAndUpdateDisplay]; // need to run code that affects the UI on the main thread
@@ -654,6 +631,30 @@
 #pragma mark - User interaction methods
 
 - (IBAction)addButtonPressed:(id)sender {
+
+    // Request location services (for adding location to new events)
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted: {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location services not authorized" message:@"Custom Alerts does not have permission to use location services. This may cause issues if you try to add a location to your new event. Please enable location services for Custom Alerts in the Settings app." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+            break;
+        }
+        case kCLAuthorizationStatusNotDetermined: {
+            self.locationManager = [[CLLocationManager alloc] init];
+            self.locationManager.delegate = self;
+            if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+                [self.locationManager requestWhenInUseAuthorization];
+            }
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+        case kCLAuthorizationStatusAuthorizedAlways: {
+            // all is good
+            break;
+        }
+    }
+    
 
     EKEventEditViewController *addController = [[EKEventEditViewController alloc] initWithNibName:nil bundle:nil];
     
