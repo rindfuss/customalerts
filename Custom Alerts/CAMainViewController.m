@@ -179,7 +179,7 @@
 
         SelectCalendarsTableViewController *vc = (SelectCalendarsTableViewController *)segue.destinationViewController;
         
-        // [self.eventStore refreshSourcesIfNecessary]; This line was ineffective at re-populating the eventStore with available calendars if no calendars existed when Custom Alerts was initially launched and then user created an event (and, automatically, a calendar) in the calendar app and then switched back to Custom Alerts. Solution is to swipe closed Custom Alerts and re-launch it. Now that a calendar exists, it and its events will show in Custom Alerts
+        //[self.eventStore refreshSourcesIfNecessary]; This line was ineffective at re-populating the eventStore with available calendars if no calendars existed when Custom Alerts was initially launched and then user created an event (and, automatically, a calendar) in the calendar app and then switched back to Custom Alerts. Solution is to swipe closed Custom Alerts and re-launch it. Now that a calendar exists, it and its events will show in Custom Alerts
         
         NSMutableArray *availableCalendars = [[NSMutableArray alloc] init];
         for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
@@ -357,7 +357,7 @@
     for (NSString *calendarID in selectedCalendarIDs) {
         EKCalendar *cal = [self.eventStore calendarWithIdentifier:calendarID];
         if (cal) {
-            if (cal.allowsContentModifications && !cal.isImmutable) {
+            if (cal.allowsContentModifications) {
                 [savedCalendars addObject:cal];
             }
         }
