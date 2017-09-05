@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		9B04E4651F42967A00C295A5 /* NSObject+Log_Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B04E4641F42967A00C295A5 /* NSObject+Log_Properties.m */; };
+		9B0854CA1F5E2E730037A7CE /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B0854C91F5E2E730037A7CE /* Launch Screen.storyboard */; };
+		9B0854CC1F5E306D0037A7CE /* launch_image4.7.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B0854CB1F5E306D0037A7CE /* launch_image4.7.png */; };
 		9B1219791F30F196002636E4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B1219781F30F196002636E4 /* CoreLocation.framework */; };
 		9B12197A1F30F1B0002636E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAAE8116F9539B008C4102 /* CoreGraphics.framework */; };
 		9B143E4118550CB2006DB54E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B143E4018550CB2006DB54E /* Images.xcassets */; };
@@ -31,6 +33,8 @@
 /* Begin PBXFileReference section */
 		9B04E4631F42967A00C295A5 /* NSObject+Log_Properties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Log_Properties.h"; path = "../Libraries/NSObject_Log_Properties/NSObject+Log_Properties.h"; sourceTree = "<group>"; };
 		9B04E4641F42967A00C295A5 /* NSObject+Log_Properties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Log_Properties.m"; path = "../Libraries/NSObject_Log_Properties/NSObject+Log_Properties.m"; sourceTree = "<group>"; };
+		9B0854C91F5E2E730037A7CE /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		9B0854CB1F5E306D0037A7CE /* launch_image4.7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = launch_image4.7.png; path = "../../../../Dropbox/Programming/Graphics/custom alerts/4.7in iPhone 6/launch_image4.7.png"; sourceTree = "<group>"; };
 		9B1219781F30F196002636E4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9B143E4018550CB2006DB54E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9B21152C1836B9E200C6EB1E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -80,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9B0854CD1F5E307C0037A7CE /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				9B0854CB1F5E306D0037A7CE /* launch_image4.7.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		9B8842451C402A65009B829A /* Date Calculator */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +141,7 @@
 				9BDAAE8C16F9539B008C4102 /* AppDelegate.h */,
 				9BDAAE8D16F9539B008C4102 /* AppDelegate.m */,
 				9BDAAE9516F9539B008C4102 /* MainStoryboard_iPhone.storyboard */,
+				9B0854C91F5E2E730037A7CE /* Launch Screen.storyboard */,
 				9B2880C71B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.h */,
 				9B2880C81B4DBD8200CB7EE1 /* SelectCalendarsTableViewController.m */,
 				9B4E0ABE1839625A00B41777 /* CalendarDayButton.h */,
@@ -142,6 +155,7 @@
 				9B7B0D301F283BB90023849C /* CustomAlert.h */,
 				9B7B0D331F283CF80023849C /* CustomAlert.m */,
 				9B143E4018550CB2006DB54E /* Images.xcassets */,
+				9B0854CD1F5E307C0037A7CE /* Images */,
 				9BDAAE8416F9539B008C4102 /* Supporting Files */,
 			);
 			path = "Custom Alerts";
@@ -217,7 +231,9 @@
 			files = (
 				9BDAAE8816F9539B008C4102 /* InfoPlist.strings in Resources */,
 				9B143E4118550CB2006DB54E /* Images.xcassets in Resources */,
+				9B0854CA1F5E2E730037A7CE /* Launch Screen.storyboard in Resources */,
 				9BDAAE9716F9539B008C4102 /* MainStoryboard_iPhone.storyboard in Resources */,
+				9B0854CC1F5E306D0037A7CE /* launch_image4.7.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

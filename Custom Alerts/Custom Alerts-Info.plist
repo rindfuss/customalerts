@@ -35,7 +35,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Custom alerts needs location information when you edit an event's location.</string>
 	<key>UILaunchStoryboardName</key>
-	<string>MainStoryboard_iPhone</string>
+	<string>Launch Screen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard_iPhone</string>
 	<key>UIPrerenderedIcon</key>
