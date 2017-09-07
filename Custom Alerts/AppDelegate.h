@@ -23,8 +23,9 @@
 // fixed re-sizing month name at top of calendar
 // added custom calendar-selection view
 // sorted event list by start datetime and then by title for events with the same start datetime
-#define AppVersion @"v2.7"
+//#define AppVersion @"v2.7"
 // rewrote alert view to work on copies of alerts rather than the live data that could be modified by other apps. Was running into timing issues where Custom Alerts would create an alert, change the alert, then get a notification that an app (CA) had created an alert and go back to the original created alert rather than keeping the changed alert. Working on copies eliminated the synchronization issue by ignoring the live data and just writing over it when user saves the alerts
+#define AppVersion @"v2.8"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
