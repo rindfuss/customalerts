@@ -30,6 +30,7 @@
     self.addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButton:)];
 
     // Initialize properties
+    self.locationManager = nil;
     self.alertSpanActionSheet = nil;
     self.saveChangesActionSheetForEdit = nil;
     self.saveChangesActionSheetForExit = nil;
@@ -248,6 +249,29 @@
 }
 
 -(void) presentEditController {
+    // Request location services (for adding locatin to new events)
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted: {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location services not authorized" message:@"Custom Alerts does not have permission to use location services. This may cause issues if you try to edit an event that has a location associated with it. Please enable location services for Custom Alerts in the Settings app." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+            break;
+        }
+        case kCLAuthorizationStatusNotDetermined: {
+            self.locationManager = [[CLLocationManager alloc] init];
+            self.locationManager.delegate = self;
+            if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+                [self.locationManager requestWhenInUseAuthorization];
+            }
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+        case kCLAuthorizationStatusAuthorizedAlways: {
+            // all is good
+            break;
+        }
+    }
+
     EKEventEditViewController *eventEditViewController = [[EKEventEditViewController alloc] init];
     
     eventEditViewController.editViewDelegate = self;

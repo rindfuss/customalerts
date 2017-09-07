@@ -51,135 +51,100 @@
     
 
     // Create and place day select buttons
-    UIImage *highlightedImage = [self circleImageFromColor:[UIColor blueColor] withSize:CGSizeMake(kDayButtonWidth, kDayButtonHeight)];
+    UIImage *highlightedImage = [self circleImageFromColor:[UIColor blueColor] withSize:CGSizeMake(self.sunLabel.frame.size.width, kDayButtonHeight)];
 
+    /*
+    CGFloat bigViewWidth = self.calendarButtonView.frame.size.width;
+    CGFloat dayButtonMarginLeft = kDayButtonMarginLeft;
+    CGFloat dayButtonSpacingHorizontal = kDayButtonSpacingHorizontal;
+    CGFloat dayButtonWidth = kDayButtonWidth;
+    CGFloat marginLeftForCenteringView = (self.calendarButtonView.frame.size.width - kDayButtonMarginLeft * 2 - kDayButtonSpacingHorizontal * 6 - kDayButtonWidth * 7) / 2.0f; // additional left margin to add so that entire calendar button view is centered within its containing frame, which will larger than the calendar button view on devices wider than the iPhone 5s
+     */
+    
     for (NSInteger r=1; r<=6; r++) {
         for (NSInteger c=1; c<=7; c++) {
             CalendarDayButton *cdb = [[CalendarDayButton alloc] init];
             [self.calendarButtonView addSubview:cdb];
-            cdb.frame = CGRectMake(kDayButtonMarginLeft + kDayButtonSpacingHorizontal * (c-1) + kDayButtonWidth * (c-1), self.sunLabel.frame.origin.y + self.sunLabel.frame.size.height + kDayButtonMarginTop + kDayButtonSpacingVertical * (r-1) + kDayButtonHeight * (r-1), kDayButtonWidth, kDayButtonHeight);
+
             cdb.tag = kDayButtonFirstTag + 7 * (r-1) + (c-1);
             [cdb setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
             [cdb setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
             [cdb addTarget:self action:@selector(calendarDayButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 
-            //cdb.backgroundColor = [UIColor brownColor];
+            //cdb.frame = CGRectMake(marginLeftForCenteringView + kDayButtonMarginLeft + kDayButtonSpacingHorizontal * (c-1) + kDayButtonWidth * (c-1), self.sunLabel.frame.origin.y + self.sunLabel.frame.size.height + kDayButtonMarginTop + kDayButtonSpacingVertical * (r-1) + kDayButtonHeight * (r-1), kDayButtonWidth, kDayButtonHeight);
+
+            cdb.translatesAutoresizingMaskIntoConstraints = NO;
             
+            // set height of day button
+            [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:cdb
+                                                                                attribute:NSLayoutAttributeHeight
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:nil
+                                                                                attribute:NSLayoutAttributeNotAnAttribute
+                                                                               multiplier:1.0
+                                                                                 constant:kDayButtonHeight]];
+            // set width of day button
+            [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:cdb
+                                                                                attribute:NSLayoutAttributeWidth
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:nil
+                                                                                attribute:NSLayoutAttributeNotAnAttribute
+                                                                               multiplier:1.0
+                                                                                 constant:self.sunLabel.frame.size.width]];
+            
+            // get the appropriate view directly above the day button (either a day label or a previous row's day button
+            UIView *viewAbove = nil;
             if (r==1) {
-                // Align the day of week lables to the center of 1st row of day buttons
-                UILabel *dayOfWeekLabel;
                 switch (c) {
                     case 1:
-                        dayOfWeekLabel = self.sunLabel;
+                        viewAbove = self.sunLabel;
                         break;
                     case 2:
-                        dayOfWeekLabel = self.monLabel;
+                        viewAbove = self.monLabel;
                         break;
                     case 3:
-                        dayOfWeekLabel = self.tueLabel;
+                        viewAbove = self.tueLabel;
                         break;
                     case 4:
-                        dayOfWeekLabel = self.wedLabel;
+                        viewAbove = self.wedLabel;
                         break;
                     case 5:
-                        dayOfWeekLabel = self.thuLabel;
+                        viewAbove = self.thuLabel;
                         break;
                     case 6:
-                        dayOfWeekLabel = self.friLabel;
+                        viewAbove = self.friLabel;
                         break;
                     case 7:
-                        dayOfWeekLabel = self.satLabel;
+                        viewAbove = self.satLabel;
                         break;
                 }
-                [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:dayOfWeekLabel
-                                                                             attribute:NSLayoutAttributeCenterX
-                                                                             relatedBy:NSLayoutRelationEqual
-                                                                                toItem:cdb
-                                                                             attribute:NSLayoutAttributeCenterX
-                                                                            multiplier:1.0
-                                                                              constant:0]];
+            } else {
+                viewAbove = [self.calendarButtonView viewWithTag:(kDayButtonFirstTag + 7 * (r-2) + (c-1))];
             }
+            
+            // set y position of day button as kDayButtonSpacingVertical units below the view about it
+            [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:cdb
+                                                                                attribute:NSLayoutAttributeTop
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:viewAbove
+                                                                                attribute:NSLayoutAttributeBottom
+                                                                               multiplier:1.0
+                                                                                 constant:kDayButtonSpacingVertical]];
+            
+            // set x position of day button to center of view above it
+            [self.calendarButtonView addConstraint:[NSLayoutConstraint constraintWithItem:cdb
+                                                                                attribute:NSLayoutAttributeCenterX
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:viewAbove
+                                                                                attribute:NSLayoutAttributeCenterX
+                                                                               multiplier:1.0
+                                                                                 constant:0]];
         }
     }
 
     // Do setup for using calendar database
     self.eventStore = [[EKEventStore alloc] init];
     
-    if ([self.eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
-    {
-        [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL accessGranted, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (error)
-                {
-                    // display error message here
-                    
-                }
-                else if (!accessGranted)
-                {
-                    // display access denied error message here
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Need permission to access calendar" message:@"Custom Alerts does not have permission to access your calendar. Please go to the Privacy section of your Settings app, select Calendars, and enable Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                    [alert show];
-                }
-                else
-                {
-                    // access granted
-                    // Get the default calendar from store.
-                    self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
-                    [self loadCurrentCalendars];
-
-                    BOOL calendarsExist = NO;
-                    for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
-                        if (cal.allowsContentModifications) {
-                            calendarsExist = YES;
-                            break;
-                        }
-                    }
-                    if (!calendarsExist) {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                        [alert show];
-                    }
-                    else {
-                        self.eventsViewController.eventStore = self.eventStore;
-                        self.eventsViewController.currentCalendars = self.currentCalendars;
-                        self.eventsViewController.selectedDate = self.currentDate;
-                        
-                        [self.eventsViewController refreshDataAndUpdateDisplay];
-                    }
-                }
-            });
-        }];
-    }
-    else
-    {
-        self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
-        [self loadCurrentCalendars];
-        //[self.goToCalendarEventsButton setEnabled:YES];
-        //        [self.addEventsButton setEnabled:YES];
-    }
-    
-    // Do setup for location services (used if user selects to edit an existing event)
-    switch ([CLLocationManager authorizationStatus]) {
-        case kCLAuthorizationStatusDenied:
-        case kCLAuthorizationStatusRestricted: {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location services not authorized" message:@"Custom Alerts does not have permission to use location services. This may generate an error if you try to edit an existing event. Please enable location services for Custom Alerts in the Settings app." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert show];
-            break;
-        }
-        case kCLAuthorizationStatusNotDetermined: {
-            self.locationManager = [[CLLocationManager alloc] init];
-            self.locationManager.delegate = self;
-            if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-                [self.locationManager requestWhenInUseAuthorization];
-            }
-            break;
-        }
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-        case kCLAuthorizationStatusAuthorizedAlways: {
-            // all is good
-            break;
-        }
-    }
-        
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -214,7 +179,7 @@
 
         SelectCalendarsTableViewController *vc = (SelectCalendarsTableViewController *)segue.destinationViewController;
         
-        // [self.eventStore refreshSourcesIfNecessary]; This line was ineffective at re-populating the eventStore with available calendars if no calendars existed when Custom Alerts was initially launched and then user created an event (and, automatically, a calendar) in the calendar app and then switched back to Custom Alerts. Solution is to swipe closed Custom Alerts and re-launch it. Now that a calendar exists, it and its events will show in Custom Alerts
+        //[self.eventStore refreshSourcesIfNecessary]; This line was ineffective at re-populating the eventStore with available calendars if no calendars existed when Custom Alerts was initially launched and then user created an event (and, automatically, a calendar) in the calendar app and then switched back to Custom Alerts. Solution is to swipe closed Custom Alerts and re-launch it. Now that a calendar exists, it and its events will show in Custom Alerts
         
         NSMutableArray *availableCalendars = [[NSMutableArray alloc] init];
         for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
@@ -300,6 +265,89 @@
 }
 
 #pragma mark - Class utility methods
+
+- (void) getAccessToEventStoreAndRefreshEventsView {
+    // requests permission to access calendar and when received updates the event view controller display on the main thread
+
+    if ([self.eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+    {
+        [self.eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL accessGranted, NSError *error) {
+            if (error)
+            {
+                // display error message here
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error Occurred" message:@"An error occurred while seeking permission to access Calendar data. Try closing Custom Alerts by double-tapping the home button and swiping Custom Alerts up. Then restart Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                dispatch_async(dispatch_get_main_queue(), ^{ [alert show]; });
+            }
+            else if (!accessGranted)
+            {
+                // display access denied error message here
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Need permission to access calendar" message:@"Custom Alerts does not have permission to access your calendar. Please go to the Privacy section of your Settings app, select Calendars, and enable Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                dispatch_async(dispatch_get_main_queue(), ^{ [alert show]; });
+            }
+            else
+            {
+                // access granted
+                //[self.eventStore reset]; // this refreshes event store data. Necessary, because granting access permission happens asynchronously, and Custom Alerts may have accessed the event store prior to the access-granting having completed.
+                
+                // Get the default calendar from store.
+                self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
+                [self loadCurrentCalendars];
+                
+                BOOL calendarsExist = NO;
+                for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
+                    if (cal.allowsContentModifications) {
+                        calendarsExist = YES;
+                        break;
+                    }
+                }
+                if (!calendarsExist) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    dispatch_async(dispatch_get_main_queue(), ^{ [alert show]; });
+                }
+                else {
+                    self.eventsViewController.eventStore = self.eventStore;
+                    self.eventsViewController.currentCalendars = self.currentCalendars;
+                    self.eventsViewController.selectedDate = self.currentDate;
+                    self.eventsViewController.hasCalendarAccess = YES;
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.eventsViewController refreshDataAndUpdateDisplay]; // need to run code that affects the UI on the main thread
+                    });
+                }
+
+            }
+        }];
+    }
+    else
+    {
+        self.defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
+        [self loadCurrentCalendars];
+        BOOL calendarsExist = NO;
+        for (EKCalendar *cal in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]) {
+            if (cal.allowsContentModifications) {
+                calendarsExist = YES;
+                break;
+            }
+        }
+        if (!calendarsExist) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot find any calendars" message:@"Custom Alerts cannot detect any existing calendars. Please close Custom Alerts by double-tapping the home button and swiping up. Open the Calendar app and then re-launch Custom Alerts." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+        }
+        else {
+            self.eventsViewController.eventStore = self.eventStore;
+            self.eventsViewController.currentCalendars = self.currentCalendars;
+            self.eventsViewController.selectedDate = self.currentDate;
+            
+            [self.eventsViewController refreshDataAndUpdateDisplay];
+        }
+    }
+}
+
+- (void) receivedCalendarPermission {
+    // code to run after receiving permission to access calendar data
+
+}
+
 - (void)loadCurrentCalendars {
     
     NSMutableArray *savedCalendars = [[NSMutableArray alloc] init];
@@ -309,7 +357,7 @@
     for (NSString *calendarID in selectedCalendarIDs) {
         EKCalendar *cal = [self.eventStore calendarWithIdentifier:calendarID];
         if (cal) {
-            if (cal.allowsContentModifications && !cal.isImmutable) {
+            if (cal.allowsContentModifications) {
                 [savedCalendars addObject:cal];
             }
         }
@@ -446,7 +494,14 @@
         }
         
         // resize calendar button view
-        self.calendarButtonViewConstraintHeight.constant = kDayOfWeekLabelHeight + kDayButtonMarginTop + rowsForMonth*(kDayButtonHeight + kDayButtonSpacingVertical) + kSpacingCalendarAndEvents;
+        // start by laying out day buttons so we can use their frame information
+        [self.calendarButtonView setNeedsLayout];
+        [self.calendarButtonView layoutIfNeeded];
+        
+        UIView *sunButtonBottomRow = [self.calendarButtonView viewWithTag:kDayButtonFirstTag + 7 * (rowsForMonth-1)];
+        CGFloat heightCalendarButtonView = sunButtonBottomRow.frame.origin.y + sunButtonBottomRow.frame.size.height + kSpacingCalendarAndEvents;
+        
+        self.calendarButtonViewConstraintHeight.constant = heightCalendarButtonView;
     }
 
     // Update selected date display
@@ -457,8 +512,6 @@
     dayButton = (CalendarDayButton *)[self.calendarButtonView viewWithTag:firstOfMonthButtonTag + newDay - 1];
     [dayButton customSetHighlighted:YES];
 
-    //    [self performSelector:@selector(doHighlight:) withObject:dayButton afterDelay:0]; // have to set the highlight this way using afterDelay so that this code runs after selectDate finishes and the button automatically unhighlights itself
-    
     
     NSDateFormatter *df;
     
@@ -467,21 +520,18 @@
     [df setDateStyle:NSDateFormatterShortStyle];
     [df setTimeStyle:NSDateFormatterNoStyle];
     [df setDateFormat:@"MMMM yyyy"];
-    //UILabel *monthTitleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 200, 40)];
-    //monthTitleLabel.text=[df stringFromDate:newDate];
-    //monthTitleLabel.textAlignment = NSTextAlignmentCenter;
-    //monthTitleLabel.font = [UIFont boldSystemFontOfSize:18];
-    //monthTitleLabel.adjustsFontSizeToFitWidth=NO;
-    //self.navigationItem.titleView=monthTitleLabel;
     self.navigationItem.title = [df stringFromDate:newDate];
     
     self.currentDate = newDate;
     
+    [self getAccessToEventStoreAndRefreshEventsView];
+/*
     self.eventsViewController.eventStore = self.eventStore;
     self.eventsViewController.currentCalendars = self.currentCalendars;
     self.eventsViewController.selectedDate = self.currentDate;
     
     [self.eventsViewController refreshDataAndUpdateDisplay];
+ */
 }
 
 -(void)selectPreviousMonth {
@@ -581,6 +631,30 @@
 #pragma mark - User interaction methods
 
 - (IBAction)addButtonPressed:(id)sender {
+
+    // Request location services (for adding location to new events)
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted: {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location services not authorized" message:@"Custom Alerts does not have permission to use location services. This may cause issues if you try to add a location to your new event. Please enable location services for Custom Alerts in the Settings app." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+            break;
+        }
+        case kCLAuthorizationStatusNotDetermined: {
+            self.locationManager = [[CLLocationManager alloc] init];
+            self.locationManager.delegate = self;
+            if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+                [self.locationManager requestWhenInUseAuthorization];
+            }
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+        case kCLAuthorizationStatusAuthorizedAlways: {
+            // all is good
+            break;
+        }
+    }
+    
 
     EKEventEditViewController *addController = [[EKEventEditViewController alloc] initWithNibName:nil bundle:nil];
     

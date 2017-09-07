@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <EventKit/EventKit.h>
 #import <EventKitUI/EventKitUI.h>
+#import <CoreLocation/CoreLocation.h>
 
 #import "DateCalculator.h"
 #import "CustomAlert.h"
@@ -30,7 +31,9 @@
 @class AlertsViewController;
 
 
-@interface AlertsViewController : UIViewController <EKEventEditViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate>
+@interface AlertsViewController : UIViewController <EKEventEditViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate, CLLocationManagerDelegate>
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;

@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "size" : "20x20",
       "idiom" : "iphone",
       "size" : "20x20",
       "scale" : "2x"
@@ -13,14 +14,18 @@
     {
       "idiom" : "iphone",
       "size" : "29x29",
+      "idiom" : "iphone",
+      "filename" : "alarm_clock29.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "iphone",
       "size" : "29x29",
+      "idiom" : "iphone",
+      "filename" : "alarm_clock58.png",
       "scale" : "2x"
     },
     {
+      "size" : "29x29",
       "idiom" : "iphone",
       "size" : "29x29",
       "scale" : "3x"
@@ -28,6 +33,8 @@
     {
       "idiom" : "iphone",
       "size" : "40x40",
+      "idiom" : "iphone",
+      "filename" : "alarm_clock80.png",
       "scale" : "2x"
     },
     {
@@ -38,19 +45,19 @@
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "alarm_clock57x57.png",
+      "filename" : "alarm_clock57.png",
       "scale" : "1x"
     },
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "alarm_clock114x114.png",
+      "filename" : "alarm_clock114.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "alarm_clock120x120.png",
+      "filename" : "alarm_clock120.png",
       "scale" : "2x"
     },
     {
@@ -70,54 +77,79 @@
     },
     {
       "idiom" : "ipad",
-      "size" : "29x29",
+      "filename" : "alarm_clock20.png",
       "scale" : "1x"
     },
     {
+      "size" : "20x20",
       "idiom" : "ipad",
-      "size" : "29x29",
+      "filename" : "alarm_clock40-1.png",
       "scale" : "2x"
     },
     {
+      "size" : "29x29",
       "idiom" : "ipad",
-      "size" : "40x40",
+      "filename" : "alarm_clock29-1.png",
       "scale" : "1x"
     },
     {
+      "size" : "29x29",
       "idiom" : "ipad",
-      "size" : "40x40",
+      "filename" : "alarm_clock58-1.png",
       "scale" : "2x"
     },
     {
+      "size" : "40x40",
       "idiom" : "ipad",
-      "size" : "50x50",
+      "filename" : "alarm_clock40-2.png",
       "scale" : "1x"
     },
     {
+      "size" : "40x40",
       "idiom" : "ipad",
+      "filename" : "alarm_clock80-1.png",
+      "scale" : "2x"
+    },
+    {
       "size" : "50x50",
+      "idiom" : "ipad",
+      "filename" : "alarm_clock50.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "50x50",
+      "idiom" : "ipad",
+      "filename" : "alarm_clock100.png",
       "scale" : "2x"
     },
     {
       "size" : "72x72",
       "idiom" : "ipad",
-      "filename" : "alarm_clock72x72.png",
+      "filename" : "alarm_clock72.png",
       "scale" : "1x"
     },
     {
       "size" : "72x72",
       "idiom" : "ipad",
-      "filename" : "alarm_clock144x144.png",
+      "filename" : "alarm_clock144.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "ipad",
       "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "alarm_clock76.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "alarm_clock152.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "83.5x83.5",
+      "idiom" : "ipad",
+      "filename" : "alarm_clock167.png",
       "scale" : "2x"
     },
     {
