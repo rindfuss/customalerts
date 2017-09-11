@@ -207,9 +207,17 @@
 
 - (void)updateEventSpanning:(EKSpan)span {
 
-    NSArray <EKRecurrenceRule *>*recurRulesArray = self.currentEvent.recurrenceRules;
+    NSArray *recurRulesArray = self.currentEvent.recurrenceRules;
     BOOL hasRules = self.currentEvent.hasRecurrenceRules;
     BOOL detached = self.currentEvent.isDetached;
+
+    NSError *error = nil;
+    BOOL success = [self.eventStore saveEvent:self.currentEvent span:span commit:YES error:&error];
+    //[self.currentEvent refresh];
+
+    recurRulesArray = self.currentEvent.recurrenceRules;
+    hasRules = self.currentEvent.hasRecurrenceRules;
+    detached = self.currentEvent.isDetached;
     
     NSMutableArray<EKAlarm *> *alarms = [[NSMutableArray alloc] init];
     
@@ -225,11 +233,8 @@
     
     self.currentEvent.alarms = alarmArray;
     
-    NSError *error = nil;
-    if (span == EKSpanThisEvent) {
-        
-    }
-    [self.eventStore saveEvent:self.currentEvent span:span error:&error];
+    //NSError *error = nil;
+    success = [self.eventStore saveEvent:self.currentEvent span:span error:&error];
     self.isAddAlertPending = NO;
     
     if (error) {
