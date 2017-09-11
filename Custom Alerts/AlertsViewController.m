@@ -14,13 +14,12 @@
 @property (nonatomic, strong) UIActionSheet *alertSpanActionSheet;
 @property (nonatomic, strong) UIActionSheet *saveChangesActionSheetForEdit;
 @property (nonatomic, strong) UIActionSheet *saveChangesActionSheetForExit;
+@property (nonatomic) BOOL isAddAlertPending; // set to true when an add alert is pending but hasn't happened yet (i.e. user hasn't yet responded to an action sheet for a recurring event asking if alert show go on all future events or just the current one. If the add is pending, it's important not to refresh self.alerts from the saved event, because the pending alert hasn't been added to the event yet
 
 -(void)loadAlertsFromEvent;
 @end
 
 @implementation AlertsViewController
-
-
 
 - (void)viewDidLoad
 {
@@ -34,6 +33,7 @@
     self.alertSpanActionSheet = nil;
     self.saveChangesActionSheetForEdit = nil;
     self.saveChangesActionSheetForExit = nil;
+    self.isAddAlertPending = NO;
     self.alerts = [[NSMutableArray alloc] init];
     [self loadAlertsFromEvent];
 
@@ -96,33 +96,36 @@
 #pragma mark - class utility methods
 -(void)loadAlertsFromEvent {
 // reads alerts from self.currentEvent into this class' properties
-    [self.alerts removeAllObjects];
-    
-    if (self.currentEvent.alarms) {
-        if (self.currentEvent.alarms.count != 0) {
-            for (EKAlarm *alarm in self.currentEvent.alarms) {
-                CustomAlert *alert = [[CustomAlert alloc] init];
-                [alert setAlertQuantityAndPeriodUsingAlarm:alarm];
-                [self.alerts addObject:alert];
+    if (!self.isAddAlertPending) {
+        // only load alerts if there isn't an add pending (see notes at top where the isAddAlertPending property is declared
+        [self.alerts removeAllObjects];
+        
+        if (self.currentEvent.alarms) {
+            if (self.currentEvent.alarms.count != 0) {
+                for (EKAlarm *alarm in self.currentEvent.alarms) {
+                    CustomAlert *alert = [[CustomAlert alloc] init];
+                    [alert setAlertQuantityAndPeriodUsingAlarm:alarm];
+                    [self.alerts addObject:alert];
+                }
             }
         }
+        
+        // Filter out duplicates
+        [self removeDuplicateAlerts];
+        
+        // Sort alers with alert nearest to event coming first
+        NSArray *sortedArray;
+        sortedArray = [self.alerts sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            NSTimeInterval first = -1 * [(CustomAlert *)a alarmIntervalForCustomAlert];
+            NSTimeInterval second = -1 * [(CustomAlert *)b alarmIntervalForCustomAlert];
+            
+            NSComparisonResult comparisonResult = first < second ? NSOrderedAscending : NSOrderedDescending;
+            
+            return comparisonResult;
+        }];
+        
+        self.alerts = [NSMutableArray arrayWithArray:sortedArray];\
     }
-    
-    // Filter out duplicates
-    [self removeDuplicateAlerts];
-    
-    // Sort alers with alert nearest to event coming first
-    NSArray *sortedArray;
-    sortedArray = [self.alerts sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-        NSTimeInterval first = -1 * [(CustomAlert *)a alarmIntervalForCustomAlert];
-        NSTimeInterval second = -1 * [(CustomAlert *)b alarmIntervalForCustomAlert];
-        
-        NSComparisonResult comparisonResult = first < second ? NSOrderedAscending : NSOrderedDescending;
-        
-        return comparisonResult;
-    }];
-    
-    self.alerts = [NSMutableArray arrayWithArray:sortedArray];
 }
 
 - (void)removeDuplicateAlerts {
@@ -204,13 +207,17 @@
 
 - (void)updateEventSpanning:(EKSpan)span {
 
+    NSArray <EKRecurrenceRule *>*recurRulesArray = self.currentEvent.recurrenceRules;
+    BOOL hasRules = self.currentEvent.hasRecurrenceRules;
+    BOOL detached = self.currentEvent.isDetached;
+    
     NSMutableArray<EKAlarm *> *alarms = [[NSMutableArray alloc] init];
     
     for (CustomAlert *alert in self.alerts) {
-        NSTimeInterval alarmInterval = 0;
-        alarmInterval = alert.alarmIntervalForCustomAlert;
-        EKAlarm *alarm = [[EKAlarm alloc]init];
-        [alarm setRelativeOffset:alarmInterval];
+        NSTimeInterval alarmInterval = alert.alarmIntervalForCustomAlert;
+        //EKAlarm *alarm = [[EKAlarm alloc]init];
+//        [alarm setRelativeOffset:alarmInterval];
+        EKAlarm *alarm = [EKAlarm alarmWithRelativeOffset:alarmInterval];
         [alarms addObject:alarm];
     }
     
@@ -219,7 +226,11 @@
     self.currentEvent.alarms = alarmArray;
     
     NSError *error = nil;
+    if (span == EKSpanThisEvent) {
+        
+    }
     [self.eventStore saveEvent:self.currentEvent span:span error:&error];
+    self.isAddAlertPending = NO;
     
     if (error) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"An error occured while saving. The event may have been deleted in another app. Try selecting the event again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -308,6 +319,8 @@
 }
 
 - (IBAction)addButton:(id)sender {
+    
+    self.isAddAlertPending = YES;
     
     CustomAlert *newAlert = [[CustomAlert alloc] init];
     
@@ -469,6 +482,10 @@
                 [self updateEventSpanning:EKSpanFutureEvents];
                 break;
             }
+            case 2: { // cancel button
+                self.isAddAlertPending = NO; // cancel the isAddAlertPending flag in case this alert span action sheet was for adding an alert to a recurring event. If the action sheet was in response to editing an existing alert, it won't hurt anything to clear the isAddAlertPending flag
+                // no need to remove the alert that was added to self.alerts when user touched add button, because by not saving it to the event here, as soon as the refresh happens below, self.alerts will be replaced by any alarms from the event
+            }
             default: {
                 break;
             }
@@ -504,5 +521,6 @@
         }
     }
 }
+
 
 @end
