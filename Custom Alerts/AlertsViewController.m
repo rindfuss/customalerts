@@ -124,7 +124,7 @@
             return comparisonResult;
         }];
         
-        self.alerts = [NSMutableArray arrayWithArray:sortedArray];\
+        self.alerts = [NSMutableArray arrayWithArray:sortedArray];
     }
 }
 
@@ -207,45 +207,50 @@
 
 - (void)updateEventSpanning:(EKSpan)span {
 
-    NSArray *recurRulesArray = self.currentEvent.recurrenceRules;
-    BOOL hasRules = self.currentEvent.hasRecurrenceRules;
-    BOOL detached = self.currentEvent.isDetached;
-
-    NSError *error = nil;
-    BOOL success = [self.eventStore saveEvent:self.currentEvent span:span commit:YES error:&error];
-    //[self.currentEvent refresh];
-
-    recurRulesArray = self.currentEvent.recurrenceRules;
-    hasRules = self.currentEvent.hasRecurrenceRules;
-    detached = self.currentEvent.isDetached;
+    // replacing the alarms array on the current event didn't work, so now we add, edit and delete existing alarms to make them correspond with the custom alerts the user has set
     
-    NSMutableArray<EKAlarm *> *alarms = [[NSMutableArray alloc] init];
-    
-    for (CustomAlert *alert in self.alerts) {
-        NSTimeInterval alarmInterval = alert.alarmIntervalForCustomAlert;
-        //EKAlarm *alarm = [[EKAlarm alloc]init];
-//        [alarm setRelativeOffset:alarmInterval];
-        EKAlarm *alarm = [EKAlarm alarmWithRelativeOffset:alarmInterval];
-        [alarms addObject:alarm];
+    // add or delete alarms until there are the same number as alerts
+    while (self.currentEvent.alarms.count < self.alerts.count) {
+        EKAlarm *newAlarm = [EKAlarm alarmWithRelativeOffset:0];
+        [self.currentEvent addAlarm:newAlarm];
     }
     
-    NSArray *alarmArray = [[NSArray alloc] initWithArray:alarms];
+    while (self.currentEvent.alarms.count > self.alerts.count) {
+        EKAlarm *lastAlarm = [self.currentEvent.alarms lastObject];
+        [self.currentEvent removeAlarm: lastAlarm];
+    }
     
-    self.currentEvent.alarms = alarmArray;
+    //    NSMutableArray<EKAlarm *> *alarms = [[NSMutableArray alloc] init];
     
-    //NSError *error = nil;
-    success = [self.eventStore saveEvent:self.currentEvent span:span error:&error];
+    NSUInteger i = 0;
+    for (CustomAlert *alert in self.alerts) {
+        NSTimeInterval alarmInterval = alert.alarmIntervalForCustomAlert;
+        //EKAlarm *alarm = [EKAlarm alarmWithRelativeOffset:alarmInterval];
+        //[alarms addObject:alarm];
+        [[self.currentEvent.alarms objectAtIndex:i++] setRelativeOffset:alarmInterval];
+    }
+    
+    //[self.currentEvent setAlarms:alarms];
+    
+    
+    NSError *error = nil;
+    [self.eventStore saveEvent:self.currentEvent span:span error:&error];
     self.isAddAlertPending = NO;
     
     if (error) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"An error occured while saving. The event may have been deleted in another app. Try selecting the event again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alertView show];
     }
-    
 }
 
 - (void)refreshDataAndUpdateDisplayAndNotifyUserOnFail: (BOOL)shouldNotifyUserOnFail {
     
+    // note: the sequence below is important. Configuring user controls assumes tableview has been loaded with current data
+    [self loadAlertsFromEvent];
+    [self.tableView reloadData];
+    [self configureUserControlsAndAnimate:NO];
+
+    /* the refesh method call was preventing removal of alerts in the edit view from being reflected in the custom alerts alert view, so I commented out everything below
     BOOL didRefresh = [self.currentEvent refresh];
     
     if (didRefresh) {
@@ -262,6 +267,7 @@
         }
         [self.navigationController popViewControllerAnimated:NO];
     }
+     */
 }
 
 -(void) presentEditController {
