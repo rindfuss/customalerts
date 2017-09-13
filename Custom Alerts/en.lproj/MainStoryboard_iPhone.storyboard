@@ -290,11 +290,11 @@
                                     <constraint firstItem="zNg-pK-ObU" firstAttribute="height" secondItem="BDs-8h-QLK" secondAttribute="height" id="zeO-vb-QaZ"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v#.#" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIf-Vg-Z2E">
-                                <rect key="frame" x="337" y="574" width="22" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v#.#.#" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIf-Vg-Z2E">
+                                <rect key="frame" x="326" y="574" width="33" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="CGL-Xh-9Nq"/>
-                                    <constraint firstAttribute="width" constant="22" id="PhV-Xi-8bx"/>
+                                    <constraint firstAttribute="width" constant="33" id="PhV-Xi-8bx"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
