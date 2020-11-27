@@ -199,7 +199,7 @@
 				ORGANIZATIONNAME = "Rich Rindfuss";
 				TargetAttributes = {
 					9BDAAE7816F9539B008C4102 = {
-						DevelopmentTeam = N736TF9VHT;
+						DevelopmentTeam = 3A4ZQA3AGW;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -387,7 +387,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = N736TF9VHT;
+				DEVELOPMENT_TEAM = 3A4ZQA3AGW;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Custom Alerts/Custom Alerts-Prefix.pch";
 				INFOPLIST_FILE = "Custom Alerts/Custom Alerts-Info.plist";
@@ -412,7 +412,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = N736TF9VHT;
+				DEVELOPMENT_TEAM = 3A4ZQA3AGW;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Custom Alerts/Custom Alerts-Prefix.pch";
 				INFOPLIST_FILE = "Custom Alerts/Custom Alerts-Info.plist";
