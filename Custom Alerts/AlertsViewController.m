@@ -11,9 +11,7 @@
 @interface AlertsViewController ()
 
 @property (nonatomic, strong) NSMutableArray<CustomAlert *> *alerts;
-@property (nonatomic, strong) UIActionSheet *alertSpanActionSheet;
-@property (nonatomic, strong) UIActionSheet *saveChangesActionSheetForEdit;
-@property (nonatomic, strong) UIActionSheet *saveChangesActionSheetForExit;
+@property (nonatomic, strong) UIAlertController *alertSpanActionSheet;
 @property (nonatomic) BOOL isAddAlertPending; // set to true when an add alert is pending but hasn't happened yet (i.e. user hasn't yet responded to an action sheet for a recurring event asking if alert show go on all future events or just the current one. If the add is pending, it's important not to refresh self.alerts from the saved event, because the pending alert hasn't been added to the event yet
 
 -(void)loadAlertsFromEvent;
@@ -31,8 +29,6 @@
     // Initialize properties
     self.locationManager = nil;
     self.alertSpanActionSheet = nil;
-    self.saveChangesActionSheetForEdit = nil;
-    self.saveChangesActionSheetForExit = nil;
     self.isAddAlertPending = NO;
     self.alerts = [[NSMutableArray alloc] init];
     [self loadAlertsFromEvent];
@@ -90,7 +86,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self initializePickerAndAnimate:NO];
+    [self initializePickerAndAnimate:YES];
 }
 
 #pragma mark - class utility methods
@@ -238,8 +234,13 @@
     self.isAddAlertPending = NO;
     
     if (error) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"An error occured while saving. The event may have been deleted in another app. Try selecting the event again." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alertView show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                       message:@"An error occured while saving. The event may have been deleted in another app. Try selecting the event again."
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* OKAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:OKAction];
+
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -249,36 +250,13 @@
     [self loadAlertsFromEvent];
     [self.tableView reloadData];
     [self configureUserControlsAndAnimate:NO];
-
-    /* the refesh method call was preventing removal of alerts in the edit view from being reflected in the custom alerts alert view, so I commented out everything below
-    BOOL didRefresh = [self.currentEvent refresh];
-    
-    if (didRefresh) {
-        // note: the sequence below is important. Configuring user controls assumes tableview has been loaded with current data
-        [self loadAlertsFromEvent];
-        [self.tableView reloadData];
-        [self configureUserControlsAndAnimate:NO];
-    }
-    else {
-        // something happened to event, and it is no longer valid
-        if (shouldNotifyUserOnFail) {
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This event is no longer valid. It may have been deleted on another device." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [av show];
-        }
-        [self.navigationController popViewControllerAnimated:NO];
-    }
-     */
 }
 
 -(void) presentEditController {
-    // Request location services (for adding locatin to new events)
+    // Request location services (for adding location to new events)
     switch ([CLLocationManager authorizationStatus]) {
         case kCLAuthorizationStatusDenied:
-        case kCLAuthorizationStatusRestricted: {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location services not authorized" message:@"Custom Alerts does not have permission to use location services. This may cause issues if you try to edit an event that has a location associated with it. Please enable location services for Custom Alerts in the Settings app." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert show];
-            break;
-        }
+        case kCLAuthorizationStatusRestricted:
         case kCLAuthorizationStatusNotDetermined: {
             self.locationManager = [[CLLocationManager alloc] init];
             self.locationManager.delegate = self;
@@ -318,11 +296,39 @@
             [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
         }
         else {
-            self.alertSpanActionSheet = [[UIActionSheet alloc] initWithTitle:@"This is a repeating event." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Save for this event only", @"Save for future events", nil];
-            [self.alertSpanActionSheet showInView:self.view];
+            self.alertSpanActionSheet = [UIAlertController alertControllerWithTitle:@"This is a repeating event."
+                                           message:nil
+                                           preferredStyle:UIAlertControllerStyleActionSheet];
+            
+            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel
+               handler:^(UIAlertAction * saveAlertAction) {
+                self.isAddAlertPending = NO; // cancel the isAddAlertPending flag in case this alert span action sheet was for adding an alert to a recurring event. If the action sheet was in response to editing an existing alert, it won't hurt anything to clear the isAddAlertPending flag
+                // no need to remove the alert that was added to self.alerts when user touched add button, because by not saving it to the event here, as soon as the refresh happens below, self.alerts will be replaced by any alarms from the event
+                [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+            }];
+
+            UIAlertAction* thisEventAction = [UIAlertAction actionWithTitle:@"Save for this event only" style:UIAlertActionStyleDefault
+               handler:^(UIAlertAction * saveAlertAction) {
+                [self updateEventSpanning:EKSpanThisEvent];
+                [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+            }];
+
+            UIAlertAction* futureEventsAction = [UIAlertAction actionWithTitle:@"Save for future events." style:UIAlertActionStyleDefault
+               handler:^(UIAlertAction * saveAlertAction) {
+                [self updateEventSpanning:EKSpanFutureEvents];
+                [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
+            }];
+
+            [self.alertSpanActionSheet addAction:cancelAction];
+            [self.alertSpanActionSheet addAction:thisEventAction];
+            [self.alertSpanActionSheet addAction:futureEventsAction];
+
+            [self presentViewController:self.alertSpanActionSheet animated:YES completion:nil];
         }
     }
 }
+
+
 
 #pragma mark - User Interaction
 - (IBAction)editButton:(id)sender {
@@ -479,59 +485,5 @@
     
     return numRows;
 }
-
-#pragma mark - ActionSheet delegate methods
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (actionSheet == self.alertSpanActionSheet) {
-        switch (buttonIndex) {
-            case 0: { // update only current event
-                [self updateEventSpanning:EKSpanThisEvent];
-                break;
-            }
-            case 1: { // update future events
-                [self updateEventSpanning:EKSpanFutureEvents];
-                break;
-            }
-            case 2: { // cancel button
-                self.isAddAlertPending = NO; // cancel the isAddAlertPending flag in case this alert span action sheet was for adding an alert to a recurring event. If the action sheet was in response to editing an existing alert, it won't hurt anything to clear the isAddAlertPending flag
-                // no need to remove the alert that was added to self.alerts when user touched add button, because by not saving it to the event here, as soon as the refresh happens below, self.alerts will be replaced by any alarms from the event
-            }
-            default: {
-                break;
-            }
-        }
-        [self refreshDataAndUpdateDisplayAndNotifyUserOnFail:YES];
-    }
-    else if (actionSheet == self.saveChangesActionSheetForEdit) {
-        switch (buttonIndex) {
-            case 0: { // don't save changes
-                [self presentEditController];
-                break;
-            }
-            case 1: { // save changes
-                [self saveAlerts];
-                [self presentEditController];
-                break;
-            }
-        }
-    }
-    else if (actionSheet == self.saveChangesActionSheetForExit) {
-        switch (buttonIndex) {
-            case 0: { // don't save changes
-                [self.navigationController popViewControllerAnimated:YES];
-                break;
-            }
-            case 1: { // save changes
-                [self saveAlerts];
-                break;
-            }
-            case 2: { // cancel
-                break;
-            }
-        }
-    }
-}
-
 
 @end

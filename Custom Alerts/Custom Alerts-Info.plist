@@ -21,11 +21,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.8</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCalendarsUsageDescription</key>
@@ -33,7 +33,7 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Custom alerts needs to access your contacts' addresses when you edit an event's location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Custom alerts needs location information when you edit an event's location.</string>
+	<string>Custom alerts needs location information when you edit an event to support assigning a location to the event.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen</string>
 	<key>UIMainStoryboardFile</key>

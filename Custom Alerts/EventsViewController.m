@@ -7,6 +7,7 @@
 //
 
 #import "EventsViewController.h"
+#import "CADisclosureIndicatorView.h"
 
 @interface EventsViewController ()
 
@@ -14,14 +15,29 @@
 
 @implementation EventsViewController
 
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
+- (void)doSetup {
     if (self) {
         // Custom initialization
         self.hasCalendarAccess = NO; // the main view controller will set this to YES once the app has permission to access calendar data
     }
+}
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    [self doSetup];
+    return self;
+}
+
+-(id)init {
+    self = [super init];
+    [self doSetup];
+    return self;
+}
+
+-(id)initWithCoder:(NSCoder *) initCoder {
+    self = [super initWithCoder: initCoder];
+    [self doSetup];
     return self;
 }
 
@@ -77,7 +93,6 @@
 	{
 		AlertsViewController *alertsViewController = segue.destinationViewController;
 
-//        alertsViewController.delegate = self;
         alertsViewController.eventStore = self.eventStore;
         
         NSInteger row = self.tableView.indexPathForSelectedRow.row;
@@ -114,14 +129,14 @@
     CGFloat r, g, b, a;
     [eventCalendarColor getRed:&r green:&g blue:&b alpha:&a];
     eventCalendarColor = [UIColor colorWithRed:r green:g blue:b alpha:0.5f];
-    cell.accessoryView.backgroundColor = eventCalendarColor;
-    cell.accessoryView.tintColor = [UIColor blackColor];
-    cell.contentView.superview.backgroundColor = eventCalendarColor;
+    cell.backgroundColor = eventCalendarColor;
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor blackColor];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
     cell.detailTextLabel.textColor = [UIColor blackColor];
-
+/*
+    // use text > for disclosure indicator and color it black since it's not possible to set the color of the default disclosure indicator
+    // this code was replaced 2020-11 by a custom accessory view that draws a chevron in a custom color
     UILabel *disclosureArrowLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, cell.contentView.frame.size.height)];
     disclosureArrowLabel.text = @">";
     disclosureArrowLabel.textAlignment = NSTextAlignmentRight;
@@ -129,13 +144,16 @@
     disclosureArrowLabel.textColor = [UIColor blackColor];
     cell.accessoryView = disclosureArrowLabel;
     cell.accessoryView.backgroundColor = [UIColor clearColor];
+ */
     
-    
-    
+    if (cell.accessoryView == nil) {
+        // Only configure the Checkbox control once.
+        cell.accessoryView = [[CADisclosureIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 24, 24) withColor:[UIColor blackColor]];
+        cell.accessoryView.opaque = NO;
+        cell.accessoryView.backgroundColor = [UIColor clearColor];
+    }
+
     cell.textLabel.text = event.title;
-    
-    
-//    NSString *calendarString = event.calendar.title;
     
     // Create subtitle string like Calendar: Start-End
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -151,37 +169,16 @@
     NSString *endString = [df stringFromDate:event.endDate];
 
     NSString *eventInfo;
-/*
-    if (self.currentCalendars.count > 1) {
-        if ([event isAllDay]) {
-            eventInfo = [NSString stringWithFormat:@"%@: All Day", calendarString];
-        }
-        else {
-            eventInfo = [NSString stringWithFormat:@"%@: %@-%@", calendarString, startString, endString];
-        }
+    if ([event isAllDay]) {
+        eventInfo = @"     All Day";
     }
     else {
- */
-        if ([event isAllDay]) {
-            eventInfo = @"     All Day";
-        }
-        else {
-            eventInfo = [NSString stringWithFormat:@"     %@-%@", startString, endString];
-        }
-//    }
+        eventInfo = [NSString stringWithFormat:@"     %@-%@", startString, endString];
+    }
     cell.detailTextLabel.text = eventInfo;
     
     return cell;
 }
-
-
-/*
-#pragma mark - AlertsViewController delegate methods
-- (void)alertsViewControllerDidComplete: (AlertsViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:nil];
-
-}
-*/
 
 #pragma mark - Utility Methods
 - (void)populateEventsList {
