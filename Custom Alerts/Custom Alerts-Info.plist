@@ -31,7 +31,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app reads and updates calendar entries in order to set custom alerts.</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Custom alerts needs to access your contacts' addresses when you edit an event's location.</string>
+	<string>Custom alerts needs to access your contacts&apos; addresses when you edit an event&apos;s location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Custom alerts needs location information when you edit an event to support assigning a location to the event.</string>
 	<key>UILaunchStoryboardName</key>
@@ -55,5 +55,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 </dict>
 </plist>
