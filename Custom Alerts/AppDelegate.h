@@ -26,7 +26,7 @@
 //#define AppVersion @"v2.7"
 // rewrote alert view to work on copies of alerts rather than the live data that could be modified by other apps. Was running into timing issues where Custom Alerts would create an alert, change the alert, then get a notification that an app (CA) had created an alert and go back to the original created alert rather than keeping the changed alert. Working on copies eliminated the synchronization issue by ignoring the live data and just writing over it when user saves the alerts
 //#define AppVersion @"v2.7.1" // fixed bug that prevented adding a new alert to a recurring event. Fixed bug that alerts on recurring events weren't updating properly when I simply replaced the alarm array on the current event vs. updating the existing array
-#define AppVersion @"v2.8"
+#define AppVersion @"v2.10"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
