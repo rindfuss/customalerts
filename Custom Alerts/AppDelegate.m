@@ -13,6 +13,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    // force top navbar not to use the iOS 15 default transparent background color. In dark mode, the default iOS 15 behavior means black shows through as the navbar background color, and the navbar title disappears, because it's black too
+    if (@available(iOS 15.0, *)) {
+        UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];
+        navBarAppearance.backgroundColor = [UIColor colorWithRed: 0.0/255.0 green: 125/255.0 blue: 0.0/255.0 alpha: 1.0];
+        [navBarAppearance configureWithOpaqueBackground];
+        [UINavigationBar appearance].standardAppearance = navBarAppearance;
+        [UINavigationBar appearance].scrollEdgeAppearance = navBarAppearance;
+    }
     
     return YES;
 }
